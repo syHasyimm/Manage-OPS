@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\OtpService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -20,11 +21,11 @@ class PasswordResetLinkController extends Controller
     }
 
     /**
-     * Handle phone submission. OTP dispatch akan diisi pada Tahap 2.
+     * Validasi nomor & kirim OTP via WhatsApp untuk reset password.
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, OtpService $otp): RedirectResponse
     {
         $validated = $request->validate([
             'phone' => ['required', 'string', 'regex:/^08[0-9]{8,12}$/'],
@@ -40,8 +41,18 @@ class PasswordResetLinkController extends Controller
             ]);
         }
 
+        if (! $otp->canResend($user->phone, OtpService::PURPOSE_RESET)) {
+            $seconds = $otp->secondsUntilResend($user->phone, OtpService::PURPOSE_RESET);
+
+            return redirect()
+                ->route('password.reset.form', ['phone' => $user->phone])
+                ->with('status', "Tunggu {$seconds} detik sebelum kirim ulang OTP.");
+        }
+
+        $otp->generate($user->phone, OtpService::PURPOSE_RESET, $request->ip());
+
         return redirect()
             ->route('password.reset.form', ['phone' => $user->phone])
-            ->with('status', 'Lanjutkan untuk verifikasi OTP & atur password baru.');
+            ->with('status', 'Kode OTP telah dikirim ke WhatsApp Anda.');
     }
 }

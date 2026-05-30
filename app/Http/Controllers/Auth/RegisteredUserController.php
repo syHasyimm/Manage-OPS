@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\OtpService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class RegisteredUserController extends Controller
     /**
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, OtpService $otp): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -43,6 +44,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('verification.notice');
+        $otp->generate($user->phone, OtpService::PURPOSE_REGISTER, $request->ip());
+
+        return redirect()
+            ->route('verification.notice')
+            ->with('status', 'Akun berhasil dibuat. Kode OTP telah dikirim ke WhatsApp Anda.');
     }
 }
