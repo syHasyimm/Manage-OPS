@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Registration\StoreStep1Request;
 use App\Http\Requests\Registration\StoreStep2Request;
 use App\Http\Requests\Registration\StoreStep3Request;
+use App\Jobs\GenerateRegistrationPdf;
+use App\Jobs\SendRegistrationConfirmation;
 use App\Models\Registration;
 use App\Models\StudentParent;
+use App\Services\RegistrationNumberGenerator;
 use App\Services\RegistrationService;
 use App\Support\RegistrationOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -163,11 +168,104 @@ class RegistrationController extends Controller
         ]);
     }
 
-    public function submit(Request $request): RedirectResponse
+    public function submit(Request $request, RegistrationNumberGenerator $generator): RedirectResponse
     {
-        // Implementasi penuh di Tahap 5 (generate nomor + PDF + WA).
-        return redirect()->route('registration.review')
-            ->with('status', 'Submit final akan tersedia setelah Tahap 5 selesai.');
+        $registration = $this->registrations->getOrCreateForUser($request->user());
+        abort_if(! $registration, 404);
+        abort_unless($this->registrations->isEditable($registration), 403, 'Pendaftaran tidak dapat diubah.');
+
+        $registration->load(['period', 'identity', 'periodic', 'parents']);
+        $period = $registration->period;
+
+        if (! $period || ! $period->isOpen()) {
+            return back()->with('status', 'Periode pendaftaran sedang tidak dibuka.');
+        }
+
+        // Validasi kelengkapan
+        if (! $registration->identity || ! $registration->periodic) {
+            return redirect()->route('registration.start')
+                ->with('status', 'Lengkapi terlebih dahulu Step 1 dan Step 2.');
+        }
+
+        $hasFather = $registration->parents->contains('role', 'father');
+        $hasMother = $registration->parents->contains('role', 'mother');
+        if (! $hasFather || ! $hasMother || empty($registration->contact_email)) {
+            return redirect()->route('registration.step', ['step' => 3])
+                ->with('status', 'Lengkapi data Ayah, Ibu, dan email kontak.');
+        }
+
+        DB::transaction(function () use ($registration, $generator) {
+            if (empty($registration->registration_number)) {
+                $registration->registration_number = $generator->generate($registration);
+            }
+
+            $registration->forceFill([
+                'status' => Registration::STATUS_SUBMITTED,
+                'submitted_at' => now(),
+                'current_step' => 3,
+            ])->save();
+        });
+
+        // Generate PDF dulu, lalu kirim WA setelah PDF tersedia.
+        Bus::chain([
+            new GenerateRegistrationPdf($registration->id),
+            new SendRegistrationConfirmation($registration->id),
+        ])->dispatch();
+
+        return redirect()
+            ->route('registration.success', ['registration' => $registration->id])
+            ->with('status', 'Pendaftaran berhasil disubmit.');
+    }
+
+    public function success(Request $request, Registration $registration): Response|RedirectResponse
+    {
+        if ($registration->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        $registration->load(['identity', 'period']);
+
+        return Inertia::render('Registration/Success', [
+            'registration' => [
+                'id' => $registration->id,
+                'registration_number' => $registration->registration_number,
+                'status' => $registration->status,
+                'submitted_at' => $registration->submitted_at,
+                'pdf_ready' => (bool) $registration->pdf_path,
+                'student_name' => $registration->identity?->full_name,
+                'period' => $registration->period?->academic_year,
+            ],
+        ]);
+    }
+
+    public function downloadPdf(Request $request, Registration $registration)
+    {
+        if ($registration->user_id !== $request->user()->id && ! $request->user()->isAdmin()) {
+            abort(403);
+        }
+
+        if (! $registration->pdf_path || ! Storage::disk('public')->exists($registration->pdf_path)) {
+            abort(404, 'PDF belum siap. Coba lagi beberapa saat.');
+        }
+
+        $filename = ($registration->registration_number ?? 'pendaftaran').'.pdf';
+
+        return Storage::disk('public')->download($registration->pdf_path, $filename);
+    }
+
+    public function resendWa(Request $request, Registration $registration): RedirectResponse
+    {
+        if ($registration->user_id !== $request->user()->id && ! $request->user()->isAdmin()) {
+            abort(403);
+        }
+
+        if (! $registration->isSubmitted()) {
+            return back()->with('status', 'Pendaftaran belum disubmit.');
+        }
+
+        SendRegistrationConfirmation::dispatch($registration->id);
+
+        return back()->with('status', 'Notifikasi WhatsApp dijadwalkan ulang.');
     }
 
     protected function upsertParent(Registration $registration, string $role, array $data): void

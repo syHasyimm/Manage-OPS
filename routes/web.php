@@ -27,6 +27,15 @@ Route::middleware(['auth', 'verified.phone'])->group(function () {
         Route::post('/step/3', [RegistrationController::class, 'storeStep3'])->name('step.3.store');
         Route::get('/review', [RegistrationController::class, 'review'])->name('review');
         Route::post('/submit', [RegistrationController::class, 'submit'])->name('submit');
+        Route::get('/{registration}/success', [RegistrationController::class, 'success'])
+            ->whereNumber('registration')
+            ->name('success');
+        Route::get('/{registration}/pdf', [RegistrationController::class, 'downloadPdf'])
+            ->whereNumber('registration')
+            ->name('pdf');
+        Route::post('/{registration}/resend-wa', [RegistrationController::class, 'resendWa'])
+            ->whereNumber('registration')
+            ->name('resend-wa');
     });
 });
 
