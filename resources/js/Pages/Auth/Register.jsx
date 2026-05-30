@@ -1,118 +1,115 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import { useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Loader2 } from 'lucide-react';
+import GuestLayout from '@/Layouts/GuestLayout';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Alert, AlertDescription } from '@/Components/ui/alert';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
-        email: '',
+        phone: '',
         password: '',
         password_confirmation: '',
     });
 
+    useEffect(() => {
+        return () => reset('password', 'password_confirmation');
+    }, []);
+
     const submit = (e) => {
         e.preventDefault();
-
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+        post(route('register'));
     };
 
     return (
-        <GuestLayout>
-            <Head title="Register" />
+        <GuestLayout
+            title="Daftar Akun Baru"
+            subtitle="Buat akun untuk memulai pendaftaran murid baru"
+        >
+            <Head title="Daftar" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
+            <form onSubmit={submit} className="space-y-4">
+                <div className="space-y-1.5">
+                    <Label htmlFor="name">Nama Lengkap Pendaftar</Label>
+                    <Input
                         id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
+                        type="text"
                         autoComplete="name"
-                        isFocused={true}
+                        autoFocus
+                        value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
-                        required
+                        placeholder="Nama orang tua / wali"
                     />
-
-                    <InputError message={errors.name} className="mt-2" />
+                    {errors.name && (
+                        <p className="text-xs text-red-600">{errors.name}</p>
+                    )}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
+                <div className="space-y-1.5">
+                    <Label htmlFor="phone">Nomor HP / WhatsApp</Label>
+                    <Input
+                        id="phone"
+                        type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel"
+                        value={data.phone}
+                        onChange={(e) => setData('phone', e.target.value.replace(/\D/g, ''))}
+                        placeholder="081234567890"
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
+                    <p className="text-xs text-navy-500">
+                        Pastikan nomor aktif WhatsApp untuk verifikasi & notifikasi.
+                    </p>
+                    {errors.phone && (
+                        <p className="text-xs text-red-600">{errors.phone}</p>
+                    )}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
+                <div className="space-y-1.5">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
                         id="password"
                         type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
                         autoComplete="new-password"
+                        value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
-                        required
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    {errors.password && (
+                        <p className="text-xs text-red-600">{errors.password}</p>
+                    )}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
+                <div className="space-y-1.5">
+                    <Label htmlFor="password_confirmation">Ulangi Password</Label>
+                    <Input
                         id="password_confirmation"
                         type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
                         autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
+                        value={data.password_confirmation}
+                        onChange={(e) => setData('password_confirmation', e.target.value)}
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                <Alert variant="info" className="text-xs">
+                    <AlertDescription>
+                        Setelah daftar, Anda akan menerima kode OTP via WhatsApp untuk
+                        verifikasi nomor.
+                    </AlertDescription>
+                </Alert>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
                     <Link
                         href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="text-sm text-navy-700 underline-offset-4 hover:underline"
                     >
-                        Already registered?
+                        Sudah punya akun?
                     </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
+                    <Button type="submit" disabled={processing}>
+                        {processing && <Loader2 className="h-4 w-4 animate-spin" />}
+                        Daftar Sekarang
+                    </Button>
                 </div>
             </form>
         </GuestLayout>

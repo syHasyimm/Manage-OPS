@@ -1,98 +1,104 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import { useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Loader2 } from 'lucide-react';
+import GuestLayout from '@/Layouts/GuestLayout';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Checkbox } from '@/Components/ui/checkbox';
+import { Alert, AlertDescription } from '@/Components/ui/alert';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
+        phone: '',
         password: '',
         remember: false,
     });
 
+    useEffect(() => {
+        return () => reset('password');
+    }, []);
+
     const submit = (e) => {
         e.preventDefault();
-
-        post(route('login'), {
-            onFinish: () => reset('password'),
-        });
+        post(route('login'));
     };
 
     return (
-        <GuestLayout>
-            <Head title="Log in" />
+        <GuestLayout
+            title="Masuk Akun"
+            subtitle="Lanjutkan pendaftaran murid baru"
+        >
+            <Head title="Login" />
 
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
+                <Alert variant="success" className="mb-4 text-xs">
+                    <AlertDescription>{status}</AlertDescription>
+                </Alert>
             )}
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
+            <form onSubmit={submit} className="space-y-4">
+                <div className="space-y-1.5">
+                    <Label htmlFor="phone">Nomor HP / WhatsApp</Label>
+                    <Input
+                        id="phone"
+                        type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel"
+                        autoFocus
+                        value={data.phone}
+                        onChange={(e) => setData('phone', e.target.value.replace(/\D/g, ''))}
+                        placeholder="081234567890"
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
+                    {errors.phone && (
+                        <p className="text-xs text-red-600">{errors.phone}</p>
+                    )}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
+                <div className="space-y-1.5">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
                         id="password"
                         type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
                         autoComplete="current-password"
+                        value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    {errors.password && (
+                        <p className="text-xs text-red-600">{errors.password}</p>
+                    )}
                 </div>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
+                <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-2 text-sm text-navy-700">
                         <Checkbox
-                            name="remember"
                             checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
+                            onCheckedChange={(value) => setData('remember', Boolean(value))}
                         />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
+                        Ingat saya
                     </label>
-                </div>
 
-                <div className="mt-4 flex items-center justify-end">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="text-sm text-navy-700 underline-offset-4 hover:underline"
                         >
-                            Forgot your password?
+                            Lupa password?
                         </Link>
                     )}
+                </div>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                <div className="flex items-center justify-between gap-3 pt-2">
+                    <Link
+                        href={route('register')}
+                        className="text-sm text-navy-700 underline-offset-4 hover:underline"
+                    >
+                        Belum punya akun?
+                    </Link>
+                    <Button type="submit" disabled={processing}>
+                        {processing && <Loader2 className="h-4 w-4 animate-spin" />}
+                        Masuk
+                    </Button>
                 </div>
             </form>
         </GuestLayout>

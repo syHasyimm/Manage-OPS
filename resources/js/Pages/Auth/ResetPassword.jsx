@@ -1,92 +1,99 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import { Loader2 } from 'lucide-react';
+import GuestLayout from '@/Layouts/GuestLayout';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Alert, AlertDescription } from '@/Components/ui/alert';
 
-export default function ResetPassword({ token, email }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        token: token,
-        email: email,
+export default function ResetPassword({ phone, status }) {
+    const { data, setData, post, processing, errors } = useForm({
+        phone: phone ?? '',
+        code: '',
         password: '',
         password_confirmation: '',
     });
 
     const submit = (e) => {
         e.preventDefault();
-
-        post(route('password.store'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+        post(route('password.update.via-otp'));
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout
+            title="Atur Password Baru"
+            subtitle="Masukkan kode OTP yang dikirim via WhatsApp dan password baru"
+        >
             <Head title="Reset Password" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+            {status && (
+                <Alert variant="info" className="mb-4 text-xs">
+                    <AlertDescription>{status}</AlertDescription>
+                </Alert>
+            )}
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
+            <form onSubmit={submit} className="space-y-4">
+                <div className="space-y-1.5">
+                    <Label htmlFor="phone">Nomor HP</Label>
+                    <Input
+                        id="phone"
+                        type="tel"
+                        value={data.phone}
+                        onChange={(e) => setData('phone', e.target.value.replace(/\D/g, ''))}
+                        readOnly={Boolean(phone)}
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
+                    {errors.phone && (
+                        <p className="text-xs text-red-600">{errors.phone}</p>
+                    )}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                <div className="space-y-1.5">
+                    <Label htmlFor="code">Kode OTP (6 digit)</Label>
+                    <Input
+                        id="code"
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={6}
+                        value={data.code}
+                        onChange={(e) => setData('code', e.target.value.replace(/\D/g, ''))}
+                        placeholder="••••••"
+                        className="tracking-widest text-center text-lg"
+                    />
+                    {errors.code && (
+                        <p className="text-xs text-red-600">{errors.code}</p>
+                    )}
+                </div>
 
-                    <TextInput
+                <div className="space-y-1.5">
+                    <Label htmlFor="password">Password Baru</Label>
+                    <Input
                         id="password"
                         type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
                         autoComplete="new-password"
-                        isFocused={true}
+                        value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    {errors.password && (
+                        <p className="text-xs text-red-600">{errors.password}</p>
+                    )}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        type="password"
+                <div className="space-y-1.5">
+                    <Label htmlFor="password_confirmation">Ulangi Password</Label>
+                    <Input
                         id="password_confirmation"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        type="password"
                         autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
+                        value={data.password_confirmation}
+                        onChange={(e) => setData('password_confirmation', e.target.value)}
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Reset Password
-                    </PrimaryButton>
+                <div className="flex justify-end pt-2">
+                    <Button type="submit" disabled={processing}>
+                        {processing && <Loader2 className="h-4 w-4 animate-spin" />}
+                        Simpan Password
+                    </Button>
                 </div>
             </form>
         </GuestLayout>
