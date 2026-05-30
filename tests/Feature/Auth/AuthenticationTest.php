@@ -8,11 +8,13 @@ test('login screen can be rendered', function () {
     $response->assertStatus(200);
 });
 
-test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+test('users can authenticate using phone + password', function () {
+    $user = User::factory()->create([
+        'phone' => '081234567890',
+    ]);
 
     $response = $this->post('/login', [
-        'email' => $user->email,
+        'phone' => $user->phone,
         'password' => 'password',
     ]);
 
@@ -21,14 +23,30 @@ test('users can authenticate using the login screen', function () {
 });
 
 test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'phone' => '081234567891',
+    ]);
 
     $this->post('/login', [
-        'email' => $user->email,
+        'phone' => $user->phone,
         'password' => 'wrong-password',
     ]);
 
     $this->assertGuest();
+});
+
+test('admin login redirects to admin dashboard', function () {
+    $admin = User::factory()->admin()->create([
+        'phone' => '081234567892',
+    ]);
+
+    $response = $this->post('/login', [
+        'phone' => $admin->phone,
+        'password' => 'password',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('admin.dashboard', absolute: false));
 });
 
 test('users can logout', function () {
