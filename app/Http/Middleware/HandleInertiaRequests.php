@@ -32,7 +32,24 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'phone' => $request->user()->phone,
+                    'role' => $request->user()->role,
+                    'phone_verified_at' => $request->user()->phone_verified_at,
+                ] : null,
+            ],
+            'school' => [
+                'name' => config('spmb.school.name'),
+                'district' => config('spmb.school.district'),
+                'address' => config('spmb.school.address'),
+                'principal' => config('spmb.school.principal'),
+            ],
+            'flash' => [
+                'status' => fn () => $request->session()->get('status'),
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
             ],
         ];
     }
