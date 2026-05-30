@@ -1,5 +1,5 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import { GraduationCap, LayoutDashboard, FileText, LogOut, User as UserIcon, Menu, X } from 'lucide-react';
+import { GraduationCap, LayoutDashboard, FileText, LogOut, User as UserIcon, Menu, Shield, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/Components/ui/sonner';
@@ -33,6 +33,9 @@ export default function AppLayout({ header, children }) {
         { href: route('dashboard'), name: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
         { href: route('registration.start'), name: 'registration.*', icon: FileText, label: 'Formulir Pendaftaran' },
         { href: route('profile.edit'), name: 'profile.edit', icon: UserIcon, label: 'Profil' },
+        ...(user?.role === 'admin'
+            ? [{ href: route('admin.dashboard'), name: 'admin.*', icon: Shield, label: 'Panel Admin' }]
+            : []),
     ];
 
     return (

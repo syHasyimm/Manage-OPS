@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 Route::get('/cek-status', [PublicStatusController::class, 'show'])->name('public-status.show');
 Route::post('/cek-status', [PublicStatusController::class, 'check'])
-    ->middleware('throttle:5,1')
+    ->middleware('throttle:public-status')
     ->name('public-status.check');
 Route::get('/cek-status/{registration_number}/pdf', [PublicStatusController::class, 'downloadPdf'])
     ->name('registration.public-pdf');

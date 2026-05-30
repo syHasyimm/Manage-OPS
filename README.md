@@ -1,66 +1,170 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SPMB SD Negeri 001 Kepenuhan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Pendaftaran Murid Baru (SPMB) berbasis web untuk SD Negeri 001 Kepenuhan, Kecamatan Kepenuhan. Calon wali murid mendaftar online, mengisi formulir 3 langkah, memverifikasi nomor WhatsApp, lalu menerima formulir resmi PDF F4 yang dikirim otomatis via WhatsApp.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Registrasi akun via No HP/WA + password (tanpa email)
+- Verifikasi nomor WhatsApp via OTP 6 digit (Fonnte)
+- Form Wizard 3 step dengan auto-save tiap klik Next
+- Resume pendaftaran (lanjutkan dari step terakhir)
+- Generator PDF formulir F4 otomatis (DomPDF) dengan QR Code & watermark
+- Notifikasi WhatsApp otomatis (konfirmasi submit + perubahan status)
+- Public status tracker tanpa login
+- Panel admin: dashboard statistik, list pendaftar dengan filter, verifikasi/tolak/minta revisi, export Excel, manajemen periode pendaftaran
+- Periode pendaftaran (academic year) yang dapat diaktifkan/nonaktifkan
+- Rate limiting pada login, OTP, dan public status
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Laravel 12, Inertia 2, Sanctum
+- React 18, Tailwind CSS 3, shadcn/ui, lucide-react, sonner, recharts
+- `barryvdh/laravel-dompdf` (PDF F4)
+- `simplesoftwareio/simple-qrcode` (QR Code pada PDF)
+- `maatwebsite/excel` (export admin)
+- Fonnte (WhatsApp Gateway) via abstraksi `WhatsAppService`
 
-## Learning Laravel
+## Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+# 1. Clone & install dependency
+composer install
+npm install
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# 2. Konfigurasi environment
+cp .env.example .env
+php artisan key:generate
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Edit .env, isi minimum:
+#   DB_*                 - koneksi database MySQL
+#   FONNTE_TOKEN         - token Fonnte (ambil dari dashboard Fonnte)
+#   FONNTE_DEVICE        - device ID Fonnte
+#   ADMIN_PHONE          - nomor HP admin (08...)
+#   ADMIN_PASSWORD       - password admin awal
+#   REGISTRATION_*       - tahun ajaran & tanggal buka/tutup periode
 
-## Laravel Sponsors
+# 3. Migrasi & seeder
+php artisan migrate --seed
+php artisan storage:link
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# 4. Build frontend (atau jalankan dev mode)
+npm run build       # production
+# atau
+npm run dev         # dev mode (Vite HMR)
 
-### Premium Partners
+# 5. Jalankan queue worker (untuk job WA & PDF)
+php artisan queue:work
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Akses
 
-## Contributing
+- Halaman publik: `http://localhost:8000/`
+- Cek Status: `http://localhost:8000/cek-status`
+- Dashboard user: `http://localhost:8000/dashboard` (login required)
+- Panel admin: `http://localhost:8000/admin/dashboard` (role admin)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Admin dibuat oleh `AdminUserSeeder` berdasarkan `.env` (`ADMIN_PHONE`, `ADMIN_PASSWORD`). Login admin akan otomatis redirect ke `/admin/dashboard`.
 
-## Code of Conduct
+## Konfigurasi WhatsApp
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Default driver: `fonnte`. Atur di `.env`:
 
-## Security Vulnerabilities
+```env
+WHATSAPP_DRIVER=fonnte
+FONNTE_TOKEN=...
+FONNTE_DEVICE=...
+FONNTE_BASE_URL=https://api.fonnte.com
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Untuk development tanpa kirim WA real, ganti driver ke `log` (pesan ditulis ke `storage/logs/laravel.log`):
 
-## License
+```env
+WHATSAPP_DRIVER=log
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Periode Pendaftaran
+
+- Hanya satu periode aktif pada satu waktu.
+- Submit ditolak jika periode tidak aktif atau di luar rentang `opens_at` - `closes_at`.
+- Admin dapat membuat & mengaktifkan periode dari menu "Periode" di panel admin.
+
+## Status Lifecycle
+
+```
+draft → submitted → verified → accepted
+                              → rejected
+                  → need_revision → (kembali ke draft, user revisi → submit lagi)
+```
+
+Setiap perubahan status dispatch `SendStatusUpdateNotification` ke pendaftar via WhatsApp.
+
+## Format Nomor Pendaftaran
+
+`SPMB-{tahun}-{seq:4}` contoh `SPMB-2026-0001`. Sequence per periode dengan locking transaksi (aman terhadap race condition).
+
+## Struktur Direktori Penting
+
+```
+app/
+├── Http/Controllers/
+│   ├── Admin/                  # Controller panel admin
+│   ├── Auth/                   # Custom auth (phone + OTP)
+│   ├── PublicStatusController  # Cek status publik
+│   └── RegistrationController  # Form wizard + submit
+├── Http/Middleware/
+│   ├── EnsurePhoneVerified
+│   └── EnsureUserIsAdmin
+├── Jobs/
+│   ├── GenerateRegistrationPdf
+│   ├── SendRegistrationConfirmation
+│   ├── SendStatusUpdateNotification
+│   ├── SendWhatsAppMessage
+│   └── SendWhatsAppFile
+├── Services/
+│   ├── OtpService
+│   ├── RegistrationNumberGenerator
+│   ├── RegistrationService
+│   └── WhatsApp/               # Interface + Fonnte/Log driver
+├── Support/
+│   └── RegistrationOptions     # Daftar opsi enum (single source of truth)
+└── Exports/
+    └── RegistrationsExport     # Export Excel
+
+resources/
+├── js/
+│   ├── Components/
+│   │   ├── ui/                 # shadcn/ui components
+│   │   └── Wizard/             # Stepper, FormField, StepShell
+│   ├── Layouts/
+│   │   ├── AppLayout           # User dashboard
+│   │   ├── AdminLayout         # Admin
+│   │   └── GuestLayout         # Halaman auth
+│   └── Pages/
+│       ├── Admin/              # Halaman admin
+│       ├── Auth/               # Login/Register/OTP/Reset
+│       ├── Registration/       # Step1, Step2, Step3, Review, Success
+│       ├── Dashboard.jsx
+│       ├── PublicStatus.jsx
+│       └── Welcome.jsx
+└── views/
+    └── pdf/registration.blade.php   # Template PDF F4
+```
+
+## Rate Limit
+
+- Login: 5/menit per (phone+IP)
+- OTP send (register/reset): 1/menit per phone
+- OTP verify: 5/menit per phone
+- Public status check: 5/menit per IP
+
+## Catatan
+
+- DomPDF tidak men-support semua CSS Tailwind. Template PDF ditulis pakai inline CSS sederhana berbasis tabel.
+- Tailwind v3 tetap dipakai (kompatibel penuh dengan shadcn/ui saat ini).
+- Validasi NIK / No KK = 16 digit numerik, kode pos = 5 digit numerik.
+- Selama development, jalankan `php artisan queue:work` agar job WhatsApp & PDF terproses.
+- PDF disimpan di `storage/app/public/registrations/{nomor}.pdf`. Pastikan sudah jalankan `php artisan storage:link`.
+
+## Lisensi
+
+Internal SD Negeri 001 Kepenuhan.

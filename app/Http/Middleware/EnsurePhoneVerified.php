@@ -15,12 +15,16 @@ class EnsurePhoneVerified
     {
         $user = $request->user();
 
-        if (! $user || ! $user->isPhoneVerified()) {
-            return $request->expectsJson()
-                ? response()->json(['message' => 'Nomor WhatsApp belum diverifikasi.'], 403)
-                : redirect()->route('verification.notice');
+        if (! $user) {
+            return redirect()->route('login');
         }
 
-        return $next($request);
+        if ($user->isAdmin() || $user->isPhoneVerified()) {
+            return $next($request);
+        }
+
+        return $request->expectsJson()
+            ? response()->json(['message' => 'Nomor WhatsApp belum diverifikasi.'], 403)
+            : redirect()->route('verification.notice');
     }
 }
