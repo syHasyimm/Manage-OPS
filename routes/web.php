@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicStatusController;
 use App\Http\Controllers\RegistrationController;
 use App\Models\RegistrationPeriod;
 use Illuminate\Http\Request;
@@ -14,6 +15,13 @@ Route::get('/', function () {
         'period' => RegistrationPeriod::active(),
     ]);
 })->name('home');
+
+Route::get('/cek-status', [PublicStatusController::class, 'show'])->name('public-status.show');
+Route::post('/cek-status', [PublicStatusController::class, 'check'])
+    ->middleware('throttle:5,1')
+    ->name('public-status.check');
+Route::get('/cek-status/{registration_number}/pdf', [PublicStatusController::class, 'downloadPdf'])
+    ->name('registration.public-pdf');
 
 Route::middleware(['auth', 'verified.phone'])->group(function () {
     Route::get('/dashboard', function (Request $request) {
