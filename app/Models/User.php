@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -53,6 +54,22 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function registrations(): HasMany
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    public function activeRegistration(): ?Registration
+    {
+        $period = RegistrationPeriod::active();
+
+        if (! $period) {
+            return null;
+        }
+
+        return $this->registrations()->where('period_id', $period->id)->first();
     }
 
     public function isPhoneVerified(): bool
