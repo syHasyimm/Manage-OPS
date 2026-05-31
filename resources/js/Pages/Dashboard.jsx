@@ -219,7 +219,7 @@ export default function Dashboard({ period, registration }) {
                                     </span>
                                     Akun terdaftar & nomor terverifikasi
                                 </li>
-                                <li className="flex items-center gap-3">
+                                <li className="flex flex-wrap items-center gap-x-3 gap-y-1">
                                     <span
                                         className={
                                             registration.submitted_at
@@ -229,7 +229,7 @@ export default function Dashboard({ period, registration }) {
                                     >
                                         <CheckCircle2 className="h-4 w-4" />
                                     </span>
-                                    Formulir disubmit
+                                    <span className="min-w-0 break-words">Formulir disubmit</span>
                                     {registration.submitted_at && (
                                         <span className="text-xs text-navy-500">
                                             ({new Date(registration.submitted_at).toLocaleString('id-ID')})

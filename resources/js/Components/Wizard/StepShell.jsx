@@ -15,22 +15,22 @@ export default function StepShell({ title, description, currentStep, completedSt
             </Card>
 
             <Card>
-                <CardHeader className="flex flex-row items-start justify-between gap-4">
-                    <div>
-                        <CardTitle>{title}</CardTitle>
+                <CardHeader className="flex flex-col items-start gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                    <div className="min-w-0">
+                        <CardTitle className="text-base sm:text-lg">{title}</CardTitle>
                         {description && (
                             <p className="mt-1 text-sm text-navy-600">{description}</p>
                         )}
                     </div>
                     <Link
                         href={route('dashboard')}
-                        className="text-xs font-medium text-navy-600 underline-offset-4 hover:underline"
+                        className="shrink-0 text-xs font-medium text-navy-600 underline-offset-4 hover:underline"
                     >
                         Kembali ke Dashboard
                     </Link>
                 </CardHeader>
                 <CardContent>{children}</CardContent>
-                {footer && <div className="border-t border-navy-100 px-6 py-4">{footer}</div>}
+                {footer && <div className="border-t border-navy-100 px-4 py-4 sm:px-6">{footer}</div>}
             </Card>
         </div>
     );

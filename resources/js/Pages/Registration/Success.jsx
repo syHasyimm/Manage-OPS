@@ -65,25 +65,25 @@ export default function Success({ registration }) {
                             Notifikasi WhatsApp berisi konfirmasi & file PDF formulir akan
                             terkirim otomatis ke nomor terdaftar dalam beberapa menit.
                         </p>
-                        <div className="flex flex-col gap-2 sm:flex-row">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                             {registration.pdf_ready ? (
-                                <Button asChild variant="default">
+                                <Button asChild variant="default" className="w-full sm:w-auto">
                                     <a href={route('registration.pdf', { registration: registration.id })} target="_blank" rel="noopener">
                                         <Download className="h-4 w-4" />
                                         Download PDF
                                     </a>
                                 </Button>
                             ) : (
-                                <Button variant="outline" disabled>
+                                <Button variant="outline" disabled className="w-full sm:w-auto">
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                     PDF sedang dibuat...
                                 </Button>
                             )}
-                            <Button variant="outline" onClick={resend} disabled={processing}>
+                            <Button variant="outline" onClick={resend} disabled={processing} className="w-full sm:w-auto">
                                 {processing ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                                 Kirim Ulang ke WhatsApp
                             </Button>
-                            <Button asChild variant="ghost">
+                            <Button asChild variant="ghost" className="w-full sm:w-auto">
                                 <Link href={route('dashboard')}>
                                     <MessageCircle className="h-4 w-4" />
                                     Kembali ke Dashboard

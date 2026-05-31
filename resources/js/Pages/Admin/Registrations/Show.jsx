@@ -41,7 +41,7 @@ function Row({ label, value }) {
     return (
         <div className="grid grid-cols-1 gap-1 border-b border-navy-100 py-2 text-sm sm:grid-cols-3">
             <dt className="font-medium text-navy-600">{label}</dt>
-            <dd className="text-navy-950 sm:col-span-2">{value || <span className="text-navy-400">-</span>}</dd>
+            <dd className="break-words text-navy-950 sm:col-span-2">{value || <span className="text-navy-400">-</span>}</dd>
         </div>
     );
 }
@@ -125,22 +125,22 @@ export default function Show({ registration, options, school }) {
     return (
         <AdminLayout
             header={
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                        <Button asChild variant="ghost" size="sm">
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+                    <div className="flex items-start gap-3">
+                        <Button asChild variant="ghost" size="sm" className="shrink-0">
                             <Link href={route('admin.registrations.index')}>
                                 <ArrowLeft className="h-4 w-4" />
                                 Kembali
                             </Link>
                         </Button>
-                        <div>
+                        <div className="min-w-0">
                             <p className="text-xs uppercase tracking-widest text-gold-700">Detail Pendaftaran</p>
-                            <h1 className="mt-1 text-xl font-semibold text-navy-950">
+                            <h1 className="mt-1 break-words text-lg font-semibold text-navy-950 sm:text-xl">
                                 {i?.full_name ?? '-'}
                             </h1>
                         </div>
                     </div>
-                    <Badge variant={meta.variant} className="uppercase">{meta.label}</Badge>
+                    <Badge variant={meta.variant} className="self-start uppercase sm:self-auto">{meta.label}</Badge>
                 </div>
             }
         >

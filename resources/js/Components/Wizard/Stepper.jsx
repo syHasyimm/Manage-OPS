@@ -20,7 +20,7 @@ export default function Stepper({ current, completed = 0 }) {
                     : 'bg-white text-navy-400 ring-navy-200';
 
                 return (
-                    <li key={step.id} className="flex flex-1 items-center gap-3">
+                    <li key={step.id} className="flex flex-1 items-center gap-3 min-w-0">
                         <div
                             className={cn(
                                 'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold ring-2 transition-colors',
@@ -29,13 +29,13 @@ export default function Stepper({ current, completed = 0 }) {
                         >
                             {isDone ? <Check className="h-4 w-4" /> : step.id}
                         </div>
-                        <div className="flex flex-col">
-                            <span className="text-xs uppercase tracking-wide text-navy-500">
+                        <div className="flex min-w-0 flex-col">
+                            <span className="text-[10px] uppercase tracking-wide text-navy-500 sm:text-xs">
                                 Langkah {step.id}
                             </span>
                             <span
                                 className={cn(
-                                    'text-sm font-medium',
+                                    'truncate text-xs font-medium sm:text-sm',
                                     isCurrent ? 'text-navy-900' : 'text-navy-700',
                                 )}
                             >

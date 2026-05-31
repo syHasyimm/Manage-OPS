@@ -25,6 +25,35 @@ import { Alert, AlertDescription } from '@/Components/ui/alert';
 
 const COLORS = ['#1E3A5F', '#C9A84C', '#486581', '#a17a2a', '#9fb3c8'];
 
+function StatList({ data, valueKey = 'total', labelKey = 'label' }) {
+    if (!data?.length) {
+        return <p className="py-4 text-center text-sm text-navy-500">Belum ada data.</p>;
+    }
+    const max = Math.max(...data.map((d) => Number(d[valueKey]) || 0)) || 1;
+    return (
+        <ul className="space-y-2">
+            {data.map((item, idx) => {
+                const value = Number(item[valueKey]) || 0;
+                const pct = Math.round((value / max) * 100);
+                return (
+                    <li key={idx} className="space-y-1">
+                        <div className="flex items-center justify-between gap-3 text-sm">
+                            <span className="min-w-0 flex-1 truncate text-navy-700">{item[labelKey]}</span>
+                            <span className="font-semibold text-navy-900">{value}</span>
+                        </div>
+                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-navy-100">
+                            <div
+                                className="h-full rounded-full bg-navy-700"
+                                style={{ width: `${pct}%` }}
+                            />
+                        </div>
+                    </li>
+                );
+            })}
+        </ul>
+    );
+}
+
 function StatCard({ icon: Icon, label, value, hint }) {
     return (
         <Card>
@@ -108,28 +137,33 @@ export default function AdminDashboard({ period, stats, status_counts, gender_co
                     <CardHeader>
                         <CardTitle className="text-base">Jenis Kelamin</CardTitle>
                     </CardHeader>
-                    <CardContent style={{ height: 240 }}>
-                        {gender_counts?.length ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={gender_counts}
-                                        dataKey="total"
-                                        nameKey="label"
-                                        innerRadius={50}
-                                        outerRadius={80}
-                                    >
-                                        {gender_counts.map((entry, idx) => (
-                                            <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip />
-                                    <Legend />
-                                </PieChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <p className="text-center text-sm text-navy-500">Belum ada data.</p>
-                        )}
+                    <CardContent>
+                        <div className="md:hidden">
+                            <StatList data={gender_counts} />
+                        </div>
+                        <div className="hidden md:block" style={{ height: 240 }}>
+                            {gender_counts?.length ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={gender_counts}
+                                            dataKey="total"
+                                            nameKey="label"
+                                            innerRadius={50}
+                                            outerRadius={80}
+                                        >
+                                            {gender_counts.map((entry, idx) => (
+                                                <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <p className="text-center text-sm text-navy-500">Belum ada data.</p>
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
 
@@ -137,20 +171,25 @@ export default function AdminDashboard({ period, stats, status_counts, gender_co
                     <CardHeader>
                         <CardTitle className="text-base">Distribusi Agama</CardTitle>
                     </CardHeader>
-                    <CardContent style={{ height: 280 }}>
-                        {religion_counts?.length ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={religion_counts}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#bcccdc" />
-                                    <XAxis dataKey="label" stroke="#486581" fontSize={11} />
-                                    <YAxis stroke="#486581" fontSize={11} allowDecimals={false} />
-                                    <Tooltip />
-                                    <Bar dataKey="total" fill="#1E3A5F" radius={[4, 4, 0, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <p className="text-center text-sm text-navy-500">Belum ada data.</p>
-                        )}
+                    <CardContent>
+                        <div className="md:hidden">
+                            <StatList data={religion_counts} />
+                        </div>
+                        <div className="hidden md:block" style={{ height: 280 }}>
+                            {religion_counts?.length ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={religion_counts}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#bcccdc" />
+                                        <XAxis dataKey="label" stroke="#486581" fontSize={11} />
+                                        <YAxis stroke="#486581" fontSize={11} allowDecimals={false} />
+                                        <Tooltip />
+                                        <Bar dataKey="total" fill="#1E3A5F" radius={[4, 4, 0, 0]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <p className="text-center text-sm text-navy-500">Belum ada data.</p>
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
 
@@ -158,20 +197,25 @@ export default function AdminDashboard({ period, stats, status_counts, gender_co
                     <CardHeader>
                         <CardTitle className="text-base">5 Dusun Terbanyak</CardTitle>
                     </CardHeader>
-                    <CardContent style={{ height: 280 }}>
-                        {dusun_top?.length ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={dusun_top} layout="vertical">
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#bcccdc" />
-                                    <XAxis type="number" stroke="#486581" fontSize={11} allowDecimals={false} />
-                                    <YAxis type="category" dataKey="label" stroke="#486581" fontSize={11} width={120} />
-                                    <Tooltip />
-                                    <Bar dataKey="total" fill="#C9A84C" radius={[0, 4, 4, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <p className="text-center text-sm text-navy-500">Belum ada data.</p>
-                        )}
+                    <CardContent>
+                        <div className="md:hidden">
+                            <StatList data={dusun_top} />
+                        </div>
+                        <div className="hidden md:block" style={{ height: 280 }}>
+                            {dusun_top?.length ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={dusun_top} layout="vertical">
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#bcccdc" />
+                                        <XAxis type="number" stroke="#486581" fontSize={11} allowDecimals={false} />
+                                        <YAxis type="category" dataKey="label" stroke="#486581" fontSize={11} width={120} />
+                                        <Tooltip />
+                                        <Bar dataKey="total" fill="#C9A84C" radius={[0, 4, 4, 0]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <p className="text-center text-sm text-navy-500">Belum ada data.</p>
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
             </div>

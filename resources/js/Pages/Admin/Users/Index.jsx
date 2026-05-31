@@ -77,14 +77,17 @@ export default function Index({ users, filters }) {
 
             <Card>
                 <CardContent className="p-0">
-                    <Table>
+                    <p className="px-4 pt-3 text-xs text-navy-500 sm:hidden">
+                        Geser tabel ke samping untuk melihat semua kolom.
+                    </p>
+                    <Table className="min-w-[680px]">
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Nama</TableHead>
-                                <TableHead>Nomor HP</TableHead>
-                                <TableHead>Role</TableHead>
-                                <TableHead>Verifikasi</TableHead>
-                                <TableHead>Bergabung</TableHead>
+                                <TableHead className="whitespace-nowrap">Nama</TableHead>
+                                <TableHead className="whitespace-nowrap">Nomor HP</TableHead>
+                                <TableHead className="whitespace-nowrap">Role</TableHead>
+                                <TableHead className="whitespace-nowrap">Verifikasi</TableHead>
+                                <TableHead className="whitespace-nowrap">Bergabung</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -97,9 +100,9 @@ export default function Index({ users, filters }) {
                             )}
                             {users.data.map((u) => (
                                 <TableRow key={u.id}>
-                                    <TableCell className="font-medium">{u.name}</TableCell>
-                                    <TableCell className="font-mono text-sm">{u.phone}</TableCell>
-                                    <TableCell>
+                                    <TableCell className="min-w-[160px] font-medium">{u.name}</TableCell>
+                                    <TableCell className="whitespace-nowrap font-mono text-sm">{u.phone}</TableCell>
+                                    <TableCell className="whitespace-nowrap">
                                         {u.role === 'admin' ? (
                                             <Badge variant="default">
                                                 <Shield className="mr-1 h-3 w-3" />
@@ -112,14 +115,14 @@ export default function Index({ users, filters }) {
                                             </Badge>
                                         )}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="whitespace-nowrap">
                                         {u.phone_verified_at ? (
                                             <Badge variant="success">Terverifikasi</Badge>
                                         ) : (
                                             <Badge variant="warning">Belum</Badge>
                                         )}
                                     </TableCell>
-                                    <TableCell className="text-xs text-navy-600">
+                                    <TableCell className="whitespace-nowrap text-xs text-navy-600">
                                         {new Date(u.created_at).toLocaleDateString('id-ID')}
                                     </TableCell>
                                 </TableRow>

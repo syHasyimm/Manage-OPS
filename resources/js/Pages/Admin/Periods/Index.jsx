@@ -108,14 +108,17 @@ export default function Index({ periods }) {
                         <CardTitle className="text-base">Daftar Periode</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
-                        <Table>
+                        <p className="px-4 pt-3 text-xs text-navy-500 sm:hidden">
+                            Geser tabel ke samping untuk melihat semua kolom.
+                        </p>
+                        <Table className="min-w-[680px]">
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Tahun Ajaran</TableHead>
-                                    <TableHead>Buka</TableHead>
-                                    <TableHead>Tutup</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead className="text-right">Aksi</TableHead>
+                                    <TableHead className="whitespace-nowrap">Tahun Ajaran</TableHead>
+                                    <TableHead className="whitespace-nowrap">Buka</TableHead>
+                                    <TableHead className="whitespace-nowrap">Tutup</TableHead>
+                                    <TableHead className="whitespace-nowrap">Status</TableHead>
+                                    <TableHead className="whitespace-nowrap text-right">Aksi</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -128,17 +131,17 @@ export default function Index({ periods }) {
                                 )}
                                 {periods.map((p) => (
                                     <TableRow key={p.id}>
-                                        <TableCell className="font-medium">
+                                        <TableCell className="whitespace-nowrap font-medium">
                                             <Calendar className="mr-2 inline h-4 w-4 text-gold-600" />
                                             {p.academic_year}
                                         </TableCell>
-                                        <TableCell className="text-xs text-navy-600">
+                                        <TableCell className="whitespace-nowrap text-xs text-navy-600">
                                             {new Date(p.opens_at).toLocaleString('id-ID')}
                                         </TableCell>
-                                        <TableCell className="text-xs text-navy-600">
+                                        <TableCell className="whitespace-nowrap text-xs text-navy-600">
                                             {new Date(p.closes_at).toLocaleString('id-ID')}
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className="whitespace-nowrap">
                                             {p.is_active ? (
                                                 <Badge variant="success">
                                                     <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -148,7 +151,7 @@ export default function Index({ periods }) {
                                                 <Badge variant="outline">Nonaktif</Badge>
                                             )}
                                         </TableCell>
-                                        <TableCell className="text-right">
+                                        <TableCell className="whitespace-nowrap text-right">
                                             {!p.is_active && (
                                                 <Button size="sm" variant="outline" onClick={() => activate(p.id)}>
                                                     <Power className="h-3.5 w-3.5" />

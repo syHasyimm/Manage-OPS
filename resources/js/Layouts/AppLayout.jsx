@@ -1,5 +1,5 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import { GraduationCap, LayoutDashboard, FileText, LogOut, User as UserIcon, Menu, Shield, X } from 'lucide-react';
+import { FileText, GraduationCap, LayoutDashboard, LogOut, Shield, User as UserIcon } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/Components/ui/sonner';
@@ -22,21 +22,54 @@ function NavItem({ href, active, icon: Icon, children, onClick }) {
     );
 }
 
+function MobileTab({ href, active, icon: Icon, label, onClick }) {
+    return (
+        <Link
+            href={href}
+            onClick={onClick}
+            className={cn(
+                'flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition-colors',
+                active ? 'text-gold-600' : 'text-navy-500 hover:text-navy-800',
+            )}
+        >
+            <Icon className="h-5 w-5" />
+            <span className="leading-none">{label}</span>
+        </Link>
+    );
+}
+
+function MobileTabButton({ active, icon: Icon, label, onClick }) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className={cn(
+                'flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition-colors',
+                active ? 'text-gold-600' : 'text-navy-500 hover:text-navy-800',
+            )}
+        >
+            <Icon className="h-5 w-5" />
+            <span className="leading-none">{label}</span>
+        </button>
+    );
+}
+
 export default function AppLayout({ header, children }) {
     const { auth, school } = usePage().props;
     const user = auth?.user;
-    const [open, setOpen] = useState(false);
-    const close = () => setOpen(false);
+    const [accountOpen, setAccountOpen] = useState(false);
     const isCurrent = (name) => route().current(name);
 
     const navItems = [
-        { href: route('dashboard'), name: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-        { href: route('registration.start'), name: 'registration.*', icon: FileText, label: 'Formulir Pendaftaran' },
-        { href: route('profile.edit'), name: 'profile.edit', icon: UserIcon, label: 'Profil' },
+        { href: route('dashboard'), name: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', mobileLabel: 'Dashboard' },
+        { href: route('registration.start'), name: 'registration.*', icon: FileText, label: 'Formulir Pendaftaran', mobileLabel: 'Formulir' },
+        { href: route('profile.edit'), name: 'profile.edit', icon: UserIcon, label: 'Profil', mobileLabel: 'Profil' },
         ...(user?.role === 'admin'
-            ? [{ href: route('admin.dashboard'), name: 'admin.*', icon: Shield, label: 'Panel Admin' }]
+            ? [{ href: route('admin.dashboard'), name: 'admin.*', icon: Shield, label: 'Panel Admin', mobileLabel: 'Admin' }]
             : []),
     ];
+
+    const totalCols = navItems.length + 1; // + tab Akun
 
     return (
         <div className="min-h-screen bg-navy-50">
@@ -76,55 +109,97 @@ export default function AppLayout({ header, children }) {
                 </div>
             </aside>
 
-            {/* Mobile drawer */}
-            {open && (
-                <div className="fixed inset-0 z-40 flex lg:hidden">
-                    <div className="fixed inset-0 bg-navy-950/60" onClick={close} />
-                    <aside className="relative flex w-72 max-w-full flex-col bg-navy-900 text-white">
-                        <div className="flex items-center justify-between border-b border-navy-800 px-5 py-4">
-                            <p className="text-sm font-semibold">{school?.name}</p>
-                            <button onClick={close} className="text-navy-200 hover:text-white">
-                                <X className="h-5 w-5" />
-                            </button>
+            <div className="lg:pl-72">
+                {/* Topbar (mobile) — brand only, no hamburger */}
+                <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-navy-100 bg-white/95 px-4 py-3 backdrop-blur lg:hidden">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold-500 text-navy-950">
+                        <GraduationCap className="h-4 w-4" />
+                    </span>
+                    <p className="text-sm font-semibold text-navy-900">{school?.name ?? 'SPMB'}</p>
+                </header>
+
+                {header && (
+                    <div className="border-b border-navy-100 bg-white">
+                        <div className="mx-auto min-w-0 max-w-6xl px-4 py-5 sm:px-6 lg:px-8">{header}</div>
+                    </div>
+                )}
+
+                <main className="mx-auto max-w-6xl px-4 py-6 pb-24 sm:px-6 lg:px-8 lg:pb-6">
+                    {children}
+                </main>
+            </div>
+
+            {/* Bottom nav (mobile) */}
+            <nav
+                className="fixed inset-x-0 bottom-0 z-30 grid border-t border-navy-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_12px_-6px_rgba(15,23,42,0.12)] lg:hidden"
+                style={{ gridTemplateColumns: `repeat(${totalCols}, minmax(0, 1fr))` }}
+            >
+                {navItems.map((item) => (
+                    <MobileTab
+                        key={item.name}
+                        href={item.href}
+                        active={isCurrent(item.name)}
+                        icon={item.icon}
+                        label={item.mobileLabel ?? item.label}
+                    />
+                ))}
+                <MobileTabButton
+                    active={accountOpen}
+                    icon={UserIcon}
+                    label="Akun"
+                    onClick={() => setAccountOpen(true)}
+                />
+            </nav>
+
+            {/* Account bottom sheet (mobile) */}
+            {accountOpen && (
+                <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
+                    <div
+                        className="fixed inset-0 bg-navy-950/40"
+                        onClick={() => setAccountOpen(false)}
+                    />
+                    <div className="fixed inset-x-0 bottom-0 rounded-t-2xl bg-white pb-[env(safe-area-inset-bottom)] shadow-2xl">
+                        <div className="flex justify-center pt-2">
+                            <span className="h-1 w-10 rounded-full bg-navy-200" />
                         </div>
-                        <nav className="flex-1 space-y-1 px-3 py-4">
-                            {navItems.map((item) => (
-                                <NavItem key={item.name} href={item.href} active={isCurrent(item.name)} icon={item.icon} onClick={close}>
-                                    {item.label}
-                                </NavItem>
-                            ))}
-                        </nav>
-                        <div className="border-t border-navy-800 px-3 py-4">
+                        <div className="px-5 py-4">
+                            <p className="text-xs uppercase tracking-widest text-navy-400">Akun</p>
+                            <p className="mt-1 text-sm font-semibold text-navy-900">{user?.name ?? '-'}</p>
+                            <p className="text-xs text-navy-500">{user?.phone ?? '-'}</p>
+                        </div>
+                        <div className="border-t border-navy-100 px-3 py-2">
+                            <Link
+                                href={route('profile.edit')}
+                                onClick={() => setAccountOpen(false)}
+                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-navy-700 hover:bg-navy-50"
+                            >
+                                <UserIcon className="h-4 w-4" />
+                                Profil
+                            </Link>
                             <button
                                 type="button"
-                                onClick={() => router.post(route('logout'))}
-                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-navy-100 hover:bg-navy-800"
+                                onClick={() => {
+                                    setAccountOpen(false);
+                                    router.post(route('logout'));
+                                }}
+                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50"
                             >
                                 <LogOut className="h-4 w-4" />
                                 Keluar
                             </button>
                         </div>
-                    </aside>
+                        <div className="border-t border-navy-100 px-3 py-2">
+                            <button
+                                type="button"
+                                onClick={() => setAccountOpen(false)}
+                                className="flex w-full items-center justify-center rounded-lg px-3 py-2.5 text-sm font-medium text-navy-500 hover:bg-navy-50"
+                            >
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
-
-            <div className="lg:pl-72">
-                {/* Topbar (mobile) */}
-                <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-navy-100 bg-white/95 px-4 py-3 backdrop-blur lg:hidden">
-                    <button onClick={() => setOpen(true)} className="rounded-md p-2 text-navy-700 hover:bg-navy-50">
-                        <Menu className="h-5 w-5" />
-                    </button>
-                    <p className="text-sm font-semibold text-navy-900">{school?.name}</p>
-                </header>
-
-                {header && (
-                    <div className="border-b border-navy-100 bg-white">
-                        <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8">{header}</div>
-                    </div>
-                )}
-
-                <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">{children}</main>
-            </div>
         </div>
     );
 }

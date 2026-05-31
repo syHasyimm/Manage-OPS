@@ -2,14 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\SchoolSetting;
 use App\Services\WhatsApp\Contracts\WhatsAppService;
 use App\Services\WhatsApp\Drivers\FonnteWhatsAppService;
 use App\Services\WhatsApp\Drivers\LogWhatsAppService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +37,35 @@ class AppServiceProvider extends ServiceProvider
         Vite::prefetch(concurrency: 3);
 
         $this->configureRateLimiters();
+        $this->overrideSchoolConfigFromDatabase();
+    }
+
+    /**
+     * Override config('spmb.school.*') dengan nilai dari tabel school_settings,
+     * sehingga semua call site yang sudah pakai config tetap berfungsi.
+     */
+    protected function overrideSchoolConfigFromDatabase(): void
+    {
+        // Hindari error saat artisan migrate / install awal sebelum tabel ada.
+        try {
+            if (! Schema::hasTable('school_settings')) {
+                return;
+            }
+
+            $setting = SchoolSetting::current();
+
+            config([
+                'spmb.school.name' => $setting->name,
+                'spmb.school.district' => $setting->district,
+                'spmb.school.address' => $setting->fullAddress() ?: config('spmb.school.address'),
+                'spmb.school.principal' => $setting->principal_name ?: config('spmb.school.principal'),
+                'spmb.school.phone' => $setting->phone ?: config('spmb.school.phone'),
+                'spmb.school.email' => $setting->email ?: config('spmb.school.email'),
+                'spmb.school.logo_path' => $setting->logo_path ?: config('spmb.school.logo_path'),
+            ]);
+        } catch (Throwable $e) {
+            // Diam saja: jika DB belum siap (mis. saat migrate fresh), pakai config default.
+        }
     }
 
     protected function configureRateLimiters(): void

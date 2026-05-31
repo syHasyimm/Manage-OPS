@@ -151,16 +151,19 @@ export default function Index({ registrations, filters, periods }) {
 
             <Card>
                 <CardContent className="p-0">
-                    <Table>
+                    <p className="px-4 pt-3 text-xs text-navy-500 sm:hidden">
+                        Geser tabel ke samping untuk melihat semua kolom.
+                    </p>
+                    <Table className="min-w-[860px]">
                         <TableHeader>
                             <TableRow>
-                                <TableHead>No Pendaftaran</TableHead>
-                                <TableHead>Nama Murid</TableHead>
-                                <TableHead>Pendaftar</TableHead>
-                                <TableHead>JK</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Submit</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
+                                <TableHead className="whitespace-nowrap">No Pendaftaran</TableHead>
+                                <TableHead className="whitespace-nowrap">Nama Murid</TableHead>
+                                <TableHead className="whitespace-nowrap">Pendaftar</TableHead>
+                                <TableHead className="whitespace-nowrap">JK</TableHead>
+                                <TableHead className="whitespace-nowrap">Status</TableHead>
+                                <TableHead className="whitespace-nowrap">Submit</TableHead>
+                                <TableHead className="whitespace-nowrap text-right">Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -175,19 +178,18 @@ export default function Index({ registrations, filters, periods }) {
                                 const meta = STATUS[r.status] ?? STATUS.draft;
                                 return (
                                     <TableRow key={r.id}>
-                                        <TableCell className="font-mono text-xs">{r.registration_number ?? '-'}</TableCell>
-                                        <TableCell>{r.identity?.full_name ?? '-'}</TableCell>
-                                        <TableCell className="text-xs text-navy-600">
-                                            {r.user?.name}
-                                            <br />
-                                            <span className="text-navy-400">{r.user?.phone}</span>
+                                        <TableCell className="whitespace-nowrap font-mono text-xs">{r.registration_number ?? '-'}</TableCell>
+                                        <TableCell className="min-w-[160px]">{r.identity?.full_name ?? '-'}</TableCell>
+                                        <TableCell className="min-w-[160px] text-xs text-navy-600">
+                                            <div className="font-medium text-navy-800">{r.user?.name}</div>
+                                            <div className="text-navy-400">{r.user?.phone}</div>
                                         </TableCell>
-                                        <TableCell>{r.identity?.gender === 'L' ? 'Laki-Laki' : r.identity?.gender === 'P' ? 'Perempuan' : '-'}</TableCell>
-                                        <TableCell><Badge variant={meta.variant}>{meta.label}</Badge></TableCell>
-                                        <TableCell className="text-xs text-navy-600">
+                                        <TableCell className="whitespace-nowrap">{r.identity?.gender === 'L' ? 'Laki-Laki' : r.identity?.gender === 'P' ? 'Perempuan' : '-'}</TableCell>
+                                        <TableCell className="whitespace-nowrap"><Badge variant={meta.variant}>{meta.label}</Badge></TableCell>
+                                        <TableCell className="whitespace-nowrap text-xs text-navy-600">
                                             {r.submitted_at ? new Date(r.submitted_at).toLocaleString('id-ID') : '-'}
                                         </TableCell>
-                                        <TableCell className="text-right">
+                                        <TableCell className="whitespace-nowrap text-right">
                                             <Button asChild variant="ghost" size="sm">
                                                 <Link href={route('admin.registrations.show', { registration: r.id })}>
                                                     <Eye className="h-4 w-4" />

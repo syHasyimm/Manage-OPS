@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Formulir Pendaftaran - {{ $registration->registration_number }}</title>
     <style>
-        @page { margin: 25mm 18mm 22mm 18mm; }
+        @page { margin: 22mm 18mm 22mm 18mm; }
         * { font-family: DejaVu Sans, sans-serif; }
         body { color: #102a43; font-size: 10.5pt; line-height: 1.45; }
         .watermark {
@@ -21,21 +21,70 @@
             letter-spacing: 4pt;
             z-index: -1;
         }
-        .header { border-bottom: 2px solid #1E3A5F; padding-bottom: 8px; margin-bottom: 14px; }
-        .header table { width: 100%; border-collapse: collapse; }
-        .header td { vertical-align: top; }
-        .school-name { font-size: 14pt; font-weight: bold; color: #1E3A5F; }
-        .school-sub { font-size: 9.5pt; color: #486581; }
+
+        /* ===================== KOP RESMI ===================== */
+        .kop { width: 100%; }
+        .kop table { width: 100%; border-collapse: collapse; }
+        .kop td { vertical-align: middle; }
+        .kop-logo { width: 95px; text-align: center; padding-right: 6px; }
+        .kop-logo img { width: 85px; height: 85px; object-fit: contain; }
+        .kop-logo .logo-fallback {
+            width: 80px;
+            height: 80px;
+            border: 2px dashed #bcccdc;
+            border-radius: 50%;
+            display: inline-block;
+            line-height: 76px;
+            color: #9fb3c8;
+            font-size: 8pt;
+        }
+        .kop-logo-right { width: 95px; text-align: center; padding-left: 6px; }
+        .kop-logo-right img { width: 85px; height: 85px; object-fit: contain; }
+        .kop-text { text-align: center; padding: 0 4px; }
+        .kop-gov {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
+            font-weight: bold;
+            color: #1E3A5F;
+            line-height: 1.25;
+            text-transform: uppercase;
+            letter-spacing: 0.3pt;
+        }
+        .kop-school {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #1E3A5F;
+            text-transform: uppercase;
+            letter-spacing: 0.5pt;
+            margin: 3px 0 2px;
+        }
+        .kop-address { font-size: 9pt; color: #243b53; line-height: 1.35; }
+        .kop-meta { font-size: 8.5pt; color: #486581; margin-top: 1px; }
+        .kop-divider {
+            border-top: 2.5px solid #1E3A5F;
+            border-bottom: 1px solid #1E3A5F;
+            height: 3px;
+            margin: 6px 0 14px;
+        }
+
+        /* ===================== DOCUMENT TITLE ===================== */
         .doc-title {
             text-align: center;
-            margin: 10px 0 14px;
+            margin: 4px 0 4px;
             font-size: 13pt;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1pt;
             color: #1E3A5F;
         }
-        .doc-sub { text-align: center; font-size: 10pt; margin-top: -8px; margin-bottom: 14px; color: #486581; }
+        .doc-title-underline {
+            border-bottom: 1.5px solid #1E3A5F;
+            width: 320px;
+            margin: 0 auto 6px;
+        }
+        .doc-sub { text-align: center; font-size: 10pt; margin-bottom: 14px; color: #486581; }
+
+        /* ===================== META ===================== */
         .meta {
             display: table;
             width: 100%;
@@ -44,6 +93,8 @@
         }
         .meta .cell { display: table-cell; padding: 6px 8px; border: 1px solid #bcccdc; background: #f0f4f8; }
         .meta .cell strong { display: block; color: #486581; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.5pt; }
+
+        /* ===================== SECTIONS ===================== */
         .section-title {
             background: #1E3A5F;
             color: white;
@@ -63,6 +114,8 @@
         .grid2 .col { display: table-cell; width: 50%; }
         .grid2 .col:first-child { padding-right: 4px; }
         .grid2 .col:last-child { padding-left: 4px; }
+
+        /* ===================== FOOTER ===================== */
         .footer {
             margin-top: 18px;
             display: table;
@@ -72,7 +125,8 @@
         .footer .right { display: table-cell; vertical-align: top; text-align: right; width: 35%; font-size: 9.5pt; }
         .qr { margin-top: 4px; }
         .signoff { margin-top: 50px; }
-        .stamp-line { display: inline-block; width: 220px; border-top: 1px solid #102a43; padding-top: 4px; }
+        .stamp-line { display: inline-block; width: 220px; border-top: 1px solid #102a43; padding-top: 4px; font-weight: bold; }
+        .nip-line { font-size: 8.5pt; color: #243b53; margin-top: 2px; }
         .small { font-size: 9pt; color: #486581; }
         .badge {
             display: inline-block;
@@ -88,34 +142,70 @@
 <body>
     <div class="watermark">SPMB {{ $registration->period->yearKey() }}</div>
 
-    <div class="header">
+    <div class="kop">
         <table>
             <tr>
-                <td style="width:75%">
-                    <div class="school-name">{{ $school['name'] }}</div>
-                    <div class="school-sub">Kecamatan {{ $school['district'] }}{{ $school['address'] ? ' - '.$school['address'] : '' }}</div>
+                <td class="kop-logo">
+                    @if(! empty($school['logo_absolute']))
+                        <img src="{{ $school['logo_absolute'] }}" alt="Logo Sekolah">
+                    @else
+                        <span class="logo-fallback">LOGO</span>
+                    @endif
                 </td>
-                <td style="width:25%; text-align:right;">
-                    <div class="small">No. Pendaftaran</div>
-                    <div><span class="badge">{{ $registration->registration_number }}</span></div>
+                <td class="kop-text">
+                    @if(! empty($school['government_regency']))
+                        <div class="kop-gov">{{ $school['government_regency'] }}</div>
+                    @endif
+                    @if(! empty($school['education_office']))
+                        <div class="kop-gov">{{ $school['education_office'] }}</div>
+                    @endif
+                    <div class="kop-school">{{ $school['name'] }}</div>
+                    @if(! empty($school['full_address']))
+                        <div class="kop-address">{{ $school['full_address'] }}</div>
+                    @endif
+                    @if(! empty($school['phone']) || ! empty($school['email']) || ! empty($school['website']))
+                        <div class="kop-meta">
+                            @if(! empty($school['phone'])) Telp: {{ $school['phone'] }} @endif
+                            @if(! empty($school['email'])) {!! ! empty($school['phone']) ? '&nbsp;|&nbsp;' : '' !!} Email: {{ $school['email'] }} @endif
+                            @if(! empty($school['website'])) {!! (! empty($school['phone']) || ! empty($school['email'])) ? '&nbsp;|&nbsp;' : '' !!} Web: {{ $school['website'] }} @endif
+                        </div>
+                    @endif
+                    @if(! empty($school['npsn']) || ! empty($school['accreditation']) || ! empty($school['nss']))
+                        <div class="kop-meta">
+                            @if(! empty($school['npsn'])) NPSN: {{ $school['npsn'] }} @endif
+                            @if(! empty($school['nss'])) {!! ! empty($school['npsn']) ? '&nbsp;|&nbsp;' : '' !!} NSS: {{ $school['nss'] }} @endif
+                            @if(! empty($school['accreditation'])) {!! (! empty($school['npsn']) || ! empty($school['nss'])) ? '&nbsp;|&nbsp;' : '' !!} Akreditasi: {{ $school['accreditation'] }} @endif
+                        </div>
+                    @endif
+                </td>
+                <td class="kop-logo-right">
+                    @if(! empty($school['regency_logo_absolute']))
+                        <img src="{{ $school['regency_logo_absolute'] }}" alt="Logo Kabupaten">
+                    @endif
                 </td>
             </tr>
         </table>
     </div>
+    <div class="kop-divider"></div>
 
     <div class="doc-title">Formulir Pendaftaran Murid Baru</div>
+    <div class="doc-title-underline"></div>
     <div class="doc-sub">Tahun Ajaran {{ $registration->period->academic_year }}</div>
 
     <div class="meta">
-        <div class="cell" style="width:34%">
+        <div class="cell" style="width:25%">
+            <strong>No. Pendaftaran</strong>
+            <span class="badge">{{ $registration->registration_number }}</span>
+        </div>
+        <div class="cell" style="width:30%">
             <strong>Nama Murid</strong>
             {{ $identity->full_name }}
         </div>
-        <div class="cell" style="width:33%">
+        <div class="cell" style="width:25%">
             <strong>Tanggal Submit</strong>
             {{ optional($registration->submitted_at)->translatedFormat('d F Y H:i') ?? '-' }}
         </div>
-        <div class="cell" style="width:33%">
+        <div class="cell" style="width:20%">
             <strong>Status</strong>
             {{ strtoupper($registration->status) }}
         </div>
@@ -222,11 +312,14 @@
         <table style="width:100%;">
             <tr>
                 <td></td>
-                <td style="width: 240px; text-align:center;" class="small">
-                    Kepenuhan, {{ optional($registration->submitted_at)->translatedFormat('d F Y') }}<br>
-                    Kepala Sekolah,
-                    <div class="signoff" style="margin-top: 50px;">
-                        <span class="stamp-line">{{ $school['principal'] ?? 'Kepala Sekolah' }}</span>
+                <td style="width: 260px; text-align:center;" class="small">
+                    {{ $school['signature_city'] ?: ($school['district'] ?: '') }}{{ ($school['signature_city'] || $school['district']) ? ',' : '' }} {{ optional($registration->submitted_at)->translatedFormat('d F Y') }}<br>
+                    {{ $school['principal_title'] ?: 'Kepala Sekolah' }},
+                    <div style="margin-top: 60px;">
+                        <span class="stamp-line">{{ $school['principal_name'] ?: 'Kepala Sekolah' }}</span>
+                        @if(! empty($school['principal_nip']))
+                            <div class="nip-line">NIP. {{ $school['principal_nip'] }}</div>
+                        @endif
                     </div>
                 </td>
             </tr>

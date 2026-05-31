@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PeriodController as AdminPeriodController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
+use App\Http\Controllers\Admin\SchoolSettingController as AdminSchoolSettingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicStatusController;
@@ -101,6 +102,11 @@ Route::middleware(['auth', 'admin'])
         Route::post('/periods/{period}/activate', [AdminPeriodController::class, 'activate'])->name('periods.activate');
 
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+
+        Route::get('/school-settings', [AdminSchoolSettingController::class, 'edit'])->name('school-settings.edit');
+        Route::match(['post', 'patch'], '/school-settings', [AdminSchoolSettingController::class, 'update'])->name('school-settings.update');
+        Route::delete('/school-settings/logo', [AdminSchoolSettingController::class, 'deleteLogo'])->name('school-settings.logo.destroy');
+        Route::delete('/school-settings/regency-logo', [AdminSchoolSettingController::class, 'deleteRegencyLogo'])->name('school-settings.regency-logo.destroy');
     });
 
 require __DIR__.'/auth.php';

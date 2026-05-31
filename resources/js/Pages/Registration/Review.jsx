@@ -14,7 +14,7 @@ function Row({ label, value }) {
     return (
         <div className="grid grid-cols-1 gap-1 border-b border-navy-100 py-2 text-sm sm:grid-cols-3">
             <dt className="font-medium text-navy-600">{label}</dt>
-            <dd className="text-navy-950 sm:col-span-2">{value || <span className="text-navy-400">-</span>}</dd>
+            <dd className="break-words text-navy-950 sm:col-span-2">{value || <span className="text-navy-400">-</span>}</dd>
         </div>
     );
 }
@@ -22,7 +22,7 @@ function Row({ label, value }) {
 function Section({ title, action, children }) {
     return (
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between gap-2">
+            <CardHeader className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                 <CardTitle className="text-base">{title}</CardTitle>
                 {action}
             </CardHeader>
@@ -61,16 +61,16 @@ export default function Review({ registration, options, school, editable }) {
     return (
         <AppLayout
             header={
-                <div className="flex items-center justify-between gap-3">
-                    <div>
+                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3">
+                    <div className="min-w-0">
                         <p className="text-xs uppercase tracking-widest text-gold-600">
                             Tahun Ajaran {registration?.period?.academic_year}
                         </p>
-                        <h1 className="mt-1 text-xl font-semibold text-navy-950">
+                        <h1 className="mt-1 break-words text-lg font-semibold text-navy-950 sm:text-xl">
                             Review & Submit Pendaftaran
                         </h1>
                     </div>
-                    <Badge variant="outline">Status: {registration.status}</Badge>
+                    <Badge variant="outline" className="self-start sm:self-auto">Status: {registration.status}</Badge>
                 </div>
             }
         >
@@ -179,14 +179,14 @@ export default function Review({ registration, options, school, editable }) {
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Button asChild variant="outline">
+                            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:flex-wrap">
+                                <Button asChild variant="outline" className="w-full sm:w-auto">
                                     <Link href={route('registration.step', { step: 3 })}>
                                         <ArrowLeft className="h-4 w-4" />
                                         Kembali
                                     </Link>
                                 </Button>
-                                <Button type="submit" disabled={processing || !editable}>
+                                <Button type="submit" disabled={processing || !editable} className="w-full sm:w-auto">
                                     {processing && <Loader2 className="h-4 w-4 animate-spin" />}
                                     <Send className="h-4 w-4" />
                                     Submit Pendaftaran

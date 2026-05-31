@@ -110,7 +110,7 @@ function ParentForm({ role, label, data, setData, errors, options, optional = fa
                         <RadioGroup
                             value={(value.is_alive ?? true) ? 'alive' : 'deceased'}
                             onValueChange={(v) => update('is_alive', v === 'alive')}
-                            className="flex gap-6"
+                            className="flex flex-wrap gap-x-6 gap-y-2"
                         >
                             <label className="flex items-center gap-2 text-sm text-navy-800">
                                 <RadioGroupItem value="alive" />
@@ -238,14 +238,15 @@ export default function Step3({ registration, options, editable }) {
                         />
 
                         <div className="rounded-lg border border-navy-100 bg-navy-50/50 p-4">
-                            <div className="flex items-center justify-between">
-                                <div>
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
                                     <p className="text-sm font-semibold text-navy-900">Apakah memiliki Wali?</p>
                                     <p className="text-xs text-navy-500">
                                         Aktifkan jika anak diasuh oleh Wali (selain orang tua kandung).
                                     </p>
                                 </div>
                                 <Switch
+                                    className="shrink-0"
                                     checked={data.has_guardian}
                                     onCheckedChange={(v) => setData('has_guardian', Boolean(v))}
                                 />

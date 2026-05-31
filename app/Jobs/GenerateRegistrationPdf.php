@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Registration;
+use App\Models\SchoolSetting;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,6 +45,8 @@ class GenerateRegistrationPdf implements ShouldQueue
             ->errorCorrection('M')
             ->generate($statusUrl);
 
+        $school = SchoolSetting::current()->toPdfArray();
+
         $pdf = Pdf::loadView('pdf.registration', [
             'registration' => $registration,
             'identity' => $registration->identity,
@@ -51,12 +54,12 @@ class GenerateRegistrationPdf implements ShouldQueue
             'father' => $registration->parents->firstWhere('role', 'father'),
             'mother' => $registration->parents->firstWhere('role', 'mother'),
             'guardian' => $registration->parents->firstWhere('role', 'guardian'),
-            'school' => config('spmb.school'),
+            'school' => $school,
             'qr' => $qrSvg,
             'statusUrl' => $statusUrl,
         ])
             ->setPaper('folio', 'portrait')
-            ->setOption(['isPhpEnabled' => true]);
+            ->setOption(['isPhpEnabled' => true, 'isRemoteEnabled' => true]);
 
         $relative = "registrations/{$registration->registration_number}.pdf";
         Storage::disk('public')->put($relative, $pdf->output());

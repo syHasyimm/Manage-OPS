@@ -85,9 +85,14 @@ export default function Welcome({ canLogin, canRegister, period }) {
                             <p className="text-sm font-semibold text-navy-950">{school?.name ?? 'SD Negeri 001 Kepenuhan'}</p>
                         </div>
                     </div>
-                    <nav className="hidden items-center gap-2 sm:flex">
-                        <Button asChild variant="ghost" size="sm">
+                    <nav className="flex items-center gap-2">
+                        <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
                             <Link href="/cek-status">Cek Status</Link>
+                        </Button>
+                        <Button asChild variant="ghost" size="sm" className="sm:hidden" aria-label="Cek Status">
+                            <Link href="/cek-status">
+                                <Search className="h-4 w-4" />
+                            </Link>
                         </Button>
                         {auth?.user ? (
                             <Button asChild size="sm">
