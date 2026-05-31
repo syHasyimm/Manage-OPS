@@ -95,6 +95,7 @@ Route::middleware(['auth', 'admin'])
         Route::post('/registrations/{registration}/accept', [AdminRegistrationController::class, 'accept'])->name('registrations.accept');
         Route::post('/registrations/{registration}/reject', [AdminRegistrationController::class, 'reject'])->name('registrations.reject');
         Route::post('/registrations/{registration}/request-revision', [AdminRegistrationController::class, 'requestRevision'])->name('registrations.request-revision');
+        Route::post('/registrations/{registration}/regenerate-pdf', [AdminRegistrationController::class, 'regeneratePdf'])->name('registrations.regenerate-pdf');
 
         Route::get('/periods', [AdminPeriodController::class, 'index'])->name('periods.index');
         Route::post('/periods', [AdminPeriodController::class, 'store'])->name('periods.store');

@@ -26,29 +26,30 @@
         .kop { width: 100%; }
         .kop table { width: 100%; border-collapse: collapse; }
         .kop td { vertical-align: middle; }
-        .kop-logo { width: 95px; text-align: center; padding-right: 6px; }
-        .kop-logo img { width: 85px; height: 85px; object-fit: contain; }
+        .kop-logo { width: 78px; text-align: center; padding-right: 4px; }
+        .kop-logo img { width: 70px; height: 70px; object-fit: contain; }
         .kop-logo .logo-fallback {
-            width: 80px;
-            height: 80px;
+            width: 65px;
+            height: 65px;
             border: 2px dashed #bcccdc;
             border-radius: 50%;
             display: inline-block;
-            line-height: 76px;
+            line-height: 61px;
             color: #9fb3c8;
             font-size: 8pt;
         }
-        .kop-logo-right { width: 95px; text-align: center; padding-left: 6px; }
-        .kop-logo-right img { width: 85px; height: 85px; object-fit: contain; }
-        .kop-text { text-align: center; padding: 0 4px; }
+        .kop-logo-right { width: 78px; text-align: center; padding-left: 4px; }
+        .kop-logo-right img { width: 70px; height: 70px; object-fit: contain; }
+        .kop-text { text-align: center; padding: 0 6px; }
         .kop-gov {
             font-family: "Times New Roman", Times, serif;
-            font-size: 12pt;
+            font-size: 14pt;
             font-weight: bold;
             color: #1E3A5F;
-            line-height: 1.25;
+            line-height: 1;
             text-transform: uppercase;
-            letter-spacing: 0.3pt;
+            letter-spacing: 0;
+            margin-bottom: 2px;
         }
         .kop-school {
             font-size: 10pt;
@@ -56,10 +57,11 @@
             color: #1E3A5F;
             text-transform: uppercase;
             letter-spacing: 0.5pt;
-            margin: 3px 0 2px;
+            line-height: 1;
+            margin: 2;
         }
-        .kop-address { font-size: 9pt; color: #243b53; line-height: 1.35; }
-        .kop-meta { font-size: 8.5pt; color: #486581; margin-top: 1px; }
+        .kop-address { font-size: 9pt; color: #243b53; line-height: 1; margin: 0; }
+        .kop-meta { font-size: 8.5pt; color: #486581; line-height: 1; margin: 0; }
         .kop-divider {
             border-top: 2.5px solid #1E3A5F;
             border-bottom: 1px solid #1E3A5F;
@@ -160,6 +162,13 @@
                         <div class="kop-gov">{{ $school['education_office'] }}</div>
                     @endif
                     <div class="kop-school">{{ $school['name'] }}</div>
+                    @if(! empty($school['npsn']) || ! empty($school['accreditation']) || ! empty($school['nss']))
+                        <div class="kop-meta">
+                            @if(! empty($school['npsn'])) NPSN: {{ $school['npsn'] }} @endif
+                            @if(! empty($school['nss'])) {!! ! empty($school['npsn']) ? '&nbsp;|&nbsp;' : '' !!} NSS: {{ $school['nss'] }} @endif
+                            @if(! empty($school['accreditation'])) {!! (! empty($school['npsn']) || ! empty($school['nss'])) ? '&nbsp;|&nbsp;' : '' !!} Akreditasi: {{ $school['accreditation'] }} @endif
+                        </div>
+                    @endif
                     @if(! empty($school['full_address']))
                         <div class="kop-address">{{ $school['full_address'] }}</div>
                     @endif
@@ -168,13 +177,6 @@
                             @if(! empty($school['phone'])) Telp: {{ $school['phone'] }} @endif
                             @if(! empty($school['email'])) {!! ! empty($school['phone']) ? '&nbsp;|&nbsp;' : '' !!} Email: {{ $school['email'] }} @endif
                             @if(! empty($school['website'])) {!! (! empty($school['phone']) || ! empty($school['email'])) ? '&nbsp;|&nbsp;' : '' !!} Web: {{ $school['website'] }} @endif
-                        </div>
-                    @endif
-                    @if(! empty($school['npsn']) || ! empty($school['accreditation']) || ! empty($school['nss']))
-                        <div class="kop-meta">
-                            @if(! empty($school['npsn'])) NPSN: {{ $school['npsn'] }} @endif
-                            @if(! empty($school['nss'])) {!! ! empty($school['npsn']) ? '&nbsp;|&nbsp;' : '' !!} NSS: {{ $school['nss'] }} @endif
-                            @if(! empty($school['accreditation'])) {!! (! empty($school['npsn']) || ! empty($school['nss'])) ? '&nbsp;|&nbsp;' : '' !!} Akreditasi: {{ $school['accreditation'] }} @endif
                         </div>
                     @endif
                 </td>
@@ -289,24 +291,6 @@
     <table class="data" style="margin-top: 6px;">
         <tr><td class="label">Email Kontak</td><td class="value" colspan="3">{{ $registration->contact_email ?: '-' }}</td></tr>
     </table>
-
-    <div class="footer">
-        <div class="left">
-            <p class="small">
-                Dokumen ini dibuat secara otomatis oleh sistem SPMB {{ $school['name'] }}.
-                QR Code di samping dapat dipindai untuk memverifikasi keaslian & melihat
-                status pendaftaran terkini.
-            </p>
-            <p class="small">
-                URL Verifikasi:<br>
-                <span style="word-break: break-all;">{{ $statusUrl }}</span>
-            </p>
-        </div>
-        <div class="right">
-            <div class="qr">{!! $qr !!}</div>
-            <div class="small" style="margin-top:4px;">{{ $registration->registration_number }}</div>
-        </div>
-    </div>
 
     <div class="signoff">
         <table style="width:100%;">

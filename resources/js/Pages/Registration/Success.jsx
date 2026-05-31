@@ -1,18 +1,48 @@
-import { Head, Link, useForm } from '@inertiajs/react';
-import { CheckCircle2, Download, Loader2, RefreshCw, MessageCircle } from 'lucide-react';
-import AppLayout from '@/Layouts/AppLayout';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
+import { Head, Link, router, useForm } from "@inertiajs/react";
+import { useEffect } from "react";
+import {
+    CheckCircle2,
+    Download,
+    Loader2,
+    RefreshCw,
+    MessageCircle,
+} from "lucide-react";
+import AppLayout from "@/Layouts/AppLayout";
+import { Card, CardContent } from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
+import { Badge } from "@/Components/ui/badge";
 
 export default function Success({ registration }) {
     const { post, processing } = useForm({});
 
     const resend = () => {
-        post(route('registration.resend-wa', { registration: registration.id }), {
-            preserveScroll: true,
-        });
+        post(
+            route("registration.resend-wa", { registration: registration.id }),
+            {
+                preserveScroll: true,
+            },
+        );
     };
+
+    // Polling agar tombol Download PDF muncul otomatis saat job queue selesai
+    // tanpa harus hard refresh. Stop saat pdf_ready=true atau setelah 60 detik.
+    useEffect(() => {
+        if (registration.pdf_ready) return;
+        let ticks = 0;
+        const id = setInterval(() => {
+            ticks += 1;
+            if (ticks > 30) {
+                clearInterval(id);
+                return;
+            }
+            router.reload({
+                only: ["registration"],
+                preserveScroll: true,
+                preserveState: true,
+            });
+        }, 2000);
+        return () => clearInterval(id);
+    }, [registration.pdf_ready]);
 
     return (
         <AppLayout
@@ -37,10 +67,13 @@ export default function Success({ registration }) {
                         </div>
                         <div>
                             <h2 className="text-lg font-semibold text-navy-950">
-                                Terima kasih, {registration.student_name ?? 'Calon Murid'}!
+                                Terima kasih,{" "}
+                                {registration.student_name ?? "Calon Murid"}!
                             </h2>
                             <p className="mt-1 text-sm text-navy-600">
-                                Pendaftaran Anda telah kami terima dan sedang menunggu verifikasi admin.
+                                Silahkan Download PDF formulir pendaftaran kamu
+                                dan Berikan Formulr ke Panitia untuk proses
+                                selanjutnya.
                             </p>
                         </div>
 
@@ -62,29 +95,57 @@ export default function Success({ registration }) {
                 <Card>
                     <CardContent className="space-y-3 py-5">
                         <p className="text-sm text-navy-700">
-                            Notifikasi WhatsApp berisi konfirmasi & file PDF formulir akan
-                            terkirim otomatis ke nomor terdaftar dalam beberapa menit.
+                            Notifikasi WhatsApp berisi konfirmasi & file PDF
+                            formulir akan terkirim otomatis ke nomor terdaftar
+                            dalam beberapa menit.
                         </p>
                         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                             {registration.pdf_ready ? (
-                                <Button asChild variant="default" className="w-full sm:w-auto">
-                                    <a href={route('registration.pdf', { registration: registration.id })} target="_blank" rel="noopener">
+                                <Button
+                                    asChild
+                                    variant="default"
+                                    className="w-full sm:w-auto"
+                                >
+                                    <a
+                                        href={route("registration.pdf", {
+                                            registration: registration.id,
+                                        })}
+                                        target="_blank"
+                                        rel="noopener"
+                                    >
                                         <Download className="h-4 w-4" />
                                         Download PDF
                                     </a>
                                 </Button>
                             ) : (
-                                <Button variant="outline" disabled className="w-full sm:w-auto">
+                                <Button
+                                    variant="outline"
+                                    disabled
+                                    className="w-full sm:w-auto"
+                                >
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                     PDF sedang dibuat...
                                 </Button>
                             )}
-                            <Button variant="outline" onClick={resend} disabled={processing} className="w-full sm:w-auto">
-                                {processing ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                            <Button
+                                variant="outline"
+                                onClick={resend}
+                                disabled={processing}
+                                className="w-full sm:w-auto"
+                            >
+                                {processing ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <RefreshCw className="h-4 w-4" />
+                                )}
                                 Kirim Ulang ke WhatsApp
                             </Button>
-                            <Button asChild variant="ghost" className="w-full sm:w-auto">
-                                <Link href={route('dashboard')}>
+                            <Button
+                                asChild
+                                variant="ghost"
+                                className="w-full sm:w-auto"
+                            >
+                                <Link href={route("dashboard")}>
                                     <MessageCircle className="h-4 w-4" />
                                     Kembali ke Dashboard
                                 </Link>

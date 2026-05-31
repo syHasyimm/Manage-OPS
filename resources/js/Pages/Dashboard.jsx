@@ -1,4 +1,5 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
 import {
     AlertCircle,
     CheckCircle2,
@@ -102,6 +103,27 @@ export default function Dashboard({ period, registration }) {
             preserveScroll: true,
         });
     };
+
+    // Polling agar tombol Download PDF muncul otomatis saat job queue selesai
+    // tanpa harus hard refresh. Stop saat pdf_ready=true atau setelah 60 detik.
+    useEffect(() => {
+        if (!registration?.registration_number) return;
+        if (registration.pdf_ready) return;
+        let ticks = 0;
+        const id = setInterval(() => {
+            ticks += 1;
+            if (ticks > 30) {
+                clearInterval(id);
+                return;
+            }
+            router.reload({
+                only: ['registration'],
+                preserveScroll: true,
+                preserveState: true,
+            });
+        }, 2000);
+        return () => clearInterval(id);
+    }, [registration?.pdf_ready, registration?.registration_number]);
 
     return (
         <AppLayout

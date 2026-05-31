@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\RegistrationsExport;
 use App\Http\Controllers\Controller;
+use App\Jobs\GenerateRegistrationPdf;
 use App\Jobs\SendStatusUpdateNotification;
 use App\Models\Registration;
 use App\Models\RegistrationPeriod;
@@ -94,6 +95,17 @@ class RegistrationController extends Controller
         $request->validate(['note' => ['required', 'string', 'max:1000']]);
 
         return $this->changeStatus($request, $registration, Registration::STATUS_NEED_REVISION);
+    }
+
+    public function regeneratePdf(Registration $registration): RedirectResponse
+    {
+        if (! $registration->registration_number) {
+            return back()->with('error', 'Registrasi belum punya nomor pendaftaran.');
+        }
+
+        GenerateRegistrationPdf::dispatch($registration->id);
+
+        return back()->with('status', 'PDF sedang di-generate ulang dengan KOP terbaru. Refresh halaman dalam beberapa detik.');
     }
 
     public function export(Request $request): BinaryFileResponse

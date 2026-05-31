@@ -7,6 +7,7 @@ import {
     Loader2,
     MessageCircle,
     PencilLine,
+    RefreshCw,
     Send,
     XCircle,
 } from 'lucide-react';
@@ -23,6 +24,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/Components/ui/dialog';
+import { toast } from 'sonner';
 
 const STATUS = {
     draft: { label: 'Draft', variant: 'warning' },
@@ -112,9 +114,17 @@ export default function Show({ registration, options, school }) {
     const [openRevision, setOpenRevision] = useState(false);
     const verifyForm = useForm({});
     const acceptForm = useForm({});
+    const regenerateForm = useForm({});
 
     const verify = () => verifyForm.post(route('admin.registrations.verify', { registration: registration.id }), { preserveScroll: true });
     const accept = () => acceptForm.post(route('admin.registrations.accept', { registration: registration.id }), { preserveScroll: true });
+    const regeneratePdf = () => {
+        if (!confirm('Regenerate PDF dengan KOP & data terbaru? File lama akan ditimpa.')) return;
+        regenerateForm.post(route('admin.registrations.regenerate-pdf', { registration: registration.id }), {
+            preserveScroll: true,
+            onSuccess: () => toast.success('PDF sedang di-regenerate, refresh halaman dalam beberapa detik.'),
+        });
+    };
 
     const i = registration.identity ?? {};
     const p = registration.periodic ?? {};
@@ -179,6 +189,21 @@ export default function Show({ registration, options, school }) {
                                     <Download className="h-4 w-4" />
                                     Download PDF
                                 </a>
+                            </Button>
+                        )}
+                        {registration.registration_number && (
+                            <Button
+                                variant="ghost"
+                                className="w-full"
+                                onClick={regeneratePdf}
+                                disabled={regenerateForm.processing}
+                            >
+                                {regenerateForm.processing ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <RefreshCw className="h-4 w-4" />
+                                )}
+                                Regenerate PDF
                             </Button>
                         )}
                     </CardContent>

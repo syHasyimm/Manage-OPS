@@ -174,12 +174,12 @@ export default function Edit({ setting }) {
                                 </div>
                                 <div className="min-w-0 flex-1 text-center">
                                     {data.government_regency && (
-                                        <p className="break-words font-serif text-[11px] font-bold uppercase text-navy-900 leading-tight sm:text-xs">
+                                        <p className="overflow-hidden text-ellipsis whitespace-nowrap font-serif text-[10px] font-bold uppercase leading-tight text-navy-900">
                                             {data.government_regency}
                                         </p>
                                     )}
                                     {data.education_office && (
-                                        <p className="break-words font-serif text-[11px] font-bold uppercase text-navy-900 leading-tight sm:text-xs">
+                                        <p className="overflow-hidden text-ellipsis whitespace-nowrap font-serif text-[10px] font-bold uppercase leading-tight text-navy-900">
                                             {data.education_office}
                                         </p>
                                     )}
