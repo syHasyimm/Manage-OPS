@@ -6,9 +6,11 @@ use App\Http\Requests\Registration\StoreStep1Request;
 use App\Http\Requests\Registration\StoreStep2Request;
 use App\Http\Requests\Registration\StoreStep3Request;
 use App\Jobs\GenerateRegistrationPdf;
+use App\Jobs\SendPrintInstructionNotification;
 use App\Jobs\SendRegistrationConfirmation;
 use App\Models\Registration;
 use App\Models\StudentParent;
+use App\Models\WhatsappLog;
 use App\Services\RegistrationNumberGenerator;
 use App\Services\RegistrationService;
 use App\Support\RegistrationOptions;
@@ -248,9 +250,51 @@ class RegistrationController extends Controller
             abort(404, 'PDF belum siap. Coba lagi beberapa saat.');
         }
 
+        $this->maybeDispatchPrintInstruction($request, $registration);
+
         $filename = ($registration->registration_number ?? 'pendaftaran').'.pdf';
 
         return Storage::disk('public')->download($registration->pdf_path, $filename);
+    }
+
+    /**
+     * Kirim notifikasi WA berisi instruksi cetak & finalisasi ke sekolah.
+     * Hanya dipanggil sekali per registrasi (idempotent via WhatsappLog).
+     * Tidak dipicu untuk admin atau bila status sudah lewat fase verifikasi.
+     */
+    protected function maybeDispatchPrintInstruction(Request $request, Registration $registration): void
+    {
+        $user = $request->user();
+
+        if ($registration->user_id !== $user->id) {
+            return;
+        }
+
+        if (! in_array($registration->status, [
+            Registration::STATUS_SUBMITTED,
+            Registration::STATUS_VERIFIED,
+        ], true)) {
+            return;
+        }
+
+        $registration->loadMissing('identity');
+        $phone = $registration->identity?->phone_wa ?? $user->phone;
+        if (empty($phone)) {
+            return;
+        }
+
+        $alreadySent = WhatsappLog::query()
+            ->where('purpose', SendPrintInstructionNotification::PURPOSE)
+            ->where('to', $phone)
+            ->where('message', 'like', '%'.$registration->registration_number.'%')
+            ->whereIn('status', [WhatsappLog::STATUS_SENT, WhatsappLog::STATUS_PENDING])
+            ->exists();
+
+        if ($alreadySent) {
+            return;
+        }
+
+        SendPrintInstructionNotification::dispatch($registration->id);
     }
 
     public function resendWa(Request $request, Registration $registration): RedirectResponse

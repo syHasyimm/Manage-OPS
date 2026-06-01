@@ -99,6 +99,16 @@ export default function Success({ registration }) {
                             formulir akan terkirim otomatis ke nomor terdaftar
                             dalam beberapa menit.
                         </p>
+                        <p className="rounded-lg bg-gold-50 px-3 py-2 text-xs text-navy-700">
+                            Setelah mengunduh PDF, kamu akan menerima
+                            notifikasi WhatsApp berisi instruksi untuk{" "}
+                            <span className="font-semibold">mencetak</span>{" "}
+                            formulir dan{" "}
+                            <span className="font-semibold">
+                                membawa berkas ke sekolah
+                            </span>{" "}
+                            untuk memfinalisasi pendaftaran.
+                        </p>
                         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                             {registration.pdf_ready ? (
                                 <Button
