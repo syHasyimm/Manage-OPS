@@ -5,6 +5,7 @@ import {
     GraduationCap,
     LayoutDashboard,
     LogOut,
+    MessageSquare,
     Settings,
     User as UserIcon,
     Users,
@@ -78,6 +79,7 @@ export default function AdminLayout({ header, children }) {
     // Item ini hanya tampil di sidebar desktop & bottom sheet, tidak di bottom nav
     // (agar bottom nav mobile tidak terlalu padat dengan 6+ tab).
     const desktopExtraItems = [
+        { href: route('admin.faqs.index'), name: 'admin.faqs.*', icon: MessageSquare, label: 'Kelola FAQ' },
         { href: route('admin.school-settings.edit'), name: 'admin.school-settings.*', icon: Settings, label: 'Pengaturan Sekolah' },
     ];
 

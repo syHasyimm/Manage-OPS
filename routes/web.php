@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\Admin\PeriodController as AdminPeriodController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\SchoolSettingController as AdminSchoolSettingController;
@@ -12,6 +14,10 @@ use App\Models\RegistrationPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+Route::post('/chatbot/message', [ChatbotController::class, 'handle'])
+    ->middleware('throttle:20,1')
+    ->name('chatbot.message');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -103,6 +109,8 @@ Route::middleware(['auth', 'admin'])
         Route::post('/periods/{period}/activate', [AdminPeriodController::class, 'activate'])->name('periods.activate');
 
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+
+        Route::resource('faqs', AdminFaqController::class)->except(['show', 'create', 'edit']);
 
         Route::get('/school-settings', [AdminSchoolSettingController::class, 'edit'])->name('school-settings.edit');
         Route::match(['post', 'patch'], '/school-settings', [AdminSchoolSettingController::class, 'update'])->name('school-settings.update');

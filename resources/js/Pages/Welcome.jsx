@@ -1,4 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import ChatbotWidget from '@/Components/ChatbotWidget';
 import {
     ArrowRight,
     CalendarDays,
@@ -297,6 +298,8 @@ export default function Welcome({ canLogin, canRegister, period }) {
             <footer className="bg-navy-950 py-6 text-center text-xs text-navy-300">
                 &copy; {new Date().getFullYear()} {school?.name}. {school?.address}.
             </footer>
+
+            <ChatbotWidget />
         </div>
     );
 }
