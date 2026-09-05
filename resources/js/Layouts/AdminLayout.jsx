@@ -5,7 +5,9 @@ import {
     Calendar,
     Bell,
     FileText,
+    FolderOpen,
     GraduationCap,
+    HelpCircle,
     LayoutDashboard,
     LogOut,
     MessageSquare,
@@ -97,42 +99,42 @@ export default function AdminLayout({ header, children }) {
             ],
         },
         {
-            label: 'Pendaftaran',
+            label: 'Penerimaan Siswa (SPMB)',
             items: [
-                { href: route('admin.registrations.index'), name: 'admin.registrations.*', icon: UserCheck, label: 'Pendaftar', mobileLabel: 'Pendaftar' },
                 { href: route('admin.periods.index'), name: 'admin.periods.*', icon: Calendar, label: 'Periode', mobileLabel: 'Periode' },
+                { href: route('admin.registrations.index'), name: 'admin.registrations.*', icon: UserCheck, label: 'Data Pendaftar', mobileLabel: 'Pendaftar' },
             ],
         },
         {
-            label: 'Administrasi Sekolah',
+            label: 'Akademik & Kesiswaan',
             items: [
-                { href: route('admin.students.index'), name: 'admin.students.*', icon: GraduationCap, label: 'Data Siswa' },
-                { href: route('admin.kartu-nisn.index'), name: 'admin.kartu-nisn.*', icon: Contact, label: 'Cetak Kartu NISN' },
-                { href: route('admin.documents.index'), name: 'admin.documents.*', icon: FileText, label: 'Manajemen Dokumen' },
+                { href: route('admin.students.index'), name: 'admin.students.*', icon: GraduationCap, label: 'Buku Induk Siswa' },
                 { href: route('admin.academic-calendars.index'), name: 'admin.academic-calendars.*', icon: Calendar, label: 'Kalender Pendidikan' },
+                { href: route('admin.kartu-nisn.index'), name: 'admin.kartu-nisn.*', icon: Contact, label: 'Cetak Kartu NISN' },
             ],
         },
         {
-            label: 'Pemberitahuan',
-            items: [
-                { href: route('admin.notifications.index'), name: 'admin.notifications.*', icon: Bell, label: 'Notifikasi Ortu' },
-                { href: route('admin.notification-templates.index'), name: 'admin.notification-templates.*', icon: MessageSquare, label: 'Template Pesan' },
-            ],
-        },
-        {
-            label: 'Surat Menyurat',
+            label: 'Administrasi & Surat',
             items: [
                 { href: route('admin.surat-tugas.create'), name: 'admin.surat-tugas.*', icon: FileText, label: 'Surat Tugas' },
                 { href: route('admin.graduation-letters.index'), name: 'admin.graduation-letters.*', icon: Award, label: 'Surat Kelulusan' },
+                { href: route('admin.documents.index'), name: 'admin.documents.*', icon: FolderOpen, label: 'Arsip Dokumen' },
             ],
         },
         {
-            label: 'Pengaturan',
+            label: 'Komunikasi',
             items: [
-                { href: route('admin.users.index'), name: 'admin.users.*', icon: Users, label: 'Pengguna' },
-                { href: route('admin.school-settings.edit'), name: 'admin.school-settings.*', icon: Settings, label: 'Pengaturan Sekolah' },
-                { href: route('admin.whatsapp-settings.edit'), name: 'admin.whatsapp-settings.*', icon: Smartphone, label: 'Pengaturan WhatsApp' },
-                { href: route('admin.faqs.index'), name: 'admin.faqs.*', icon: MessageSquare, label: 'Kelola FAQ' },
+                { href: route('admin.notifications.index'), name: 'admin.notifications.*', icon: Bell, label: 'Kirim Notifikasi' },
+                { href: route('admin.notification-templates.index'), name: 'admin.notification-templates.*', icon: MessageSquare, label: 'Template Pesan' },
+                { href: route('admin.faqs.index'), name: 'admin.faqs.*', icon: HelpCircle, label: 'Kelola FAQ' },
+            ],
+        },
+        {
+            label: 'Sistem',
+            items: [
+                { href: route('admin.school-settings.edit'), name: 'admin.school-settings.*', icon: Settings, label: 'Profil Sekolah' },
+                { href: route('admin.whatsapp-settings.edit'), name: 'admin.whatsapp-settings.*', icon: Smartphone, label: 'Koneksi WhatsApp' },
+                { href: route('admin.users.index'), name: 'admin.users.*', icon: Users, label: 'Kelola Pengguna' },
             ],
         },
     ];
