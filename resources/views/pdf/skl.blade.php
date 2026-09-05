@@ -25,7 +25,7 @@
         font-size: 8pt;
     }
     .kop-logo-right { width: 78px; text-align: center; padding-left: 4px; }
-    .kop-logo-right img { width: 70px; height: 70px; object-fit: contain; }
+    .kop-logo-right img { width: 70px; height: 78px; object-fit: contain; }
     .kop-text { text-align: center; padding: 0 6px; }
     .kop-gov {
         font-family: "Times New Roman", Times, serif;

@@ -32,7 +32,7 @@
             line-height: 61px;
         }
         .kop-logo-right { width: 78px; padding-left: 4px; text-align: center; }
-        .kop-logo-right img { width: 84px; height: 84px; object-fit: contain; }
+        .kop-logo-right img { width: 70px; height: 78px; object-fit: contain; }
         .kop-text { padding: 0 6px; text-align: center; }
         .kop-gov {
             margin-bottom: 2px;
