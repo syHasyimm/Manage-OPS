@@ -70,4 +70,11 @@ class PeriodController extends Controller
 
         return back()->with('status', "Periode {$period->academic_year} diaktifkan.");
     }
+
+    public function deactivate(RegistrationPeriod $period): RedirectResponse
+    {
+        $period->update(['is_active' => false]);
+
+        return back()->with('status', "Periode {$period->academic_year} dinonaktifkan.");
+    }
 }

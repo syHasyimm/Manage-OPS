@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AppSetting;
 use App\Models\SchoolSetting;
 use App\Services\WhatsApp\Contracts\WhatsAppService;
 use App\Services\WhatsApp\Drivers\FonnteWhatsAppService;
@@ -18,16 +19,26 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(WhatsAppService::class, function ($app) {
+        $this->app->scoped(WhatsAppService::class, function () {
             $driver = config('whatsapp.driver', 'log');
+            $token = config('whatsapp.drivers.fonnte.token');
+
+            // Queue workers are long-lived, so resolve admin settings for each job lifecycle.
+            try {
+                if (Schema::hasTable('app_settings')) {
+                    $token = AppSetting::value(AppSetting::FONNTE_TOKEN, $token);
+                }
+            } catch (Throwable) {
+                // Use .env fallback while the database is unavailable or not migrated yet.
+            }
 
             return match ($driver) {
                 'fonnte' => new FonnteWhatsAppService(
-                    token: config('whatsapp.drivers.fonnte.token'),
+                    token: $token,
                     baseUrl: config('whatsapp.drivers.fonnte.base_url', 'https://api.fonnte.com'),
                     timeout: (int) config('whatsapp.drivers.fonnte.timeout', 15),
                 ),
-                default => new LogWhatsAppService(),
+                default => new LogWhatsAppService,
             };
         });
     }

@@ -2,11 +2,18 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
-use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\Admin\GraduationLetterController as AdminGraduationLetterController;
+use App\Http\Controllers\Admin\NotificationTemplateController as AdminNotificationTemplateController;
 use App\Http\Controllers\Admin\PeriodController as AdminPeriodController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\SchoolSettingController as AdminSchoolSettingController;
+use App\Http\Controllers\Admin\StudentController as AdminStudentController;
+use App\Http\Controllers\Admin\StudentNotificationController as AdminStudentNotificationController;
+use App\Http\Controllers\Admin\SuratTugasController as AdminSuratTugasController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\WhatsAppSettingController as AdminWhatsAppSettingController;
+use App\Http\Controllers\Admin\KartuNisnController as AdminKartuNisnController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicStatusController;
 use App\Http\Controllers\RegistrationController;
@@ -46,6 +53,7 @@ Route::middleware(['auth', 'verified.phone'])->group(function () {
 
         return Inertia::render('Dashboard', [
             'period' => $period,
+            'isOpen' => (bool) $period?->isOpen(),
             'registration' => $registration ? [
                 'id' => $registration->id,
                 'status' => $registration->status,
@@ -107,15 +115,54 @@ Route::middleware(['auth', 'admin'])
         Route::post('/periods', [AdminPeriodController::class, 'store'])->name('periods.store');
         Route::patch('/periods/{period}', [AdminPeriodController::class, 'update'])->name('periods.update');
         Route::post('/periods/{period}/activate', [AdminPeriodController::class, 'activate'])->name('periods.activate');
+        Route::post('/periods/{period}/deactivate', [AdminPeriodController::class, 'deactivate'])->name('periods.deactivate');
 
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
 
         Route::resource('faqs', AdminFaqController::class)->except(['show', 'create', 'edit']);
 
+        Route::get('/kartu-nisn', [AdminKartuNisnController::class, 'index'])->name('kartu-nisn.index');
+        Route::post('/kartu-nisn/desain', [AdminKartuNisnController::class, 'updateDesain'])->name('kartu-nisn.desain.update');
+        Route::delete('/kartu-nisn/desain/{field}', [AdminKartuNisnController::class, 'deleteAsset'])->name('kartu-nisn.desain.asset.destroy');
+        Route::get('/kartu-nisn/print', [AdminKartuNisnController::class, 'print'])->name('kartu-nisn.print');
+
+        Route::get('/notifications', [AdminStudentNotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/notifications/create', [AdminStudentNotificationController::class, 'create'])->name('notifications.create');
+        Route::get('/notifications/students', [AdminStudentNotificationController::class, 'searchStudents'])->name('notifications.students');
+        Route::post('/notifications', [AdminStudentNotificationController::class, 'store'])->name('notifications.store');
+        Route::post('/notifications/{studentNotification}/retry', [AdminStudentNotificationController::class, 'retry'])->name('notifications.retry');
+
+        Route::resource('notification-templates', AdminNotificationTemplateController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        Route::get('/students/template', [AdminStudentController::class, 'template'])->name('students.template');
+        Route::get('/students/import', [AdminStudentController::class, 'importForm'])->name('students.import.create');
+        Route::post('/students/import', [AdminStudentController::class, 'import'])->name('students.import.store');
+        Route::resource('students', AdminStudentController::class)->except(['show']);
+
+        Route::get('/surat-tugas', [AdminSuratTugasController::class, 'create'])->name('surat-tugas.create');
+        Route::post('/surat-tugas', [AdminSuratTugasController::class, 'store'])->name('surat-tugas.store');
+        Route::get('/surat-tugas/download', [AdminSuratTugasController::class, 'download'])->name('surat-tugas.download');
+
+        Route::get('/graduation-letters/template', [AdminGraduationLetterController::class, 'template'])->name('graduation-letters.template');
+        Route::get('/graduation-letters/import', [AdminGraduationLetterController::class, 'importForm'])->name('graduation-letters.import.create');
+        Route::post('/graduation-letters/import', [AdminGraduationLetterController::class, 'import'])->name('graduation-letters.import.store');
+        Route::get('/graduation-letters', [AdminGraduationLetterController::class, 'index'])->name('graduation-letters.index');
+        Route::get('/graduation-letters/create', [AdminGraduationLetterController::class, 'create'])->name('graduation-letters.create');
+        Route::post('/graduation-letters', [AdminGraduationLetterController::class, 'store'])->name('graduation-letters.store');
+        Route::get('/graduation-letters/{graduationLetter}/download', [AdminGraduationLetterController::class, 'download'])->name('graduation-letters.download');
+        Route::post('/graduation-letters/{graduationLetter}/finalize', [AdminGraduationLetterController::class, 'finalize'])->name('graduation-letters.finalize');
+        Route::delete('/graduation-letters/{graduationLetter}', [AdminGraduationLetterController::class, 'destroy'])->name('graduation-letters.destroy');
+
         Route::get('/school-settings', [AdminSchoolSettingController::class, 'edit'])->name('school-settings.edit');
         Route::match(['post', 'patch'], '/school-settings', [AdminSchoolSettingController::class, 'update'])->name('school-settings.update');
         Route::delete('/school-settings/logo', [AdminSchoolSettingController::class, 'deleteLogo'])->name('school-settings.logo.destroy');
         Route::delete('/school-settings/regency-logo', [AdminSchoolSettingController::class, 'deleteRegencyLogo'])->name('school-settings.regency-logo.destroy');
+
+        Route::get('/whatsapp-settings', [AdminWhatsAppSettingController::class, 'edit'])->name('whatsapp-settings.edit');
+        Route::patch('/whatsapp-settings', [AdminWhatsAppSettingController::class, 'update'])->name('whatsapp-settings.update');
+        Route::post('/whatsapp-settings/test', [AdminWhatsAppSettingController::class, 'test'])
+            ->middleware('throttle:5,1')
+            ->name('whatsapp-settings.test');
     });
 
 require __DIR__.'/auth.php';

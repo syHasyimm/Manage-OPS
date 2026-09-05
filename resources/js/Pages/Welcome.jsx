@@ -97,7 +97,7 @@ export default function Welcome({ canLogin, canRegister, period }) {
                         </Button>
                         {auth?.user ? (
                             <Button asChild size="sm">
-                                <Link href={route('dashboard')}>Dashboard</Link>
+                                <Link href={route(auth.user?.role === 'admin' ? 'admin.dashboard' : 'dashboard')}>Dashboard</Link>
                             </Button>
                         ) : (
                             <>
@@ -107,9 +107,15 @@ export default function Welcome({ canLogin, canRegister, period }) {
                                     </Button>
                                 )}
                                 {canRegister && (
-                                    <Button asChild size="sm">
-                                        <Link href={route('register')}>Daftar</Link>
-                                    </Button>
+                                    period ? (
+                                        <Button asChild size="sm">
+                                            <Link href={route('register')}>Daftar</Link>
+                                        </Button>
+                                    ) : (
+                                        <Button size="sm" disabled className="opacity-50 cursor-not-allowed">
+                                            Daftar
+                                        </Button>
+                                    )
                                 )}
                             </>
                         )}
@@ -143,12 +149,19 @@ export default function Welcome({ canLogin, canRegister, period }) {
                         </p>
                         <div className="flex flex-wrap gap-3">
                             {canRegister && (
-                                <Button asChild size="lg" className="bg-gold-500 text-navy-950 hover:bg-gold-400">
-                                    <Link href={route('register')}>
+                                period ? (
+                                    <Button asChild size="lg" className="bg-gold-500 text-navy-950 hover:bg-gold-400">
+                                        <Link href={route('register')}>
+                                            Mulai Pendaftaran
+                                            <ArrowRight className="ml-2 h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                ) : (
+                                    <Button size="lg" disabled className="bg-gold-500/50 text-navy-950/50 cursor-not-allowed">
                                         Mulai Pendaftaran
-                                        <ArrowRight className="h-4 w-4" />
-                                    </Link>
-                                </Button>
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                )
                             )}
                             <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">
                                 <Link href="/cek-status">
@@ -279,12 +292,19 @@ export default function Welcome({ canLogin, canRegister, period }) {
                     </p>
                     <div className="flex flex-wrap justify-center gap-3 pt-2">
                         {canRegister && (
-                            <Button asChild size="lg" className="bg-gold-500 text-navy-950 hover:bg-gold-400">
-                                <Link href={route('register')}>
+                            period ? (
+                                <Button asChild size="lg" className="bg-gold-500 text-navy-950 hover:bg-gold-400">
+                                    <Link href={route('register')}>
+                                        Mulai Pendaftaran
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Link>
+                                </Button>
+                            ) : (
+                                <Button size="lg" disabled className="bg-gold-500/50 text-navy-950/50 cursor-not-allowed">
                                     Mulai Pendaftaran
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
-                            </Button>
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            )
                         )}
                         {canLogin && (
                             <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">

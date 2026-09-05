@@ -2,10 +2,12 @@ import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import {
     AlertCircle,
+    CalendarClock,
     CheckCircle2,
     Clock,
     Download,
     FileText,
+    Lock,
     MessageCircle,
     PencilLine,
     PlayCircle,
@@ -94,7 +96,87 @@ function StatusCard({ registration }) {
     );
 }
 
-export default function Dashboard({ period, registration }) {
+function formatDate(value) {
+    return new Date(value).toLocaleDateString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    });
+}
+
+function RegistrationClosedHero({ period }) {
+    const now = new Date();
+    let state = 'none';
+    if (period) {
+        const opens = new Date(period.opens_at);
+        const closes = new Date(period.closes_at);
+        if (opens > now) {
+            state = 'upcoming';
+        } else if (closes < now) {
+            state = 'closed';
+        } else {
+            state = 'closed';
+        }
+    }
+
+    const meta = {
+        none: {
+            Icon: CalendarClock,
+            title: 'Pendaftaran Belum Dibuka',
+            description:
+                'Saat ini belum ada periode pendaftaran yang aktif. Nantikan pengumuman resmi dari sekolah untuk jadwal pendaftaran berikutnya.',
+            note: null,
+        },
+        upcoming: {
+            Icon: CalendarClock,
+            title: 'Pendaftaran Segera Dibuka',
+            description: `Pendaftaran untuk Tahun Ajaran ${period?.academic_year ?? ''} akan segera dibuka. Siapkan berkas Anda dari sekarang.`,
+            note: period ? `Dibuka pada ${formatDate(period.opens_at)}` : null,
+        },
+        closed: {
+            Icon: Lock,
+            title: 'Pendaftaran Telah Ditutup',
+            description: `Masa pendaftaran untuk Tahun Ajaran ${period?.academic_year ?? ''} telah berakhir. Terima kasih atas antusiasme Anda.`,
+            note: period ? `Ditutup pada ${formatDate(period.closes_at)}` : null,
+        },
+    }[state];
+
+    const { Icon } = meta;
+
+    return (
+        <Card className="overflow-hidden border-gold-200/60">
+            <CardContent className="relative flex flex-col items-center gap-6 bg-gradient-to-b from-gold-500/10 via-white to-white px-6 py-14 text-center">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-navy-950/5 to-transparent" />
+                <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gold-500/15 ring-8 ring-gold-500/5">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500 text-navy-950 shadow-lg shadow-gold-500/30">
+                        <Icon className="h-8 w-8" />
+                    </div>
+                </div>
+                <div className="relative max-w-md space-y-2">
+                    <h2 className="text-2xl font-bold tracking-tight text-navy-950">{meta.title}</h2>
+                    <p className="text-sm leading-relaxed text-navy-600">{meta.description}</p>
+                </div>
+                {meta.note && (
+                    <div className="relative inline-flex items-center gap-2 rounded-full border border-gold-300/70 bg-gold-500/10 px-4 py-1.5 text-sm font-medium text-gold-800">
+                        <Clock className="h-4 w-4" />
+                        {meta.note}
+                    </div>
+                )}
+                <div className="relative flex flex-wrap justify-center gap-2 pt-2">
+                    <Button asChild variant="outline">
+                        <Link href={route('public-status.show')}>
+                            <FileText className="h-4 w-4" />
+                            Cek Status Kelulusan
+                        </Link>
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
+
+export default function Dashboard({ period, isOpen, registration }) {
     const resendForm = useForm({});
 
     const handleResend = () => {
@@ -137,18 +219,20 @@ export default function Dashboard({ period, registration }) {
             <Head title="Dashboard" />
 
             <div className="space-y-6">
-                {!period && (
+                {!isOpen && !registration && <RegistrationClosedHero period={period} />}
+
+                {!isOpen && registration && (
                     <Alert variant="warning">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Periode pendaftaran belum dibuka</AlertTitle>
+                        <Lock className="h-4 w-4" />
+                        <AlertTitle>Pendaftaran sedang tidak dibuka</AlertTitle>
                         <AlertDescription>
-                            Saat ini belum ada periode pendaftaran aktif. Silakan tunggu pengumuman
-                            resmi dari sekolah.
+                            Periode pendaftaran saat ini tidak aktif. Anda tetap dapat melihat status
+                            dan mengunduh dokumen pendaftaran Anda di bawah ini.
                         </AlertDescription>
                     </Alert>
                 )}
 
-                {period && !registration && (
+                {isOpen && period && !registration && (
                     <Card>
                         <CardContent className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
                             <div>
@@ -185,7 +269,7 @@ export default function Dashboard({ period, registration }) {
                             <CardTitle className="text-base">Aksi Cepat</CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-wrap gap-2">
-                            {(registration.status === 'draft' || registration.status === 'need_revision') && (
+                            {isOpen && (registration.status === 'draft' || registration.status === 'need_revision') && (
                                 <Button asChild>
                                     <Link href={route('registration.start')}>
                                         <FileText className="h-4 w-4" />

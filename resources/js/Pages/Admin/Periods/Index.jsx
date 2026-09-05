@@ -1,6 +1,6 @@
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { Calendar, CheckCircle2, Loader2, Plus, Power } from 'lucide-react';
+import { Calendar, CheckCircle2, Loader2, Plus, Power, PowerOff } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Input } from '@/Components/ui/input';
@@ -35,6 +35,10 @@ export default function Index({ periods }) {
 
     const activate = (id) => {
         router.post(route('admin.periods.activate', { period: id }), {}, { preserveScroll: true });
+    };
+
+    const deactivate = (id) => {
+        router.post(route('admin.periods.deactivate', { period: id }), {}, { preserveScroll: true });
     };
 
     return (
@@ -152,7 +156,12 @@ export default function Index({ periods }) {
                                             )}
                                         </TableCell>
                                         <TableCell className="whitespace-nowrap text-right">
-                                            {!p.is_active && (
+                                            {p.is_active ? (
+                                                <Button size="sm" variant="outline" onClick={() => deactivate(p.id)}>
+                                                    <PowerOff className="h-3.5 w-3.5" />
+                                                    Nonaktifkan
+                                                </Button>
+                                            ) : (
                                                 <Button size="sm" variant="outline" onClick={() => activate(p.id)}>
                                                     <Power className="h-3.5 w-3.5" />
                                                     Aktifkan

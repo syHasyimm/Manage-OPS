@@ -82,6 +82,20 @@ Untuk development tanpa kirim WA real, ganti driver ke `log` (pesan ditulis ke `
 WHATSAPP_DRIVER=log
 ```
 
+Token dan device Fonnte juga dapat diubah dari Panel Admin → Pengaturan WhatsApp. Token dari panel disimpan terenkripsi dan digunakan oleh request serta queue job berikutnya. Jika belum pernah diatur dari panel, aplikasi memakai `FONNTE_TOKEN` dan `FONNTE_DEVICE` dari `.env` sebagai fallback. Base URL dan pilihan driver tetap diatur melalui `.env`. Endpoint kirim Fonnte mengikat pengiriman ke token; nilai device disimpan sebagai konfigurasi referensi dan tidak dikirim sebagai parameter API yang tidak didukung.
+
+## Surat Perintah Tugas
+
+Admin dapat membuat Surat Perintah Tugas dari menu **Surat Tugas**. KOP dan data Kepala Sekolah diambil dari Pengaturan Sekolah, nomor surat diisi manual, tanggal surat dapat diubah, dan daftar penerima tugas dapat berisi satu atau beberapa orang. Setelah validasi berhasil, PDF A4 langsung diunduh dan tidak disimpan sebagai riwayat.
+
+## Data Siswa
+
+Menu **Data Siswa** menyediakan input manual dan import Excel untuk data Nama, NIS, NISN, NIK, tempat/tanggal lahir, agama, alamat, No HP Ortu, Nama Ortu, dan kelas. Kelas memakai format tingkat 1-6 dengan rombel opsional, misalnya `1A`. Foto bersifat opsional dan hanya diunggah melalui form manual/edit. Import membatalkan seluruh file jika ada baris tidak valid, sedangkan data dengan NIS/NISN/NIK duplikat dilewati dan dilaporkan.
+
+## Notifikasi Orang Tua
+
+Menu **Notifikasi Ortu** mengirim template pesan ke No HP Ortu melalui driver WhatsApp yang dikonfigurasi. Staff dapat mengirim ke satu siswa atau broadcast berdasarkan kelas. Nama siswa, kelas, nama ortu, dan nama sekolah diisi otomatis; variabel kegiatan diisi pada form. Pesan final dan nomor tujuan disimpan sebagai snapshot, lalu dikirim melalui queue. Gunakan **Template Pesan** untuk mengelola placeholder `{{nama_siswa}}`, `{{nama_ortu}}`, `{{kelas}}`, dan variabel kategori lainnya.
+
 ## Periode Pendaftaran
 
 - Hanya satu periode aktif pada satu waktu.
