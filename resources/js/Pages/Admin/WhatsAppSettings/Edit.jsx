@@ -74,7 +74,7 @@ export default function Edit({ driver, base_url, token_configured, token_hint, d
         <AdminLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-700">Admin</p>
+                    <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
                     <h1 className="mt-1 text-xl font-semibold text-navy-950">Pengaturan WhatsApp</h1>
                     <p className="mt-1 text-xs text-navy-500">
                         Atur kredensial Fonnte untuk notifikasi OTP, pendaftaran, dan perubahan status.

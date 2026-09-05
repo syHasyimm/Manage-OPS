@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {
     Edit3,
     FileSpreadsheet,
+    FileArchive,
     Plus,
     Search,
     Trash2,
@@ -58,10 +59,16 @@ export default function Index({ students, filters, grades, religions }) {
             header={
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <p className="text-xs uppercase tracking-widest text-gold-700">Admin</p>
+                        <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
                         <h1 className="mt-1 text-xl font-semibold text-navy-950">Data Siswa</h1>
                     </div>
                     <div className="flex flex-wrap gap-2">
+                        <Button asChild variant="outline">
+                            <Link href={route('admin.students.import-photos.create')}>
+                                <FileArchive className="h-4 w-4" />
+                                Upload Foto (ZIP)
+                            </Link>
+                        </Button>
                         <Button asChild variant="outline">
                             <Link href={route('admin.students.import.create')}>
                                 <FileSpreadsheet className="h-4 w-4" />

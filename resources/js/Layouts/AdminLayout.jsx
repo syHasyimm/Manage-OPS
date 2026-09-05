@@ -148,7 +148,7 @@ export default function AdminLayout({ header, children }) {
                         <GraduationCap className="h-5 w-5" />
                     </span>
                     <div>
-                        <p className="text-[10px] uppercase tracking-widest text-gold-400">Admin Panel</p>
+                        <p className="text-[10px] uppercase tracking-widest text-gold-400">Manage OPS</p>
                         <p className="text-xs font-semibold leading-tight">{school?.name}</p>
                     </div>
                 </div>
@@ -188,7 +188,7 @@ export default function AdminLayout({ header, children }) {
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold-500 text-navy-950">
                         <GraduationCap className="h-4 w-4" />
                     </span>
-                    <p className="text-sm font-semibold text-navy-900">Admin Panel</p>
+                    <p className="text-sm font-semibold text-navy-900">Manage OPS</p>
                 </header>
 
                 {header && (

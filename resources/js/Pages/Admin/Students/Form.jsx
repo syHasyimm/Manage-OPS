@@ -103,7 +103,7 @@ export default function StudentForm({ student, religions, genders, grades, mode 
             header={
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <p className="text-xs uppercase tracking-widest text-gold-700">Admin</p>
+                        <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
                         <h1 className="mt-1 text-xl font-semibold text-navy-950">
                             {isEdit ? 'Edit Data Siswa' : 'Tambah Data Siswa'}
                         </h1>

@@ -38,7 +38,7 @@ export default function Index({ users, filters }) {
         <AdminLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-700">Admin</p>
+                    <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
                     <h1 className="mt-1 text-xl font-semibold text-navy-950">Pengguna</h1>
                 </div>
             }

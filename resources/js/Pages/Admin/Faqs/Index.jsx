@@ -132,7 +132,7 @@ export default function Index({ faqs }) {
         <AdminLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-700">Admin</p>
+                    <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
                     <h1 className="mt-1 text-xl font-semibold text-navy-950">Kelola FAQ Chatbot</h1>
                     <p className="mt-1 text-xs text-navy-500">
                         Pertanyaan di sini dijawab langsung dari database tanpa memanggil AI API.
