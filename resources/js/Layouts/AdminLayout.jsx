@@ -109,6 +109,7 @@ export default function AdminLayout({ header, children }) {
                 { href: route('admin.students.index'), name: 'admin.students.*', icon: GraduationCap, label: 'Data Siswa' },
                 { href: route('admin.kartu-nisn.index'), name: 'admin.kartu-nisn.*', icon: Contact, label: 'Cetak Kartu NISN' },
                 { href: route('admin.documents.index'), name: 'admin.documents.*', icon: FileText, label: 'Manajemen Dokumen' },
+                { href: route('admin.academic-calendars.index'), name: 'admin.academic-calendars.*', icon: Calendar, label: 'Kalender Pendidikan' },
             ],
         },
         {

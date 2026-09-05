@@ -1,7 +1,8 @@
 <?php
 
+use App\Jobs\GenerateRegistrationPdf;
+use App\Jobs\SendRegistrationConfirmation;
 use App\Models\Registration;
-use App\Models\RegistrationPeriod;
 use App\Models\User;
 use Database\Seeders\RegistrationPeriodSeeder;
 use Illuminate\Support\Facades\Bus;
@@ -127,8 +128,8 @@ test('user can complete all 3 steps and submit', function () {
     $response->assertRedirect(route('registration.success', ['registration' => $registration->id]));
 
     Bus::assertChained([
-        \App\Jobs\GenerateRegistrationPdf::class,
-        \App\Jobs\SendRegistrationConfirmation::class,
+        GenerateRegistrationPdf::class,
+        SendRegistrationConfirmation::class,
     ]);
 });
 

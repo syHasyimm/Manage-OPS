@@ -29,7 +29,7 @@ class DesainKartuNisn extends Model
     public static function defaultsFromSchoolSetting(): array
     {
         $school = SchoolSetting::current();
-        
+
         return [
             'warna_primary' => '#1d4ed8',
             'nama_sekolah' => $school->name ?? 'Sekolah Anda',

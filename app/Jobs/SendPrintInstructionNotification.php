@@ -20,6 +20,7 @@ class SendPrintInstructionNotification implements ShouldQueue
     public const PURPOSE = 'registration.print_instruction';
 
     public int $tries = 3;
+
     public int $backoff = 60;
 
     public function __construct(public int $registrationId) {}

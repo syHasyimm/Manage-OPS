@@ -9,7 +9,7 @@ interface WhatsAppService
      *
      * @param  string  $to  Nomor tujuan (format: 08xx atau 62xx).
      * @param  string  $message  Isi pesan.
-     * @return bool  True jika request gateway berhasil.
+     * @return bool True jika request gateway berhasil.
      */
     public function sendText(string $to, string $message): bool;
 

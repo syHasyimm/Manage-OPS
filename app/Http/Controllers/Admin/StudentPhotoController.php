@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 use ZipArchive;
-use Illuminate\Support\Facades\File;
 
 class StudentPhotoController extends Controller
 {
@@ -32,14 +32,14 @@ class StudentPhotoController extends Controller
         ]);
 
         $zipFile = $request->file('file');
-        $zip = new ZipArchive();
-        
+        $zip = new ZipArchive;
+
         if ($zip->open($zipFile->path()) !== true) {
             return back()->withErrors(['file' => 'Tidak dapat membuka file ZIP.']);
         }
 
-        $tempPath = storage_path('app/temp/photos_' . Str::uuid());
-        if (!File::exists($tempPath)) {
+        $tempPath = storage_path('app/temp/photos_'.Str::uuid());
+        if (! File::exists($tempPath)) {
             File::makeDirectory($tempPath, 0755, true);
         }
 
@@ -51,13 +51,13 @@ class StudentPhotoController extends Controller
         $details = [];
 
         $files = File::allFiles($tempPath);
-        $manager = new ImageManager(new Driver());
+        $manager = new ImageManager(new Driver);
 
         foreach ($files as $file) {
             $extension = strtolower($file->getExtension());
-            
+
             // Abaikan file yang bukan gambar
-            if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
+            if (! in_array($extension, ['jpg', 'jpeg', 'png'])) {
                 continue;
             }
 
@@ -65,13 +65,14 @@ class StudentPhotoController extends Controller
 
             $student = Student::where('nisn', $nisn)->first();
 
-            if (!$student) {
+            if (! $student) {
                 $failedCount++;
                 $details[] = [
                     'nisn' => $nisn,
                     'status' => 'Gagal',
                     'reason' => 'Siswa dengan NISN ini tidak ditemukan.',
                 ];
+
                 continue;
             }
 
@@ -87,12 +88,12 @@ class StudentPhotoController extends Controller
                 $image->scaleDown(width: 800, height: 800);
 
                 // Buat nama file unik
-                $filename = Str::slug($student->nis) . '-' . Str::uuid() . '.' . $extension;
-                $relativePath = 'students/' . $filename;
-                $absolutePath = storage_path('app/public/' . $relativePath);
+                $filename = Str::slug($student->nis).'-'.Str::uuid().'.'.$extension;
+                $relativePath = 'students/'.$filename;
+                $absolutePath = storage_path('app/public/'.$relativePath);
 
                 // Ensure directory exists
-                if (!File::exists(dirname($absolutePath))) {
+                if (! File::exists(dirname($absolutePath))) {
                     File::makeDirectory(dirname($absolutePath), 0755, true);
                 }
 
@@ -115,7 +116,7 @@ class StudentPhotoController extends Controller
                 $details[] = [
                     'nisn' => $nisn,
                     'status' => 'Gagal',
-                    'reason' => 'Gagal memproses foto: ' . $e->getMessage(),
+                    'reason' => 'Gagal memproses foto: '.$e->getMessage(),
                 ];
             }
         }

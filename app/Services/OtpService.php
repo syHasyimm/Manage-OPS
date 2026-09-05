@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 class OtpService
 {
     public const PURPOSE_REGISTER = 'register';
+
     public const PURPOSE_RESET = 'reset';
 
     /**

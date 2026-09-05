@@ -21,10 +21,10 @@ class FaqController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'question'   => ['required', 'string', 'max:255'],
-            'answer'     => ['required', 'string'],
-            'keywords'   => ['nullable', 'string', 'max:255'],
-            'is_active'  => ['boolean'],
+            'question' => ['required', 'string', 'max:255'],
+            'answer' => ['required', 'string'],
+            'keywords' => ['nullable', 'string', 'max:255'],
+            'is_active' => ['boolean'],
             'sort_order' => ['integer', 'min:0'],
         ]);
 
@@ -36,10 +36,10 @@ class FaqController extends Controller
     public function update(Request $request, Faq $faq): RedirectResponse
     {
         $data = $request->validate([
-            'question'   => ['required', 'string', 'max:255'],
-            'answer'     => ['required', 'string'],
-            'keywords'   => ['nullable', 'string', 'max:255'],
-            'is_active'  => ['boolean'],
+            'question' => ['required', 'string', 'max:255'],
+            'answer' => ['required', 'string'],
+            'keywords' => ['nullable', 'string', 'max:255'],
+            'is_active' => ['boolean'],
             'sort_order' => ['integer', 'min:0'],
         ]);
 

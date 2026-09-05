@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::table('graduation_letters', function (Blueprint $table) {
             // First add the new unique index so `student_id` foreign key still has an index
             $table->unique(['student_id', 'academic_year']);
-            
-            // Now safe to drop the old unique index
+
+            // Drop foreign key and old unique index
+            $table->dropForeign(['period_id']);
             $table->dropUnique(['student_id', 'period_id']);
-            
+
             // Drop column
             $table->dropColumn('period_id');
         });

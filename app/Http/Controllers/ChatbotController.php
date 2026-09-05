@@ -20,7 +20,7 @@ class ChatbotController extends Controller
         $faq = Faq::where('is_active', true)
             ->where(function ($q) use ($message) {
                 $q->whereRaw('LOWER(question) LIKE ?', ["%{$message}%"])
-                  ->orWhereRaw('LOWER(keywords) LIKE ?', ["%{$message}%"]);
+                    ->orWhereRaw('LOWER(keywords) LIKE ?', ["%{$message}%"]);
             })
             ->orderBy('sort_order')
             ->first();

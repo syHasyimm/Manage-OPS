@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class StudentParent extends Model
 {
     public const ROLE_FATHER = 'father';
+
     public const ROLE_MOTHER = 'mother';
+
     public const ROLE_GUARDIAN = 'guardian';
 
     protected $table = 'student_parents';

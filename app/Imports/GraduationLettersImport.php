@@ -4,12 +4,11 @@ namespace App\Imports;
 
 use App\Models\GraduationLetter;
 use App\Models\RegistrationPeriod;
-use App\Models\Student;
 use App\Models\SchoolSetting;
+use App\Models\Student;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Row;
@@ -46,10 +45,13 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
     protected array $duplicateRows = [];
 
     protected array $studentIdsMap = [];
+
     protected array $studentReligions = [];
 
     protected ?int $periodId;
+
     protected ?string $principalNameSnapshot;
+
     protected ?string $principalNipSnapshot;
 
     public function __construct(?int $periodId = null)
@@ -67,6 +69,7 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
                 'row' => 2,
                 'errors' => ['File tidak memiliki data SKL.'],
             ];
+
             return;
         }
 
@@ -78,14 +81,16 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
                 'row' => 1,
                 'errors' => ['Kolom wajib tidak ditemukan: '.implode(', ', $missingHeadings).'.'],
             ];
+
             return;
         }
 
-        if (!$this->periodId) {
+        if (! $this->periodId) {
             $this->invalidRows[] = [
                 'row' => 1,
                 'errors' => ['Tidak ada periode pendaftaran aktif.'],
             ];
+
             return;
         }
 
@@ -93,11 +98,11 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
         $nisList = [];
         foreach ($rows as $row) {
             $raw = $this->rowToArray($row);
-            if (!empty($raw['nis'])) {
+            if (! empty($raw['nis'])) {
                 $nisList[] = (string) $raw['nis'];
             }
         }
-        
+
         $nisList = array_unique($nisList);
         $students = Student::whereIn('nis', $nisList)->get(['id', 'nis', 'religion']);
         foreach ($students as $student) {
@@ -116,7 +121,7 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
 
             $rowNumber = $row instanceof Row ? $row->getIndex() : $index + 2;
             $normalized = $this->normalizeRow($raw);
-            
+
             $validator = Validator::make(
                 $normalized,
                 [
@@ -157,9 +162,15 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
 
             // Custom validation for exactly 1 mulok
             $mulokCount = 0;
-            if (isset($normalized['nilai_mulok_bahasa_daerah'])) $mulokCount++;
-            if (isset($normalized['nilai_mulok_prakarya'])) $mulokCount++;
-            if (isset($normalized['nilai_mulok_potensi_khusus'])) $mulokCount++;
+            if (isset($normalized['nilai_mulok_bahasa_daerah'])) {
+                $mulokCount++;
+            }
+            if (isset($normalized['nilai_mulok_prakarya'])) {
+                $mulokCount++;
+            }
+            if (isset($normalized['nilai_mulok_potensi_khusus'])) {
+                $mulokCount++;
+            }
 
             if ($mulokCount > 1) {
                 $validator->errors()->add('mulok', 'Hanya boleh mengisi nilai untuk satu jenis Muatan Lokal.');
@@ -170,6 +181,7 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
                     'row' => $rowNumber,
                     'errors' => $validator->errors()->all(),
                 ];
+
                 continue;
             }
 
@@ -188,6 +200,7 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
                 'row' => 2,
                 'errors' => ['File tidak memiliki data SKL.'],
             ];
+
             return;
         }
 
@@ -238,15 +251,16 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
                     'row' => $validRow['row'],
                     'reason' => implode('; ', $reasons).'.',
                 ];
+
                 continue;
             }
 
             $seen[$studentId] = $validRow['row'];
-            
+
             // Format to insert array
             $grades = $this->buildGradesJson($data);
-            
-            $letter = new GraduationLetter();
+
+            $letter = new GraduationLetter;
             $letter->student_id = $studentId;
             $letter->period_id = $this->periodId;
             $letter->letter_number = $data['letter_number'];
@@ -264,7 +278,7 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
             $letter->principal_name_snapshot = $this->principalNameSnapshot;
             $letter->principal_nip_snapshot = $this->principalNipSnapshot;
             $letter->created_by = request()->user()?->id ?? 1;
-            
+
             $this->records[] = $letter->toArray();
         }
     }
@@ -279,9 +293,9 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
             'hindu' => 'Pendidikan Agama Hindu dan Budi Pekerti',
             'budha' => 'Pendidikan Agama Buddha dan Budi Pekerti',
             'khonghucu' => 'Pendidikan Agama Khonghucu dan Budi Pekerti',
-            'kepercayaan' => 'Pendidikan Kepercayaan Terhadap Tuhan YME dan Budi Pekerti'
+            'kepercayaan' => 'Pendidikan Kepercayaan Terhadap Tuhan YME dan Budi Pekerti',
         ];
-        
+
         $mapelAgama = $religionMapels[$religion] ?? $religionMapels['islam'];
 
         $grades = [
@@ -326,9 +340,12 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
 
     protected function calculateAverage(array $grades): string
     {
-        $filled = array_filter($grades, fn($g) => isset($g['nilai']) && $g['nilai'] !== null && $g['nilai'] !== '');
-        if (count($filled) === 0) return '0.00';
-        $sum = array_reduce($filled, fn($acc, $g) => $acc + (float)$g['nilai'], 0);
+        $filled = array_filter($grades, fn ($g) => isset($g['nilai']) && $g['nilai'] !== null && $g['nilai'] !== '');
+        if (count($filled) === 0) {
+            return '0.00';
+        }
+        $sum = array_reduce($filled, fn ($acc, $g) => $acc + (float) $g['nilai'], 0);
+
         return number_format($sum / count($filled), 2, '.', '');
     }
 
@@ -378,6 +395,7 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
                 return false;
             }
         }
+
         return true;
     }
 
@@ -393,13 +411,16 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
 
         return trim((string) $value);
     }
-    
+
     protected function numericValue(mixed $value): ?float
     {
         $val = $this->stringValue($value);
-        if ($val === null || $val === '') return null;
-        
+        if ($val === null || $val === '') {
+            return null;
+        }
+
         $val = str_replace(',', '.', $val);
+
         return is_numeric($val) ? (float) $val : null;
     }
 

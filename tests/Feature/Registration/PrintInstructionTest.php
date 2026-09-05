@@ -2,6 +2,7 @@
 
 use App\Jobs\SendPrintInstructionNotification;
 use App\Models\Registration;
+use App\Models\RegistrationPeriod;
 use App\Models\StudentIdentity;
 use App\Models\User;
 use App\Models\WhatsappLog;
@@ -24,7 +25,7 @@ function makeSubmittedRegistration(string $status = Registration::STATUS_SUBMITT
         'phone' => '081299999999',
     ]);
 
-    $period = \App\Models\RegistrationPeriod::active();
+    $period = RegistrationPeriod::active();
 
     $registration = Registration::create([
         'user_id' => $user->id,

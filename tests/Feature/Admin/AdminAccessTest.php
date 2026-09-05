@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Registration;
+use App\Models\RegistrationPeriod;
 use App\Models\StudentIdentity;
 use App\Models\User;
 use Database\Seeders\RegistrationPeriodSeeder;
@@ -32,7 +33,7 @@ test('admin can access admin dashboard', function () {
 test('admin can verify a submitted registration', function () {
     $admin = User::factory()->admin()->create();
     $applicant = User::factory()->create();
-    $period = \App\Models\RegistrationPeriod::active();
+    $period = RegistrationPeriod::active();
 
     $registration = Registration::create([
         'user_id' => $applicant->id,
@@ -72,7 +73,7 @@ test('admin can verify a submitted registration', function () {
 test('admin reject requires note', function () {
     $admin = User::factory()->admin()->create();
     $applicant = User::factory()->create();
-    $period = \App\Models\RegistrationPeriod::active();
+    $period = RegistrationPeriod::active();
 
     $registration = Registration::create([
         'user_id' => $applicant->id,

@@ -11,10 +11,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Registration extends Model
 {
     public const STATUS_DRAFT = 'draft';
+
     public const STATUS_SUBMITTED = 'submitted';
+
     public const STATUS_VERIFIED = 'verified';
+
     public const STATUS_ACCEPTED = 'accepted';
+
     public const STATUS_REJECTED = 'rejected';
+
     public const STATUS_NEED_REVISION = 'need_revision';
 
     protected $fillable = [

@@ -12,6 +12,7 @@ use Inertia\Inertia;
 class DocumentController extends Controller
 {
     public const CATEGORIES = ['Surat', 'SK', 'Rapor', 'Ijazah', 'Sertifikat', 'Administrasi', 'Lainnya'];
+
     public const STATUSES = ['Aktif', 'Arsip'];
 
     public function index(Request $request)
@@ -21,8 +22,8 @@ class DocumentController extends Controller
         if ($search = $request->query('q')) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('file_name', 'like', "%{$search}%")
-                  ->orWhere('tags', 'like', "%{$search}%");
+                    ->orWhere('file_name', 'like', "%{$search}%")
+                    ->orWhere('tags', 'like', "%{$search}%");
             });
         }
 
@@ -39,11 +40,12 @@ class DocumentController extends Controller
         }
 
         $documents = $query->paginate(20)->withQueryString();
-        
-        $documents->getCollection()->transform(function($doc) {
+
+        $documents->getCollection()->transform(function ($doc) {
             $data = $doc->toArray();
             $data['file_size_mb'] = $doc->file_size_mb;
             $data['uploader_name'] = $doc->uploader ? $doc->uploader->name : 'Sistem';
+
             return $data;
         });
 
@@ -83,7 +85,7 @@ class DocumentController extends Controller
                 'required',
                 'file',
                 'max:10240', // 10MB
-                'mimes:pdf,doc,docx,xls,xlsx,csv,ppt,pptx,jpg,jpeg,png'
+                'mimes:pdf,doc,docx,xls,xlsx,csv,ppt,pptx,jpg,jpeg,png',
             ],
         ]);
 
@@ -142,7 +144,7 @@ class DocumentController extends Controller
                 'nullable',
                 'file',
                 'max:10240', // 10MB
-                'mimes:pdf,doc,docx,xls,xlsx,csv,ppt,pptx,jpg,jpeg,png'
+                'mimes:pdf,doc,docx,xls,xlsx,csv,ppt,pptx,jpg,jpeg,png',
             ],
         ]);
 
@@ -191,7 +193,7 @@ class DocumentController extends Controller
 
     public function download(Document $document)
     {
-        if (!Storage::disk('public')->exists($document->file_path)) {
+        if (! Storage::disk('public')->exists($document->file_path)) {
             abort(404, 'File not found');
         }
 
@@ -200,7 +202,7 @@ class DocumentController extends Controller
 
     public function preview(Document $document)
     {
-        if (!Storage::disk('public')->exists($document->file_path)) {
+        if (! Storage::disk('public')->exists($document->file_path)) {
             abort(404, 'File not found');
         }
 
@@ -208,7 +210,7 @@ class DocumentController extends Controller
 
         return response()->file($path, [
             'Content-Type' => $document->mime_type,
-            'Content-Disposition' => 'inline; filename="' . $document->file_name . '"'
+            'Content-Disposition' => 'inline; filename="'.$document->file_name.'"',
         ]);
     }
 }

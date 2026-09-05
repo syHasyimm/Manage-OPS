@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\OtpCode;
 use App\Models\User;
 use App\Services\OtpService;
 use Illuminate\Support\Facades\Bus;

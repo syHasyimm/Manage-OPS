@@ -4,21 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DesainKartuNisn;
-use App\Models\Student;
 use App\Models\SchoolSetting;
+use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Str;
 
 class KartuNisnController extends Controller
 {
     public function index(Request $request): Response
     {
         $desain = DesainKartuNisn::current();
-        
+
         $query = Student::query()->latest('id');
 
         if ($tingkat = $request->query('tingkat')) {
@@ -36,6 +36,7 @@ class KartuNisnController extends Controller
         $students = $query->paginate(50)->withQueryString();
         $students->getCollection()->transform(function (Student $student) {
             $student->photo_url = $student->photoUrl();
+
             return $student;
         });
 
@@ -69,16 +70,16 @@ class KartuNisnController extends Controller
         ]);
 
         $desain = DesainKartuNisn::current();
-        
+
         $fields = ['logo_sekolah', 'logo_nisn', 'logo_dapodik', 'background_depan'];
-        
+
         foreach ($fields as $field) {
             if ($request->hasFile($field)) {
                 if ($desain->$field) {
                     Storage::disk('public')->delete($desain->$field);
                 }
                 $extension = $request->file($field)->extension() ?: 'png';
-                $filename = $field . '_' . Str::random(10) . '.' . $extension;
+                $filename = $field.'_'.Str::random(10).'.'.$extension;
                 $data[$field] = $request->file($field)->storeAs('kartu_nisn', $filename, 'public');
             } else {
                 unset($data[$field]);
@@ -93,13 +94,13 @@ class KartuNisnController extends Controller
     public function deleteAsset($field)
     {
         $validFields = ['logo_sekolah', 'logo_nisn', 'logo_dapodik', 'background_depan'];
-        
-        if (!in_array($field, $validFields)) {
+
+        if (! in_array($field, $validFields)) {
             abort(400, 'Invalid field');
         }
 
         $desain = DesainKartuNisn::current();
-        
+
         if ($desain->$field) {
             Storage::disk('public')->delete($desain->$field);
             $desain->update([$field => null]);
@@ -122,21 +123,21 @@ class KartuNisnController extends Controller
         if ($request->filled('student_ids')) {
             $query->whereIn('id', $request->student_ids);
         } elseif ($request->filled('tingkat')) {
-            $query->where('kelas', 'like', $request->tingkat . '%');
+            $query->where('kelas', 'like', $request->tingkat.'%');
         } else {
             // Jika tidak ada filter, cetak semua. Batasi agar tidak terlalu berat jika murid banyak sekali.
-             $query->take(500); 
+            $query->take(500);
         }
 
         $students = $query->get();
-        
+
         if ($students->isEmpty()) {
             return back()->with('error', 'Tidak ada data siswa untuk dicetak.');
         }
 
-        $kartus = $students->map(function($student) use ($desain) {
+        $kartus = $students->map(function ($student) use ($desain) {
             // Create a DTO that matches the structure expected by the blade template
-            $siswaDto = new \stdClass();
+            $siswaDto = new \stdClass;
             $siswaDto->nama = $student->name;
             $siswaDto->nis = $student->nis;
             $siswaDto->nisn = $student->nisn;
@@ -147,18 +148,19 @@ class KartuNisnController extends Controller
             $siswaDto->tahun_ajaran = SchoolSetting::current()->academic_year ?? '2023/2024'; // Or get from active period
             $siswaDto->foto = $student->photo_path;
 
-            $kartu = new \stdClass();
+            $kartu = new \stdClass;
             $kartu->siswa = $siswaDto;
             $kartu->desainCard = $desain;
+
             return $kartu;
         });
 
         $pdf = Pdf::loadView('pdf.kartu', [
-            'kartus' => $kartus
+            'kartus' => $kartus,
         ])
-        ->setPaper([0, 0, 612.00, 936.00], 'portrait') // Kertas Legal/F4 (215.9mm x 330.2mm)
-        ->setOption(['isPhpEnabled' => true, 'isRemoteEnabled' => true]);
+            ->setPaper([0, 0, 612.00, 936.00], 'portrait') // Kertas Legal/F4 (215.9mm x 330.2mm)
+            ->setOption(['isPhpEnabled' => true, 'isRemoteEnabled' => true]);
 
-        return $pdf->download("kartu-nisn-" . now()->format('Ymd-His') . ".pdf");
+        return $pdf->download('kartu-nisn-'.now()->format('Ymd-His').'.pdf');
     }
 }

@@ -4,11 +4,11 @@ namespace App\Exports;
 
 use App\Models\Registration;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class RegistrationsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
+class RegistrationsExport implements FromQuery, ShouldAutoSize, WithHeadings, WithMapping
 {
     public function __construct(public array $filters = []) {}
 

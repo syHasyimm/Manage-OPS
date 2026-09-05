@@ -9,7 +9,9 @@ class WhatsappLog extends Model
     protected $table = 'whatsapp_logs';
 
     public const STATUS_PENDING = 'pending';
+
     public const STATUS_SENT = 'sent';
+
     public const STATUS_FAILED = 'failed';
 
     protected $fillable = [

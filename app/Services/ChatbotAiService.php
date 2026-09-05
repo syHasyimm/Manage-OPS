@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Log;
 class ChatbotAiService
 {
     private string $apiKey;
+
     private string $apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-    private string $model  = 'llama-3.1-8b-instant';
+
+    private string $model = 'llama-3.1-8b-instant';
 
     public function __construct()
     {
@@ -19,21 +21,21 @@ class ChatbotAiService
 
     public function generate(string $message): string
     {
-        $school       = SchoolSetting::current();
+        $school = SchoolSetting::current();
         $systemPrompt = $this->buildSystemPrompt($school);
 
         $payload = [
-            'model'       => $this->model,
-            'messages'    => [
+            'model' => $this->model,
+            'messages' => [
                 ['role' => 'system', 'content' => $systemPrompt],
                 ['role' => 'user',   'content' => $message],
             ],
             'temperature' => 0.7,
-            'max_tokens'  => 512,
+            'max_tokens' => 512,
         ];
 
         $maxRetries = 3;
-        $delay      = 1;
+        $delay = 1;
 
         for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             try {
@@ -52,13 +54,14 @@ class ChatbotAiService
                     Log::info("Chatbot AI rate limited (attempt {$attempt}/{$maxRetries}), retrying in {$delay}s...");
                     sleep($delay);
                     $delay *= 2;
+
                     continue;
                 }
 
                 Log::warning('Chatbot AI response error', [
                     'attempt' => $attempt,
-                    'status'  => $response->status(),
-                    'body'    => $response->body(),
+                    'status' => $response->status(),
+                    'body' => $response->body(),
                 ]);
                 break;
 
@@ -76,8 +79,8 @@ class ChatbotAiService
     private function buildSystemPrompt(SchoolSetting $school): string
     {
         $address = $school->fullAddress() ?: $school->address ?? '-';
-        $phone   = $school->phone ?? '-';
-        $name    = $school->name ?? 'sekolah kami';
+        $phone = $school->phone ?? '-';
+        $name = $school->name ?? 'sekolah kami';
 
         return <<<PROMPT
 Anda adalah "Asisten SPMB {$name}", chatbot resmi untuk Penerimaan Murid Baru.

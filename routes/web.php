@@ -1,18 +1,21 @@
 <?php
 
+use App\Http\Controllers\Admin\AcademicCalendarController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\GraduationLetterController as AdminGraduationLetterController;
+use App\Http\Controllers\Admin\KartuNisnController as AdminKartuNisnController;
 use App\Http\Controllers\Admin\NotificationTemplateController as AdminNotificationTemplateController;
 use App\Http\Controllers\Admin\PeriodController as AdminPeriodController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\SchoolSettingController as AdminSchoolSettingController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\Admin\StudentNotificationController as AdminStudentNotificationController;
+use App\Http\Controllers\Admin\StudentPhotoController;
 use App\Http\Controllers\Admin\SuratTugasController as AdminSuratTugasController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\WhatsAppSettingController as AdminWhatsAppSettingController;
-use App\Http\Controllers\Admin\KartuNisnController as AdminKartuNisnController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicStatusController;
@@ -134,13 +137,15 @@ Route::middleware(['auth', 'admin'])
 
         Route::resource('notification-templates', AdminNotificationTemplateController::class)->only(['index', 'store', 'update', 'destroy']);
 
-        Route::get('/documents/{document}/download', [\App\Http\Controllers\Admin\DocumentController::class, 'download'])->name('documents.download');
-        Route::get('/documents/{document}/preview', [\App\Http\Controllers\Admin\DocumentController::class, 'preview'])->name('documents.preview');
-        Route::resource('documents', \App\Http\Controllers\Admin\DocumentController::class)->except(['show']);
+        Route::get('/documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+        Route::get('/documents/{document}/preview', [DocumentController::class, 'preview'])->name('documents.preview');
+        Route::resource('documents', DocumentController::class)->except(['show']);
+
+        Route::resource('academic-calendars', AcademicCalendarController::class)->except(['create', 'edit', 'show']);
 
         Route::get('/students/template', [AdminStudentController::class, 'template'])->name('students.template');
-        Route::get('/students/import-photos', [\App\Http\Controllers\Admin\StudentPhotoController::class, 'create'])->name('students.import-photos.create');
-        Route::post('/students/import-photos', [\App\Http\Controllers\Admin\StudentPhotoController::class, 'store'])->name('students.import-photos.store');
+        Route::get('/students/import-photos', [StudentPhotoController::class, 'create'])->name('students.import-photos.create');
+        Route::post('/students/import-photos', [StudentPhotoController::class, 'store'])->name('students.import-photos.store');
         Route::get('/students/import', [AdminStudentController::class, 'importForm'])->name('students.import.create');
         Route::post('/students/import', [AdminStudentController::class, 'import'])->name('students.import.store');
         Route::resource('students', AdminStudentController::class)->except(['show']);

@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\GraduationLettersTemplateExport;
 use App\Http\Controllers\Controller;
+use App\Imports\GraduationLettersImport;
 use App\Models\GraduationLetter;
 use App\Models\SchoolSetting;
 use App\Models\Student;
-use App\Exports\GraduationLettersTemplateExport;
-use App\Imports\GraduationLettersImport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
@@ -45,7 +46,7 @@ class GraduationLetterController extends Controller
     public function create(): Response
     {
         $setting = SchoolSetting::current();
-        $year = date('n') >= 7 ? date('Y') . '/' . (date('Y') + 1) : (date('Y') - 1) . '/' . date('Y');
+        $year = date('n') >= 7 ? date('Y').'/'.(date('Y') + 1) : (date('Y') - 1).'/'.date('Y');
 
         $students = Student::select('id', 'name', 'nis', 'nisn', 'kelas', 'gender', 'religion', 'birth_place', 'birth_date', 'parent_name', 'previous_school')
             ->where('kelas', 'like', '6%')
@@ -89,9 +90,9 @@ class GraduationLetterController extends Controller
             'student_id' => [
                 'required',
                 'exists:students,id',
-                \Illuminate\Validation\Rule::unique('graduation_letters')->where(function ($query) use ($request) {
+                Rule::unique('graduation_letters')->where(function ($query) use ($request) {
                     return $query->where('academic_year', $request->academic_year);
-                })
+                }),
             ],
             'letter_number' => ['required', 'string', 'max:100'],
             'decree_number' => ['required', 'string', 'max:100'],
@@ -186,7 +187,7 @@ class GraduationLetterController extends Controller
             'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:5120'],
         ]);
 
-        $import = new GraduationLettersImport();
+        $import = new GraduationLettersImport;
 
         try {
             Excel::import($import, $request->file('file'));
@@ -225,10 +226,11 @@ class GraduationLetterController extends Controller
                 ],
                 $records,
             );
-            
+
             // Format grades back to json string for DB insert
-            $records = array_map(function($record) {
+            $records = array_map(function ($record) {
                 $record['grades'] = json_encode($record['grades']);
+
                 return $record;
             }, $records);
 

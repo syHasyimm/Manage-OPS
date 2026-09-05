@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Document extends Model
 {
@@ -35,6 +35,6 @@ class Document extends Model
 
     public function getFileSizeMbAttribute(): string
     {
-        return number_format($this->file_size / 1048576, 2) . ' MB';
+        return number_format($this->file_size / 1048576, 2).' MB';
     }
 }
