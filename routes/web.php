@@ -134,6 +134,10 @@ Route::middleware(['auth', 'admin'])
 
         Route::resource('notification-templates', AdminNotificationTemplateController::class)->only(['index', 'store', 'update', 'destroy']);
 
+        Route::get('/documents/{document}/download', [\App\Http\Controllers\Admin\DocumentController::class, 'download'])->name('documents.download');
+        Route::get('/documents/{document}/preview', [\App\Http\Controllers\Admin\DocumentController::class, 'preview'])->name('documents.preview');
+        Route::resource('documents', \App\Http\Controllers\Admin\DocumentController::class)->except(['show']);
+
         Route::get('/students/template', [AdminStudentController::class, 'template'])->name('students.template');
         Route::get('/students/import-photos', [\App\Http\Controllers\Admin\StudentPhotoController::class, 'create'])->name('students.import-photos.create');
         Route::post('/students/import-photos', [\App\Http\Controllers\Admin\StudentPhotoController::class, 'store'])->name('students.import-photos.store');
