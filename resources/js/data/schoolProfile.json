@@ -1,0 +1,177 @@
+{
+  "profil": {
+    "nama": "SD Negeri 001 Kepenuhan",
+    "npsn": "10403164",
+    "akreditasi": "A (Unggul)",
+    "kurikulum": "Kurikulum Merdeka",
+    "status_sekolah": "Negeri",
+    "jenjang": "Sekolah Dasar (SD)",
+    "tagline": "Mewujudkan Generasi Berakhlak Mulia, Unggul Prestasi, dan Berkarakter Pancasila",
+    "deskripsi_singkat": "SD Negeri 001 Kepenuhan adalah sekolah dasar negeri terkemuka di Kecamatan Kepenuhan, Kabupaten Rokan Hulu. Kami berdedikasi membimbing dan mendidik generasi penerus bangsa dengan memadukan keunggulan akademik, pembentukan karakter luhur, kecakapan literasi digital, serta pelestarian budaya daerah.",
+    "sambutan_kepala_sekolah": {
+      "judul": "Membina Potensi, Menumbuhkan Karakter Sejak Dini",
+      "nama": "Kepala Sekolah SD Negeri 001 Kepenuhan",
+      "jabatan": "Kepala Sekolah",
+      "nip": "19750512 200212 1 004",
+      "kutipan": "Selamat datang di portal resmi SD Negeri 001 Kepenuhan. Kami berkomitmen untuk menghadirkan ekosistem belajar yang ramah anak, aman, dan inovatif. Setiap anak adalah aset bangsa yang istimewa — kami mendampingi mereka tumbuh menjadi pribadi yang beriman, cerdas, percaya diri, dan peduli terhadap sesama."
+    }
+  },
+  "visi_misi": {
+    "visi": "Terwujudnya peserta didik yang beriman dan bertakwa, unggul dalam prestasi, berkarakter Profil Pelajar Pancasila, berbudaya, serta berwawasan lingkungan.",
+    "misi": [
+      "Menanamkan nilai-nilai keimanan dan ketakwaan melalui pembiasaan ibadah, akhlak mulia, dan toleransi dalam kehidupan sehari-hari.",
+      "Menyelenggarakan pembelajaran yang aktif, bermakna, inovatif, dan berpusat pada murid sesuai implementasi Kurikulum Merdeka.",
+      "Mengembangkan minat, bakat, kreativitas, dan potensi siswa secara optimal melalui pembinaan intrakurikuler dan ekstrakurikuler.",
+      "Menumbuhkembangkan rasa cinta dan pelestarian terhadap kearifan budaya lokal Melayu Riau dan semangat persatuan kebangsaan.",
+      "Mewujudkan lingkungan sekolah yang bersih, asri, sehat, aman, dan ramah anak berlandaskan semangat sekolah berwawasan Adiwiyata.",
+      "Membangun sinergi harmonis antara sekolah, orang tua, komite, dan masyarakat dalam mendukung kemajuan pendidikan."
+    ],
+    "nilai_utama": [
+      {
+        "title": "Beriman & Berakhlak",
+        "desc": "Mengutamakan pembiasaan ibadah harian, kejujuran, dan sopan santun kepada guru, teman, dan orang tua."
+      },
+      {
+        "title": "Bernalar Kritis & Kreatif",
+        "desc": "Mendorong siswa berani bertanya, berpikir terbuka, bereksplorasi, dan menemukan solusi baru."
+      },
+      {
+        "title": "Gotong Royong & Empati",
+        "desc": "Mendidik kepedulian sosial, kerja sama dalam keberagaman, dan sikap saling membantu sesama."
+      },
+      {
+        "title": "Mandiri & Disiplin",
+        "desc": "Menumbuhkan kesadaran diri dalam belajar, ketepatan waktu, dan tanggung jawab terhadap kewajiban."
+      }
+    ]
+  },
+  "program_unggulan": [
+    {
+      "id": "religi",
+      "title": "Pembiasaan Religi & Budi Pekerti",
+      "description": "Sholat Dhuha & Dzuhur berjamaah, tadarus Al-Qur'an / doa harian, hafalan surat pendek, serta kultum pagi pembina akhlak.",
+      "icon": "HeartHandshake"
+    },
+    {
+      "id": "literasi",
+      "title": "Gerakan Literasi Sekolah (GLS)",
+      "description": "Pojok baca interaktif di setiap kelas, program 15 menit membaca sebelum KBM, serta apresiasi karya dongeng dan puisi siswa.",
+      "icon": "BookOpen"
+    },
+    {
+      "id": "adiwiyata",
+      "title": "Sekolah Hijau & Peduli Lingkungan",
+      "description": "Edukasi daur ulang sampah, budidaya tanaman apotek hidup di kebun sekolah, serta pemeliharaan kebersihan kelas mandiri.",
+      "icon": "Trees"
+    },
+    {
+      "id": "digital",
+      "title": "Pengenalan TIK & Numerasi Ceria",
+      "description": "Pengenalan teknologi dasar ramah anak melalui perangkat Chromebook dan laboratorium komputer terfasilitasi.",
+      "icon": "Laptop"
+    }
+  ],
+  "fasilitas": [
+    {
+      "title": "Ruang Kelas Modern & Nyaman",
+      "description": "Dilengkapi sirkulasi udara optimal, pencahayaan alami, proyektor pembelajaran, dan penataan meja kolaboratif.",
+      "icon": "School"
+    },
+    {
+      "title": "Perpustakaan Ramah Anak",
+      "description": "Koleksi ribuan buku bacaan cerita edukatif, ensiklopedia sains, dan area membaca lesehan yang sejuk.",
+      "icon": "Library"
+    },
+    {
+      "title": "Laboratorium Komputer & TIK",
+      "description": "Unit komputer terawat untuk kegiatan Asesmen Nasional (ANBK) serta pelatihan literasi digital dasar siswa.",
+      "icon": "Monitor"
+    },
+    {
+      "title": "Lapangan Olahraga Serbaguna",
+      "description": "Area lapangan luas untuk kegiatan futsal, bulu tangkis, senam kesegaran jasmani, dan upacara bendera.",
+      "icon": "Trophy"
+    },
+    {
+      "title": "Musholla Sekolah",
+      "description": "Sarana ibadah yang bersih dan representatif untuk pembiasaan sholat berjamaah dan praktik manasik cilik.",
+      "icon": "Building2"
+    },
+    {
+      "title": "UKS & Kantin Sehat",
+      "description": "Layanan pertolongan pertama bekerja sama dengan Puskesmas serta kantin bersih dengan pengawasan higienitas.",
+      "icon": "Activity"
+    }
+  ],
+  "ekstrakurikuler": [
+    { "name": "Gerakan Pramuka (Siaga & Penggalang)", "category": "Kepanduan & Karakter", "badge": "Wajib" },
+    { "name": "Seni Tari Tradisional Melayu", "category": "Kesenian & Budaya Daerah", "badge": "Kesenian" },
+    { "name": "Futsal & Sepak Bola", "category": "Kebugaran & Sportivitas", "badge": "Olahraga" },
+    { "name": "Tahfidz & Tilawatil Qur'an", "category": "Pendidikan Keagamaan", "badge": "Agama" },
+    { "name": "Dokter Kecil / UKS", "category": "Kesehatan Lingkungan", "badge": "Sosial" },
+    { "name": "Klub Sains & Matematika Kreatif", "category": "Pengembangan Sains", "badge": "Akademik" }
+  ],
+  "prestasi": [
+    {
+      "year": "2025",
+      "title": "Juara 1 Lomba Cerdas Cermat Jenjang SD",
+      "level": "Tingkat Kecamatan Kepenuhan",
+      "category": "Akademik"
+    },
+    {
+      "year": "2025",
+      "title": "Juara Umum FLS2N Seni Tari Melayu",
+      "level": "Tingkat Gugus Pendidikan Dasar",
+      "category": "Seni & Budaya"
+    },
+    {
+      "year": "2024",
+      "title": "Juara 2 O2SN Cabang Atletik Kids",
+      "level": "Tingkat Kabupaten Rokan Hulu",
+      "category": "Olahraga"
+    },
+    {
+      "year": "2024",
+      "title": "Penghargaan Sekolah Bersih & Ramah Anak",
+      "level": "Tingkat Kabupaten Rokan Hulu",
+      "category": "Lingkungan"
+    }
+  ],
+  "spmb": {
+    "badge": "Penerimaan Peserta Didik Baru",
+    "title": "Penerimaan Peserta Didik Baru (PPDB / SPMB)",
+    "subtitle": "Pendaftaran calon murid baru SD Negeri 001 Kepenuhan kini dapat dilakukan secara online dengan mudah, cepat, dan transparan dari rumah.",
+    "steps": [
+      {
+        "step": 1,
+        "title": "Masuk dengan WhatsApp",
+        "desc": "Gunakan nomor WhatsApp aktif untuk menerima kode verifikasi OTP tanpa perlu mengingat password rumit."
+      },
+      {
+        "step": 2,
+        "title": "Lengkapi Biodata Calon Murid",
+        "desc": "Isi formulir ringkas identitas calon siswa, data orang tua/wali, serta unggah dokumen persyaratan."
+      },
+      {
+        "step": 3,
+        "title": "Terima Formulir Resmi PDF",
+        "desc": "Setelah submit, kartu bukti pendaftaran berformat PDF langsung siap diunduh dan dipantau status verifikasinya."
+      }
+    ],
+    "syarat": [
+      "Berusia minimal 6 (enam) tahun pada tanggal 1 Juli tahun ajaran berjalan",
+      "Foto / Scan Kartu Keluarga (KK) yang masih berlaku",
+      "Foto / Scan Akta Kelahiran calon murid",
+      "Foto / Scan Kartu Indonesia Pintar (KIP / PKH) jika memiliki",
+      "Nomor WhatsApp aktif orang tua / wali untuk konfirmasi"
+    ]
+  },
+  "kontak": {
+    "alamat": "Kecamatan Kepenuhan, Kabupaten Rokan Hulu, Riau 28558",
+    "telepon": "(0762) 7000-001 / 0812-7500-1234",
+    "email": "sdn001kepenuhan@gmail.com",
+    "jam_sekolah": "Senin - Sabtu: 07.15 - 12.30 WIB",
+    "jam_tata_usaha": "Senin - Jumat: 08.00 - 14.00 WIB",
+    "maps_url": "https://maps.google.com/?q=SD+Negeri+001+Kepenuhan"
+  }
+}

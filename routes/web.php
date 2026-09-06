@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SuratTugasController as AdminSuratTugasController
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\WhatsAppSettingController as AdminWhatsAppSettingController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicStatusController;
 use App\Http\Controllers\RegistrationController;
@@ -30,13 +31,7 @@ Route::post('/chatbot/message', [ChatbotController::class, 'handle'])
     ->middleware('throttle:20,1')
     ->name('chatbot.message');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'period' => RegistrationPeriod::active(),
-    ]);
-})->name('home');
+Route::get('/', LandingController::class)->name('home');
 
 Route::get('/cek-status', [PublicStatusController::class, 'show'])->name('public-status.show');
 Route::post('/cek-status', [PublicStatusController::class, 'check'])

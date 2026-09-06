@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SchoolSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Middleware;
+use Throwable;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -29,6 +32,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $schoolSetting = null;
+        try {
+            if (Schema::hasTable('school_settings')) {
+                $schoolSetting = SchoolSetting::current();
+            }
+        } catch (Throwable) {
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -41,10 +52,16 @@ class HandleInertiaRequests extends Middleware
                 ] : null,
             ],
             'school' => [
-                'name' => config('spmb.school.name'),
-                'district' => config('spmb.school.district'),
+                'name' => config('spmb.school.name', 'SD Negeri 001 Kepenuhan'),
+                'district' => config('spmb.school.district', 'Kepenuhan'),
                 'address' => config('spmb.school.address'),
                 'principal' => config('spmb.school.principal'),
+                'phone' => config('spmb.school.phone'),
+                'email' => config('spmb.school.email'),
+                'logo_url' => $schoolSetting?->logoUrl(),
+                'regency_logo_url' => $schoolSetting?->regencyLogoUrl(),
+                'npsn' => $schoolSetting?->npsn ?: '10403164',
+                'accreditation' => $schoolSetting?->accreditation ?: 'A',
             ],
             'flash' => [
                 'status' => fn () => $request->session()->get('status'),
