@@ -3,11 +3,9 @@ import { useState } from 'react';
 import {
     Edit3,
     FileSpreadsheet,
-    FileArchive,
     Plus,
     Search,
     Trash2,
-    User,
     Download,
 } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
@@ -41,26 +39,23 @@ import {
     TableRow,
 } from '@/Components/ui/table';
 
-export default function Index({ students, filters, grades, religions }) {
+export default function Index({ staff, filters }) {
     const [form, setForm] = useState({
         q: filters?.q ?? '',
-        tingkat: filters?.tingkat ?? '',
+        jenis: filters?.jenis ?? '',
     });
 
     const [isExportOpen, setIsExportOpen] = useState(false);
     const availableColumns = [
-        { id: 'nis', label: 'NIS' },
-        { id: 'nisn', label: 'NISN' },
-        { id: 'nik', label: 'NIK' },
         { id: 'name', label: 'Nama Lengkap' },
-        { id: 'gender', label: 'Jenis Kelamin' },
+        { id: 'nip', label: 'NIP' },
+        { id: 'nuptk', label: 'NUPTK' },
+        { id: 'nik', label: 'NIK' },
         { id: 'birth_info', label: 'Tempat, Tanggal Lahir' },
-        { id: 'religion', label: 'Agama' },
-        { id: 'kelas', label: 'Kelas' },
-        { id: 'address', label: 'Alamat' },
-        { id: 'parent_name', label: 'Nama Orang Tua' },
-        { id: 'parent_phone', label: 'No HP Orang Tua' },
-        { id: 'previous_school', label: 'Asal Sekolah' },
+        { id: 'jabatan', label: 'Jabatan' },
+        { id: 'pangkat', label: 'Pangkat' },
+        { id: 'golongan', label: 'Golongan' },
+        { id: 'jenis', label: 'Jenis' },
     ];
     const [selectedColumns, setSelectedColumns] = useState(availableColumns.map(c => c.id));
 
@@ -73,29 +68,28 @@ export default function Index({ students, filters, grades, religions }) {
     const handleExport = () => {
         const params = new URLSearchParams();
         if (form.q) params.append('q', form.q);
-        if (form.tingkat) params.append('tingkat', form.tingkat);
+        if (form.jenis) params.append('jenis', form.jenis);
         params.append('columns', selectedColumns.join(','));
         
-        window.location.href = route('admin.students.export') + '?' + params.toString();
+        window.location.href = route('admin.staff.export') + '?' + params.toString();
         setIsExportOpen(false);
     };
-    const religionLabels = Object.fromEntries((religions ?? []).map((religion) => [religion.value, religion.label]));
 
     const apply = (event) => {
         event?.preventDefault?.();
         const params = Object.fromEntries(Object.entries(form).filter(([, value]) => value !== '' && value !== null));
-        router.get(route('admin.students.index'), params, { preserveState: true, replace: true });
+        router.get(route('admin.staff.index'), params, { preserveState: true, replace: true });
     };
 
     const reset = () => {
-        setForm({ q: '', tingkat: '' });
-        router.get(route('admin.students.index'));
+        setForm({ q: '', jenis: '' });
+        router.get(route('admin.staff.index'));
     };
 
-    const remove = (student) => {
-        if (! window.confirm(`Hapus data ${student.name}?`)) return;
+    const remove = (item) => {
+        if (! window.confirm(`Hapus data ${item.name}?`)) return;
 
-        router.delete(route('admin.students.destroy', { student: student.id }), { preserveScroll: true });
+        router.delete(route('admin.staff.destroy', { staff: item.id }), { preserveScroll: true });
     };
 
     return (
@@ -103,18 +97,12 @@ export default function Index({ students, filters, grades, religions }) {
             header={
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
-                        <h1 className="mt-1 text-xl font-semibold text-navy-950">Data Siswa</h1>
+                        <p className="text-xs uppercase tracking-widest text-gold-700">Manage SDM</p>
+                        <h1 className="mt-1 text-xl font-semibold text-navy-950">Data Guru & Tendik</h1>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         <Button asChild variant="outline">
-                            <Link href={route('admin.students.import-photos.create')}>
-                                <FileArchive className="h-4 w-4" />
-                                Upload Foto (ZIP)
-                            </Link>
-                        </Button>
-                        <Button asChild variant="outline">
-                            <Link href={route('admin.students.import.create')}>
+                            <Link href={route('admin.staff.import.create')}>
                                 <FileSpreadsheet className="h-4 w-4" />
                                 Import Excel
                             </Link>
@@ -128,7 +116,7 @@ export default function Index({ students, filters, grades, religions }) {
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
-                                    <DialogTitle>Export Data Siswa</DialogTitle>
+                                    <DialogTitle>Export Data Guru/Tendik</DialogTitle>
                                     <DialogDescription>
                                         Pilih kolom yang ingin disertakan dalam file Excel.
                                     </DialogDescription>
@@ -154,7 +142,7 @@ export default function Index({ students, filters, grades, religions }) {
                             </DialogContent>
                         </Dialog>
                         <Button asChild>
-                            <Link href={route('admin.students.create')}>
+                            <Link href={route('admin.staff.create')}>
                                 <Plus className="h-4 w-4" />
                                 Tambah Manual
                             </Link>
@@ -163,36 +151,33 @@ export default function Index({ students, filters, grades, religions }) {
                 </div>
             }
         >
-            <Head title="Admin - Data Siswa" />
+            <Head title="Admin - Data Guru & Tendik" />
 
             <Card className="mb-4">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-base">
                         <Search className="h-4 w-4" />
-                        Cari Data Siswa
+                        Cari Data
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={apply} className="grid gap-3 md:grid-cols-[1fr_220px_auto_auto]">
                         <Input
-                            placeholder="Nama / NIS / NISN / NIK"
+                            placeholder="Nama / NIP / NIK"
                             value={form.q}
                             onChange={(event) => setForm({ ...form, q: event.target.value })}
                         />
                         <Select
-                            value={form.tingkat || 'all'}
-                            onValueChange={(value) => setForm({ ...form, tingkat: value === 'all' ? '' : value })}
+                            value={form.jenis || 'all'}
+                            onValueChange={(value) => setForm({ ...form, jenis: value === 'all' ? '' : value })}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Semua tingkat" />
+                                <SelectValue placeholder="Semua jenis" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">Semua tingkat</SelectItem>
-                                {grades.map((grade) => (
-                                    <SelectItem key={grade} value={String(grade)}>
-                                        Kelas {grade}
-                                    </SelectItem>
-                                ))}
+                                <SelectItem value="all">Semua jenis</SelectItem>
+                                <SelectItem value="guru">Guru</SelectItem>
+                                <SelectItem value="tendik">Tendik</SelectItem>
                             </SelectContent>
                         </Select>
                         <Button type="button" variant="ghost" onClick={reset}>Reset</Button>
@@ -206,57 +191,52 @@ export default function Index({ students, filters, grades, religions }) {
                     <p className="px-4 pt-3 text-xs text-navy-500 sm:hidden">
                         Geser tabel ke samping untuk melihat semua kolom.
                     </p>
-                    <Table className="min-w-[1050px]">
+                    <Table className="min-w-[1000px]">
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Siswa</TableHead>
-                                <TableHead>NIS / NISN</TableHead>
+                                <TableHead>Nama</TableHead>
+                                <TableHead>NIP / NUPTK</TableHead>
                                 <TableHead>NIK</TableHead>
-                                <TableHead>No Ortu</TableHead>
-                                <TableHead>Nama Ortu</TableHead>
-                                <TableHead>Tempat, Tanggal Lahir</TableHead>
-                                <TableHead>Agama</TableHead>
-                                <TableHead>Kelas</TableHead>
+                                <TableHead>Jabatan</TableHead>
+                                <TableHead>Pangkat/Golongan</TableHead>
+                                <TableHead>Jenis</TableHead>
                                 <TableHead className="text-right">Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {students.data.length === 0 && (
+                            {staff.data.length === 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={9} className="py-10 text-center text-sm text-navy-500">
-                                        Belum ada data siswa.
+                                    <TableCell colSpan={7} className="py-10 text-center text-sm text-navy-500">
+                                        Belum ada data guru/tendik.
                                     </TableCell>
                                 </TableRow>
                             )}
-                            {students.data.map((student) => (
-                                <TableRow key={student.id}>
+                            {staff.data.map((item) => (
+                                <TableRow key={item.id}>
                                     <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-navy-50">
-                                                {student.photo_url ? (
-                                                    <img src={student.photo_url} alt={`Foto ${student.name}`} className="h-full w-full object-cover" />
-                                                ) : (
-                                                    <User className="h-5 w-5 text-navy-300" />
-                                                )}
-                                            </div>
-                                            <span className="min-w-[170px] font-medium text-navy-900">{student.name}</span>
+                                        <div className="font-medium text-navy-900">{item.name}</div>
+                                        <div className="text-xs text-navy-500">
+                                            {item.birth_place}, {new Date(item.birth_date).toLocaleDateString('id-ID')}
                                         </div>
                                     </TableCell>
                                     <TableCell className="whitespace-nowrap text-xs text-navy-700">
-                                        <div>NIS: {student.nis}</div>
-                                        <div className="text-navy-500">NISN: {student.nisn}</div>
+                                        <div>NIP: {item.nip || '-'}</div>
+                                        <div className="text-navy-500">NUPTK: {item.nuptk || '-'}</div>
                                     </TableCell>
-                                    <TableCell className="whitespace-nowrap font-mono text-xs">{student.nik}</TableCell>
-                                    <TableCell className="whitespace-nowrap text-xs">{student.parent_phone}</TableCell>
-                                    <TableCell className="whitespace-nowrap text-xs">{student.parent_name}</TableCell>
+                                    <TableCell className="whitespace-nowrap font-mono text-xs">{item.nik}</TableCell>
+                                    <TableCell className="whitespace-nowrap text-sm">{item.jabatan}</TableCell>
                                     <TableCell className="whitespace-nowrap text-xs">
-                                        {student.birth_place}, {new Date(student.birth_date).toLocaleDateString('id-ID')}
+                                        <div>{item.pangkat || '-'}</div>
+                                        <div className="text-navy-500">{item.golongan || '-'}</div>
                                     </TableCell>
-                                    <TableCell>{religionLabels[student.religion] ?? student.religion}</TableCell>
-                                    <TableCell><Badge variant="outline">{student.kelas}</Badge></TableCell>
+                                    <TableCell>
+                                        <Badge variant={item.jenis === 'guru' ? 'default' : 'secondary'} className="capitalize">
+                                            {item.jenis}
+                                        </Badge>
+                                    </TableCell>
                                     <TableCell className="whitespace-nowrap text-right">
                                         <Button asChild variant="ghost" size="sm">
-                                            <Link href={route('admin.students.edit', { student: student.id })}>
+                                            <Link href={route('admin.staff.edit', { staff: item.id })}>
                                                 <Edit3 className="h-4 w-4" />
                                                 Edit
                                             </Link>
@@ -265,7 +245,7 @@ export default function Index({ students, filters, grades, religions }) {
                                             type="button"
                                             variant="ghost"
                                             size="sm"
-                                            onClick={() => remove(student)}
+                                            onClick={() => remove(item)}
                                             className="text-red-600 hover:bg-red-50 hover:text-red-700"
                                         >
                                             <Trash2 className="h-4 w-4" />
@@ -279,9 +259,9 @@ export default function Index({ students, filters, grades, religions }) {
                 </CardContent>
             </Card>
 
-            {students.links?.length > 0 && (
+            {staff.links?.length > 0 && (
                 <div className="mt-4 flex flex-wrap items-center justify-center gap-1">
-                    {students.links.map((link, index) => (
+                    {staff.links.map((link, index) => (
                         <Link
                             key={index}
                             href={link.url ?? '#'}

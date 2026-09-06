@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\NotificationTemplateController as AdminNotificati
 use App\Http\Controllers\Admin\PeriodController as AdminPeriodController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\SchoolSettingController as AdminSchoolSettingController;
+use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\Admin\StudentNotificationController as AdminStudentNotificationController;
 use App\Http\Controllers\Admin\StudentPhotoController;
@@ -141,8 +142,15 @@ Route::middleware(['auth', 'admin'])
         Route::get('/documents/{document}/preview', [DocumentController::class, 'preview'])->name('documents.preview');
         Route::resource('documents', DocumentController::class)->except(['show']);
 
+        Route::get('/staff/export', [StaffController::class, 'export'])->name('staff.export');
+        Route::get('/staff/template', [StaffController::class, 'template'])->name('staff.template');
+        Route::get('/staff/import', [StaffController::class, 'importForm'])->name('staff.import.create');
+        Route::post('/staff/import', [StaffController::class, 'import'])->name('staff.import.store');
+        Route::resource('staff', StaffController::class)->except(['show']);
+
         Route::resource('academic-calendars', AcademicCalendarController::class)->except(['create', 'edit', 'show']);
 
+        Route::get('/students/export', [AdminStudentController::class, 'export'])->name('students.export');
         Route::get('/students/template', [AdminStudentController::class, 'template'])->name('students.template');
         Route::get('/students/import-photos', [StudentPhotoController::class, 'create'])->name('students.import-photos.create');
         Route::post('/students/import-photos', [StudentPhotoController::class, 'store'])->name('students.import-photos.store');

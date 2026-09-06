@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StudentsExport;
 use App\Exports\StudentsTemplateExport;
 use App\Http\Controllers\Controller;
 use App\Imports\StudentsImport;
@@ -21,6 +22,14 @@ use Throwable;
 class StudentController extends Controller
 {
     public const IMPORT_RESULT_KEY = 'admin.students.import.result';
+
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new StudentsExport($request->only(['q', 'tingkat', 'columns'])),
+            'buku-induk-siswa.xlsx'
+        );
+    }
 
     public function index(Request $request): Response
     {
