@@ -3,9 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicCalendar;
+use App\Models\Achievement;
+use App\Models\Extracurricular;
 use App\Models\Faq;
 use App\Models\RegistrationPeriod;
+use App\Models\SchoolFacility;
+use App\Models\SchoolGallery;
+use App\Models\SchoolMission;
+use App\Models\SchoolProgram;
 use App\Models\SchoolSetting;
+use App\Models\SchoolValue;
 use App\Models\Staff;
 use App\Models\Student;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +62,15 @@ class LandingController extends Controller
             ->take(6)
             ->get(['id', 'question', 'answer']);
 
+        // Fetch dynamic landing page content
+        $missions = SchoolMission::orderBy('sort_order')->get(['id', 'body']);
+        $values = SchoolValue::orderBy('sort_order')->get(['id', 'title', 'description', 'icon']);
+        $programs = SchoolProgram::active()->orderBy('sort_order')->get();
+        $facilities = SchoolFacility::active()->orderBy('sort_order')->get();
+        $extracurriculars = Extracurricular::active()->orderBy('sort_order')->get();
+        $achievements = Achievement::active()->orderBy('year', 'desc')->orderBy('sort_order')->get();
+        $galleries = SchoolGallery::active()->orderBy('sort_order')->get();
+
         $totalStudents = Student::query()->count();
         $totalStaff = Staff::query()->count();
         $schoolSetting = SchoolSetting::current();
@@ -66,6 +82,13 @@ class LandingController extends Controller
             'staffList' => $staffList,
             'academicCalendars' => $academicCalendars,
             'faqs' => $faqs,
+            'missions' => $missions,
+            'values' => $values,
+            'programs' => $programs,
+            'facilities' => $facilities,
+            'extracurriculars' => $extracurriculars,
+            'achievements' => $achievements,
+            'galleries' => $galleries,
             'stats' => [
                 'total_students' => $totalStudents,
                 'total_staff' => $totalStaff,

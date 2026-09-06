@@ -9,9 +9,12 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/Components/ui/badge';
 
-export default function ProgramsSection({ profileData }) {
-    const programs = profileData.program_unggulan;
-    const ekskul = profileData.ekstrakurikuler;
+export default function ProgramsSection({ profileData, programs, extracurriculars }) {
+    const defaultPrograms = profileData.program_unggulan;
+    const defaultEkskul = profileData.ekstrakurikuler;
+
+    const displayPrograms = programs && programs.length > 0 ? programs : defaultPrograms;
+    const displayEkskul = extracurriculars && extracurriculars.length > 0 ? extracurriculars : defaultEkskul;
 
     const iconMap = {
         HeartHandshake,
@@ -39,16 +42,22 @@ export default function ProgramsSection({ profileData }) {
 
                 {/* Programs Grid */}
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    {programs.map((item, idx) => {
-                        const IconComponent = iconMap[item.icon] || Sparkles;
+                    {displayPrograms.map((item, idx) => {
+                        const IconComponent = item.icon ? (iconMap[item.icon] || Sparkles) : Sparkles;
                         return (
                             <div
                                 key={idx}
                                 className="group relative rounded-3xl border border-navy-100 bg-navy-50/40 p-6 hover:bg-white hover:border-gold-400/50 hover:shadow-xl hover:shadow-navy-950/5 transition-all duration-300"
                             >
-                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-500 text-navy-950 font-bold shadow-md shadow-gold-500/20 mb-5 group-hover:scale-110 transition-transform">
-                                    <IconComponent className="h-6 w-6" />
-                                </div>
+                                {item.image_url ? (
+                                    <div className="h-12 w-12 rounded-2xl overflow-hidden mb-5 group-hover:scale-110 transition-transform shadow-md shadow-gold-500/20 border border-gold-500/30">
+                                        <img src={item.image_url} alt={item.title} className="h-full w-full object-cover" />
+                                    </div>
+                                ) : (
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-500 text-navy-950 font-bold shadow-md shadow-gold-500/20 mb-5 group-hover:scale-110 transition-transform">
+                                        <IconComponent className="h-6 w-6" />
+                                    </div>
+                                )}
                                 <h3 className="text-base font-bold text-navy-950 mb-2 leading-snug">
                                     {item.title}
                                 </h3>
@@ -77,23 +86,32 @@ export default function ProgramsSection({ profileData }) {
 
                         <div className="lg:col-span-7">
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                {ekskul.map((e, idx) => (
+                                {displayEkskul.map((e, idx) => (
                                     <div
-                                        key={idx}
-                                        className="rounded-2xl border border-white/10 bg-white/5 p-3.5 hover:bg-white/10 hover:border-gold-400/40 transition-all"
+                                        key={e.id || idx}
+                                        className="relative rounded-2xl border border-white/10 bg-white/5 p-3.5 hover:bg-white/10 hover:border-gold-400/40 transition-all overflow-hidden"
                                     >
-                                        <Badge
-                                            variant="secondary"
-                                            className="bg-gold-500/20 text-gold-300 border-none text-[10px] font-semibold mb-1.5"
-                                        >
-                                            {e.badge}
-                                        </Badge>
-                                        <p className="text-xs font-bold text-white leading-tight">
-                                            {e.name}
-                                        </p>
-                                        <p className="text-[11px] text-navy-300 mt-1">
-                                            {e.category}
-                                        </p>
+                                        {e.image_url && (
+                                            <div className="absolute inset-0 opacity-10">
+                                                <img src={e.image_url} alt="" className="w-full h-full object-cover" />
+                                            </div>
+                                        )}
+                                        <div className="relative z-10">
+                                            {e.badge && (
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-gold-500/20 text-gold-300 border-none text-[10px] font-semibold mb-1.5"
+                                                >
+                                                    {e.badge}
+                                                </Badge>
+                                            )}
+                                            <p className="text-xs font-bold text-white leading-tight">
+                                                {e.name}
+                                            </p>
+                                            <p className="text-[11px] text-navy-300 mt-1">
+                                                {e.category || 'Umum'}
+                                            </p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

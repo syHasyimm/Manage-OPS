@@ -1,8 +1,9 @@
 import { Award, Medal, Sparkles, Star, Trophy } from 'lucide-react';
 import { Badge } from '@/Components/ui/badge';
 
-export default function AchievementsSection({ profileData }) {
-    const prestasi = profileData.prestasi;
+export default function AchievementsSection({ profileData, achievements }) {
+    const defaultPrestasi = profileData.prestasi;
+    const displayPrestasi = achievements && achievements.length > 0 ? achievements : defaultPrestasi;
 
     const iconColors = [
         'bg-gold-500/15 text-gold-700',
@@ -30,9 +31,9 @@ export default function AchievementsSection({ profileData }) {
 
                 {/* Achievements Grid */}
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    {prestasi.map((item, idx) => (
+                    {displayPrestasi.map((item, idx) => (
                         <div
-                            key={idx}
+                            key={item.id || idx}
                             className="group relative rounded-3xl border border-navy-100 bg-navy-50/30 p-6 hover:bg-white hover:border-gold-400/50 hover:shadow-xl hover:shadow-navy-950/5 transition-all duration-300"
                         >
                             <div className="flex items-center justify-between mb-4">
@@ -48,12 +49,14 @@ export default function AchievementsSection({ profileData }) {
                                 </span>
                             </div>
 
-                            <Badge
-                                variant="secondary"
-                                className="bg-navy-100/70 text-navy-700 border-none text-[10px] font-semibold mb-2"
-                            >
-                                {item.category}
-                            </Badge>
+                            {item.category && (
+                                <Badge
+                                    variant="secondary"
+                                    className="bg-navy-100/70 text-navy-700 border-none text-[10px] font-semibold mb-2"
+                                >
+                                    {item.category}
+                                </Badge>
+                            )}
 
                             <h3 className="text-sm sm:text-base font-bold text-navy-950 leading-snug group-hover:text-navy-900 mb-2">
                                 {item.title}

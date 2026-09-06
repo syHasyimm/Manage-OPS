@@ -11,6 +11,7 @@ import AgendaSection from '@/Components/Landing/AgendaSection';
 import AchievementsSection from '@/Components/Landing/AchievementsSection';
 import SpmbSection from '@/Components/Landing/SpmbSection';
 import FaqSection from '@/Components/Landing/FaqSection';
+import GallerySection from '@/Components/Landing/GallerySection';
 import ContactSection from '@/Components/Landing/ContactSection';
 import LandingFooter from '@/Components/Landing/LandingFooter';
 import schoolProfileData from '@/data/schoolProfile.json';
@@ -23,6 +24,13 @@ export default function Welcome({
     academicCalendars = [],
     faqs = [],
     stats = {},
+    missions = [],
+    values = [],
+    programs = [],
+    facilities = [],
+    extracurriculars = [],
+    achievements = [],
+    galleries = [],
 }) {
     const { school } = usePage().props;
     const schoolName = school?.name || schoolProfileData.profil.nama;
@@ -64,16 +72,21 @@ export default function Welcome({
                 <AboutSection
                     profileData={schoolProfileData}
                     school={school}
+                    missions={missions}
                 />
 
                 {/* Programs & Character Building Section */}
                 <ProgramsSection
                     profileData={schoolProfileData}
+                    programs={programs}
+                    values={values}
+                    extracurriculars={extracurriculars}
                 />
 
                 {/* Facilities Section */}
                 <FacilitiesSection
                     profileData={schoolProfileData}
+                    facilities={facilities}
                 />
 
                 {/* Staff & Teachers Section */}
@@ -89,6 +102,12 @@ export default function Welcome({
                 {/* Achievements Showcase */}
                 <AchievementsSection
                     profileData={schoolProfileData}
+                    achievements={achievements}
+                />
+
+                {/* School Gallery */}
+                <GallerySection
+                    galleries={galleries}
                 />
 
                 {/* Simplified & Elegant SPMB Registration Section */}

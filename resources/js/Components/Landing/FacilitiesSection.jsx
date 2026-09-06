@@ -8,8 +8,9 @@ import {
     Trophy,
 } from 'lucide-react';
 
-export default function FacilitiesSection({ profileData }) {
-    const facilities = profileData.fasilitas;
+export default function FacilitiesSection({ profileData, facilities }) {
+    const defaultFacilities = profileData.fasilitas;
+    const displayFacilities = facilities && facilities.length > 0 ? facilities : defaultFacilities;
 
     const iconMap = {
         School,
@@ -39,21 +40,27 @@ export default function FacilitiesSection({ profileData }) {
 
                 {/* Facilities Grid */}
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {facilities.map((fac, idx) => {
-                        const IconComponent = iconMap[fac.icon] || School;
+                    {displayFacilities.map((fac, idx) => {
+                        const IconComponent = fac.icon ? (iconMap[fac.icon] || School) : School;
                         return (
                             <div
                                 key={idx}
                                 className="group relative rounded-3xl border border-navy-100 bg-white p-6 shadow-sm hover:shadow-xl hover:shadow-navy-950/5 hover:border-gold-400/50 transition-all duration-300"
                             >
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy-50 text-navy-900 group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors shadow-sm">
-                                        <IconComponent className="h-6 w-6" />
+                                {fac.image_url ? (
+                                    <div className="h-40 w-full rounded-2xl overflow-hidden mb-4 border border-navy-100">
+                                        <img src={fac.image_url} alt={fac.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     </div>
-                                    <span className="text-xs font-bold text-navy-300 group-hover:text-gold-600 transition-colors">
-                                        0{idx + 1}
-                                    </span>
-                                </div>
+                                ) : (
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy-50 text-navy-900 group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors shadow-sm">
+                                            <IconComponent className="h-6 w-6" />
+                                        </div>
+                                        <span className="text-xs font-bold text-navy-300 group-hover:text-gold-600 transition-colors">
+                                            0{idx + 1}
+                                        </span>
+                                    </div>
+                                )}
                                 <h3 className="text-base font-bold text-navy-950 mb-2 leading-snug group-hover:text-navy-900">
                                     {fac.title}
                                 </h3>

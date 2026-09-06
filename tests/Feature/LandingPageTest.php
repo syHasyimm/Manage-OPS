@@ -5,7 +5,6 @@ use App\Models\Faq;
 use App\Models\RegistrationPeriod;
 use App\Models\SchoolSetting;
 use App\Models\Staff;
-use App\Models\Student;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('landing page can be rendered with complete school profile props', function () {

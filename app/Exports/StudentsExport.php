@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class StudentsExport implements FromView, ShouldAutoSize, WithEvents
 {
@@ -76,7 +77,7 @@ class StudentsExport implements FromView, ShouldAutoSize, WithEvents
                         'vertical' => Alignment::VERTICAL_CENTER,
                     ],
                     'fill' => [
-                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'fillType' => Fill::FILL_SOLID,
                         'startColor' => [
                             'rgb' => 'D9E1F2', // Light blueish color for header
                         ],

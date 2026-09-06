@@ -62,6 +62,7 @@ test('admin can save a student manually with an optional photo', function () {
             'nik' => '1234567890123456',
             'birth_place' => 'Kepenuhan',
             'birth_date' => '2018-01-01',
+            'gender' => 'L',
             'religion' => 'islam',
             'address' => 'Jalan Pendidikan',
             'parent_phone' => '081234567890',

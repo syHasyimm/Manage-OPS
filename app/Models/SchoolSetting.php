@@ -30,6 +30,16 @@ class SchoolSetting extends Model
         'principal_nip',
         'principal_title',
         'signature_city',
+        // Landing Page Content
+        'tagline',
+        'short_desc',
+        'principal_quote',
+        'principal_image_path',
+        'vision',
+        'operating_hours',
+        'office_hours',
+        'maps_url',
+        'hero_image_path',
     ];
 
     public const CACHE_KEY = 'school_setting:current';
@@ -110,6 +120,30 @@ class SchoolSetting extends Model
         }
 
         return Storage::disk('public')->url($this->regency_logo_path);
+    }
+
+    /**
+     * URL publik foto kepala sekolah.
+     */
+    public function principalImageUrl(): ?string
+    {
+        if (! $this->principal_image_path) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->principal_image_path);
+    }
+
+    /**
+     * URL publik gambar hero background.
+     */
+    public function heroImageUrl(): ?string
+    {
+        if (! $this->hero_image_path) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->hero_image_path);
     }
 
     /**

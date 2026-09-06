@@ -12,8 +12,7 @@ import {
 } from 'lucide-react';
 import { Card, CardContent } from '@/Components/ui/card';
 
-export default function AboutSection({ profileData, school }) {
-    const vm = profileData.visi_misi;
+export default function AboutSection({ profileData, school, missions, values }) {
     const p = profileData.profil;
     const schoolName = school?.name || p.nama;
 
@@ -48,7 +47,7 @@ export default function AboutSection({ profileData, school }) {
                                 <span>Visi Sekolah</span>
                             </div>
                             <p className="text-lg sm:text-xl font-bold leading-snug text-white">
-                                &ldquo;{vm.visi}&rdquo;
+                                &ldquo;{school?.vision || profileData.visi_misi.visi}&rdquo;
                             </p>
                             <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between text-xs text-navy-200">
                                 <span>{schoolName}</span>
@@ -63,11 +62,11 @@ export default function AboutSection({ profileData, school }) {
                                 <span>Empat Pilar Karakter Murid</span>
                             </h3>
                             <div className="grid sm:grid-cols-2 gap-3">
-                                {vm.nilai_utama.map((item, idx) => {
+                                {(values && values.length > 0 ? values : profileData.visi_misi.nilai_utama).map((item, idx) => {
                                     const IconComponent = valueIcons[idx % valueIcons.length];
                                     return (
                                         <div
-                                            key={idx}
+                                            key={item.id || idx}
                                             className="rounded-2xl border border-navy-100 bg-white p-4 shadow-sm hover:border-gold-400/50 transition-colors"
                                         >
                                             <div className="flex items-center gap-2 mb-1.5">
@@ -79,7 +78,7 @@ export default function AboutSection({ profileData, school }) {
                                                 </p>
                                             </div>
                                             <p className="text-[11px] text-navy-600 leading-relaxed">
-                                                {item.desc}
+                                                {item.description || item.desc}
                                             </p>
                                         </div>
                                     );
@@ -100,16 +99,16 @@ export default function AboutSection({ profileData, school }) {
                             </h3>
 
                             <div className="space-y-3.5">
-                                {vm.misi.map((m, idx) => (
+                                {(missions && missions.length > 0 ? missions : profileData.visi_misi.misi).map((m, idx) => (
                                     <div
-                                        key={idx}
+                                        key={m.id || idx}
                                         className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-navy-50/70 border border-navy-100/70 hover:bg-navy-50 hover:border-navy-200 transition-all"
                                     >
                                         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold-500 text-navy-950 text-xs font-bold shadow-sm mt-0.5">
                                             {idx + 1}
                                         </span>
                                         <p className="text-xs sm:text-sm text-navy-800 leading-relaxed font-medium">
-                                            {m}
+                                            {m.body || m}
                                         </p>
                                     </div>
                                 ))}

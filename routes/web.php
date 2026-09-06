@@ -1,15 +1,22 @@
 <?php
 
 use App\Http\Controllers\Admin\AcademicCalendarController;
+use App\Http\Controllers\Admin\AchievementController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\ExtracurricularController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\GraduationLetterController as AdminGraduationLetterController;
 use App\Http\Controllers\Admin\KartuNisnController as AdminKartuNisnController;
 use App\Http\Controllers\Admin\NotificationTemplateController as AdminNotificationTemplateController;
 use App\Http\Controllers\Admin\PeriodController as AdminPeriodController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
+use App\Http\Controllers\Admin\SchoolFacilityController;
+use App\Http\Controllers\Admin\SchoolGalleryController;
+use App\Http\Controllers\Admin\SchoolMissionController;
+use App\Http\Controllers\Admin\SchoolProgramController;
 use App\Http\Controllers\Admin\SchoolSettingController as AdminSchoolSettingController;
+use App\Http\Controllers\Admin\SchoolValueController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\Admin\StudentNotificationController as AdminStudentNotificationController;
@@ -120,6 +127,28 @@ Route::middleware(['auth', 'admin'])
 
         Route::resource('faqs', AdminFaqController::class)->except(['show', 'create', 'edit']);
 
+        // Landing Page Content
+        Route::post('/school-missions/reorder', [SchoolMissionController::class, 'reorder'])->name('school-missions.reorder');
+        Route::resource('school-missions', SchoolMissionController::class)->except(['create', 'show', 'edit']);
+
+        Route::post('/school-values/reorder', [SchoolValueController::class, 'reorder'])->name('school-values.reorder');
+        Route::resource('school-values', SchoolValueController::class)->except(['create', 'show', 'edit']);
+
+        Route::post('/school-programs/reorder', [SchoolProgramController::class, 'reorder'])->name('school-programs.reorder');
+        Route::resource('school-programs', SchoolProgramController::class)->except(['create', 'show', 'edit']);
+
+        Route::post('/school-facilities/reorder', [SchoolFacilityController::class, 'reorder'])->name('school-facilities.reorder');
+        Route::resource('school-facilities', SchoolFacilityController::class)->except(['create', 'show', 'edit']);
+
+        Route::post('/extracurriculars/reorder', [ExtracurricularController::class, 'reorder'])->name('extracurriculars.reorder');
+        Route::resource('extracurriculars', ExtracurricularController::class)->except(['create', 'show', 'edit']);
+
+        Route::post('/achievements/reorder', [AchievementController::class, 'reorder'])->name('achievements.reorder');
+        Route::resource('achievements', AchievementController::class)->except(['create', 'show', 'edit']);
+
+        Route::post('/school-galleries/reorder', [SchoolGalleryController::class, 'reorder'])->name('school-galleries.reorder');
+        Route::resource('school-galleries', SchoolGalleryController::class)->except(['create', 'show', 'edit']);
+
         Route::get('/kartu-nisn', [AdminKartuNisnController::class, 'index'])->name('kartu-nisn.index');
         Route::post('/kartu-nisn/desain', [AdminKartuNisnController::class, 'updateDesain'])->name('kartu-nisn.desain.update');
         Route::delete('/kartu-nisn/desain/{field}', [AdminKartuNisnController::class, 'deleteAsset'])->name('kartu-nisn.desain.asset.destroy');
@@ -171,6 +200,8 @@ Route::middleware(['auth', 'admin'])
         Route::match(['post', 'patch'], '/school-settings', [AdminSchoolSettingController::class, 'update'])->name('school-settings.update');
         Route::delete('/school-settings/logo', [AdminSchoolSettingController::class, 'deleteLogo'])->name('school-settings.logo.destroy');
         Route::delete('/school-settings/regency-logo', [AdminSchoolSettingController::class, 'deleteRegencyLogo'])->name('school-settings.regency-logo.destroy');
+        Route::delete('/school-settings/principal-image', [AdminSchoolSettingController::class, 'deletePrincipalImage'])->name('school-settings.principal-image.destroy');
+        Route::delete('/school-settings/hero-image', [AdminSchoolSettingController::class, 'deleteHeroImage'])->name('school-settings.hero-image.destroy');
 
         Route::get('/whatsapp-settings', [AdminWhatsAppSettingController::class, 'edit'])->name('whatsapp-settings.edit');
         Route::patch('/whatsapp-settings', [AdminWhatsAppSettingController::class, 'update'])->name('whatsapp-settings.update');
