@@ -35,7 +35,7 @@ export default function SpmbSection({ profileData, period, canRegister, canLogin
     const stepIcons = [MessageCircle, UserCheck, FileCheck2];
 
     return (
-        <section id="spmb" className="scroll-mt-20 py-16 sm:py-24 bg-gradient-to-b from-navy-950 via-navy-900 to-navy-950 text-white relative overflow-hidden">
+        <section id="spmb" className="landing-section spmb-section relative flex min-h-[calc(100dvh-4.5rem)] scroll-mt-20 items-center overflow-hidden bg-gradient-to-b from-navy-950 via-navy-900 to-navy-950 py-12 text-white sm:py-16 lg:py-20">
             {/* Ambient Background Glow */}
             <div className="pointer-events-none absolute inset-0 opacity-25">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[32rem] w-[32rem] rounded-full bg-gold-500/20 blur-[130px]" />
@@ -44,21 +44,21 @@ export default function SpmbSection({ profileData, period, canRegister, canLogin
 
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-12" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-300 border border-gold-400/30 backdrop-blur">
                         <Sparkles className="h-3.5 w-3.5 text-gold-400" />
-                        <span>Penerimaan Murid Baru</span>
+                        <span>Portal penerimaan murid baru</span>
                     </div>
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
-                        Pendaftaran Murid Baru (SPMB)
+                        Pendaftaran SPMB dari rumah
                     </h2>
                     <p className="text-sm sm:text-base text-navy-200">
-                        Pendaftaran online kini lebih simpel, elegan, dan transparan. Daftarkan putra-putri Anda dalam 3 langkah mudah dari rumah.
+                        Siapkan dokumen, isi formulir secara online, lalu pantau status pendaftaran melalui satu portal yang mudah digunakan.
                     </p>
                 </div>
 
                 {/* Main Card Container */}
-                <div className="rounded-3xl border border-white/15 bg-white/5 backdrop-blur-xl p-6 sm:p-10 shadow-2xl shadow-navy-950/40 space-y-10">
+                <div className="rounded-3xl border border-white/15 bg-white/5 backdrop-blur-xl p-6 sm:p-10 shadow-2xl shadow-navy-950/40 space-y-10" data-reveal>
                     {/* Period Status Ribbon */}
                     <div className="flex flex-wrap items-center justify-between gap-4 pb-8 border-b border-white/10">
                         <div className="flex items-center gap-3">
@@ -115,7 +115,7 @@ export default function SpmbSection({ profileData, period, canRegister, canLogin
                                 return (
                                     <div
                                         key={idx}
-                                        className="relative rounded-2xl border border-white/10 bg-navy-950/60 p-5 backdrop-blur transition-all duration-300 hover:border-gold-400/40 hover:bg-navy-950/80"
+                                        className="landing-card relative rounded-2xl border border-white/10 bg-navy-950/60 p-5 backdrop-blur transition-all duration-300 hover:border-gold-400/40 hover:bg-navy-950/80"
                                     >
                                         <div className="flex items-center justify-between mb-3.5">
                                             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-500/20 text-gold-400 border border-gold-400/30 font-bold">

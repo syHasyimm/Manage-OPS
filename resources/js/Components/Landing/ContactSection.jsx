@@ -9,10 +9,10 @@ export default function ContactSection({ profileData, school }) {
     const address = school?.address || kontak.alamat;
 
     return (
-        <section id="kontak" className="scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
+        <section id="kontak" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-14" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <MapPin className="h-3.5 w-3.5 text-gold-600" />
                         <span>Lokasi & Narahubung</span>
@@ -29,7 +29,7 @@ export default function ContactSection({ profileData, school }) {
                     {/* Left: Contact Info Cards */}
                     <div className="lg:col-span-6 space-y-4">
                         {/* Address Card */}
-                        <div className="rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
+                        <div className="landing-card rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
                             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gold-500/15 text-gold-700 font-bold">
                                 <MapPin className="h-6 w-6" />
                             </div>
@@ -46,7 +46,7 @@ export default function ContactSection({ profileData, school }) {
 
                         {/* Phone & Email Cards in Grid */}
                         <div className="grid sm:grid-cols-2 gap-4">
-                            <div className="rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
+                            <div className="landing-card rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-50 text-navy-800 font-bold">
                                     <Phone className="h-5 w-5" />
                                 </div>
@@ -61,7 +61,7 @@ export default function ContactSection({ profileData, school }) {
                                 </div>
                             </div>
 
-                            <div className="rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
+                            <div className="landing-card rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-navy-50 text-navy-800 font-bold">
                                     <Mail className="h-5 w-5" />
                                 </div>
@@ -78,7 +78,7 @@ export default function ContactSection({ profileData, school }) {
                         </div>
 
                         {/* Operating Hours Card */}
-                        <div className="rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
+                        <div className="landing-card rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex items-start gap-4">
                             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gold-500/15 text-gold-700 font-bold">
                                 <Clock className="h-6 w-6" />
                             </div>
@@ -100,7 +100,7 @@ export default function ContactSection({ profileData, school }) {
 
                     {/* Right: Map Embed Card */}
                     <div className="lg:col-span-6 flex flex-col">
-                        <div className="h-full rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex flex-col justify-between space-y-4">
+                        <div className="landing-card h-full rounded-3xl border border-navy-100 bg-white p-6 shadow-sm flex flex-col justify-between space-y-4">
                             <div>
                                 <h3 className="text-base font-bold text-navy-950 mb-1">
                                     Peta Lokasi Kampus Sekolah

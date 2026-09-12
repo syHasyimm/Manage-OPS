@@ -24,10 +24,10 @@ export default function ProgramsSection({ profileData, programs, extracurricular
     };
 
     return (
-        <section id="program" className="scroll-mt-20 py-16 sm:py-24 bg-white">
+        <section id="program" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-white">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-14" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <Sparkles className="h-3.5 w-3.5 text-gold-600" />
                         <span>Keunggulan Institusi</span>
@@ -47,7 +47,7 @@ export default function ProgramsSection({ profileData, programs, extracurricular
                         return (
                             <div
                                 key={idx}
-                                className="group relative rounded-3xl border border-navy-100 bg-navy-50/40 p-6 hover:bg-white hover:border-gold-400/50 hover:shadow-xl hover:shadow-navy-950/5 transition-all duration-300"
+                                className="landing-card group relative rounded-3xl border border-navy-100 bg-navy-50/40 p-6 hover:bg-white hover:border-gold-400/50 hover:shadow-xl hover:shadow-navy-950/5 transition-all duration-300"
                             >
                                 {item.image_url ? (
                                     <div className="h-12 w-12 rounded-2xl overflow-hidden mb-5 group-hover:scale-110 transition-transform shadow-md shadow-gold-500/20 border border-gold-500/30">
@@ -70,7 +70,7 @@ export default function ProgramsSection({ profileData, programs, extracurricular
                 </div>
 
                 {/* Ekstrakurikuler Showcase */}
-                <div className="mt-16 rounded-3xl border border-navy-800 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950 p-6 sm:p-10 text-white shadow-xl shadow-navy-950/10">
+                <div className="mt-16 rounded-3xl border border-navy-800 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-950 p-6 sm:p-10 text-white shadow-xl shadow-navy-950/10" data-reveal>
                     <div className="grid lg:grid-cols-12 gap-8 items-center">
                         <div className="lg:col-span-5 space-y-3">
                             <span className="text-xs font-bold uppercase tracking-widest text-gold-400">

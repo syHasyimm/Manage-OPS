@@ -60,6 +60,8 @@ class HandleInertiaRequests extends Middleware
                 'email' => config('spmb.school.email'),
                 'logo_url' => $schoolSetting?->logoUrl(),
                 'regency_logo_url' => $schoolSetting?->regencyLogoUrl(),
+                'principal_image_url' => $schoolSetting?->principalImageUrl(),
+                'hero_image_url' => $schoolSetting?->heroImageUrl(),
                 'npsn' => $schoolSetting?->npsn ?: '10403164',
                 'accreditation' => $schoolSetting?->accreditation ?: 'A',
             ],

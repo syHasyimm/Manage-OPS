@@ -43,10 +43,6 @@ export default function Edit({ setting }) {
     const regencyFileInputRef = useRef(null);
     const [logoPreview, setLogoPreview] = useState(setting?.logo_url ?? null);
     const [regencyLogoPreview, setRegencyLogoPreview] = useState(setting?.regency_logo_url ?? null);
-    const principalFileInputRef = useRef(null);
-    const heroFileInputRef = useRef(null);
-    const [principalImagePreview, setPrincipalImagePreview] = useState(setting?.principal_image_url ?? null);
-    const [heroImagePreview, setHeroImagePreview] = useState(setting?.hero_image_url ?? null);
 
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         name: setting?.name ?? '',
@@ -68,17 +64,8 @@ export default function Edit({ setting }) {
         principal_nip: setting?.principal_nip ?? '',
         principal_title: setting?.principal_title ?? 'Kepala Sekolah',
         signature_city: setting?.signature_city ?? '',
-        tagline: setting?.tagline ?? '',
-        short_desc: setting?.short_desc ?? '',
-        principal_quote: setting?.principal_quote ?? '',
-        vision: setting?.vision ?? '',
-        operating_hours: setting?.operating_hours ?? '',
-        office_hours: setting?.office_hours ?? '',
-        maps_url: setting?.maps_url ?? '',
         logo: null,
         regency_logo: null,
-        principal_image: null,
-        hero_image: null,
         _method: 'patch',
     });
 
@@ -96,12 +83,8 @@ export default function Edit({ setting }) {
             onSuccess: () => {
                 setData('logo', null);
                 setData('regency_logo', null);
-                setData('principal_image', null);
-                setData('hero_image', null);
                 if (fileInputRef.current) fileInputRef.current.value = '';
                 if (regencyFileInputRef.current) regencyFileInputRef.current.value = '';
-                if (principalFileInputRef.current) principalFileInputRef.current.value = '';
-                if (heroFileInputRef.current) heroFileInputRef.current.value = '';
             },
             onError: () => toast.error('Gagal menyimpan. Periksa kembali isian.'),
         });
@@ -143,46 +126,6 @@ export default function Edit({ setting }) {
                 setData('regency_logo', null);
                 if (regencyFileInputRef.current) regencyFileInputRef.current.value = '';
                 toast.success('Logo kabupaten dihapus');
-            },
-        });
-    };
-
-    const onPrincipalImageChange = (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setData('principal_image', file);
-        setPrincipalImagePreview(URL.createObjectURL(file));
-    };
-
-    const removePrincipalImage = () => {
-        if (!confirm('Hapus foto kepala sekolah?')) return;
-        router.delete(route('admin.school-settings.principal-image.destroy'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                setPrincipalImagePreview(null);
-                setData('principal_image', null);
-                if (principalFileInputRef.current) principalFileInputRef.current.value = '';
-                toast.success('Foto kepala sekolah dihapus');
-            },
-        });
-    };
-
-    const onHeroImageChange = (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setData('hero_image', file);
-        setHeroImagePreview(URL.createObjectURL(file));
-    };
-
-    const removeHeroImage = () => {
-        if (!confirm('Hapus gambar hero background?')) return;
-        router.delete(route('admin.school-settings.hero-image.destroy'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                setHeroImagePreview(null);
-                setData('hero_image', null);
-                if (heroFileInputRef.current) heroFileInputRef.current.value = '';
-                toast.success('Gambar hero background dihapus');
             },
         });
     };
@@ -481,97 +424,6 @@ export default function Edit({ setting }) {
                     </CardContent>
                 </Card>
 
-                {/* Landing Page Content */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base">Konten Landing Page</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <Field label="Tagline / Motto Utama" htmlFor="tagline" error={errors.tagline}>
-                            <Input
-                                id="tagline"
-                                value={data.tagline}
-                                onChange={(e) => setData('tagline', e.target.value)}
-                                placeholder="Membangun Generasi Cerdas Berkarakter"
-                            />
-                        </Field>
-                        <Field label="Deskripsi Singkat" htmlFor="short_desc" error={errors.short_desc} hint="Muncul di bawah tagline pada halaman utama">
-                            <Textarea
-                                id="short_desc"
-                                rows={2}
-                                value={data.short_desc}
-                                onChange={(e) => setData('short_desc', e.target.value)}
-                            />
-                        </Field>
-                        <Field label="Visi Sekolah" htmlFor="vision" error={errors.vision}>
-                            <Textarea
-                                id="vision"
-                                rows={3}
-                                value={data.vision}
-                                onChange={(e) => setData('vision', e.target.value)}
-                            />
-                        </Field>
-                        
-                        <div className="mt-4 rounded-md border border-navy-100 bg-navy-50/40 p-4">
-                            <div className="mb-3 flex items-center gap-3">
-                                <div className="flex h-20 w-32 shrink-0 items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-navy-200 bg-white">
-                                    {heroImagePreview ? (
-                                        <img src={heroImagePreview} alt="Preview Hero" className="h-full w-full object-cover" />
-                                    ) : (
-                                        <ImageIcon className="h-6 w-6 text-navy-300" />
-                                    )}
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-sm font-semibold text-navy-900">Gambar Hero Background</p>
-                                    <p className="text-xs text-navy-500">Muncul di latar belakang bagian paling atas landing page</p>
-                                </div>
-                            </div>
-                            <input
-                                ref={heroFileInputRef}
-                                id="hero_image"
-                                type="file"
-                                accept="image/png,image/jpeg,image/jpg"
-                                onChange={onHeroImageChange}
-                                className="block w-full text-sm text-navy-700 file:mr-3 file:rounded-md file:border-0 file:bg-navy-900 file:px-3 file:py-2 file:text-xs file:font-medium file:text-white hover:file:bg-navy-800"
-                            />
-                            <p className="mt-2 text-xs text-navy-500">PNG / JPG, maks 2 MB. Disarankan orientasi landscape (contoh: 1920x1080).</p>
-                            <FieldError message={errors.hero_image} />
-                            {setting?.hero_image_path && (
-                                <Button type="button" variant="outline" size="sm" onClick={removeHeroImage} className="mt-2">
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                    Hapus Gambar Hero
-                                </Button>
-                            )}
-                        </div>
-
-                        <div className="grid gap-4 md:grid-cols-2 pt-4">
-                            <Field label="Jam KBM" htmlFor="operating_hours" error={errors.operating_hours}>
-                                <Input
-                                    id="operating_hours"
-                                    value={data.operating_hours}
-                                    onChange={(e) => setData('operating_hours', e.target.value)}
-                                    placeholder="Senin-Sabtu, 07.15-12.30 WIB"
-                                />
-                            </Field>
-                            <Field label="Jam Tata Usaha" htmlFor="office_hours" error={errors.office_hours}>
-                                <Input
-                                    id="office_hours"
-                                    value={data.office_hours}
-                                    onChange={(e) => setData('office_hours', e.target.value)}
-                                    placeholder="Senin-Jumat, 08.00-14.00 WIB"
-                                />
-                            </Field>
-                        </div>
-                        <Field label="URL Google Maps" htmlFor="maps_url" error={errors.maps_url} hint="Link embed atau bagikan dari Google Maps">
-                            <Input
-                                id="maps_url"
-                                value={data.maps_url}
-                                onChange={(e) => setData('maps_url', e.target.value)}
-                            />
-                        </Field>
-                    </CardContent>
-                </Card>
-
                 {/* Kepala Sekolah */}
                 <Card>
                     <CardHeader>
@@ -613,46 +465,6 @@ export default function Edit({ setting }) {
                             </Field>
                         </div>
 
-                        <Field label="Sambutan Kepala Sekolah" htmlFor="principal_quote" error={errors.principal_quote} hint="Ditampilkan di halaman utama landing page">
-                            <Textarea
-                                id="principal_quote"
-                                rows={4}
-                                value={data.principal_quote}
-                                onChange={(e) => setData('principal_quote', e.target.value)}
-                            />
-                        </Field>
-
-                        <div className="rounded-md border border-navy-100 bg-navy-50/40 p-4 mt-2">
-                            <div className="mb-3 flex items-center gap-3">
-                                <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-md border-2 border-dashed border-navy-200 bg-white">
-                                    {principalImagePreview ? (
-                                        <img src={principalImagePreview} alt="Preview Foto Kepala Sekolah" className="h-full w-full object-cover" />
-                                    ) : (
-                                        <ImageIcon className="h-6 w-6 text-navy-300" />
-                                    )}
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-sm font-semibold text-navy-900">Foto Kepala Sekolah</p>
-                                    <p className="text-xs text-navy-500">Tampil bersampingan dengan sambutan</p>
-                                </div>
-                            </div>
-                            <input
-                                ref={principalFileInputRef}
-                                id="principal_image"
-                                type="file"
-                                accept="image/png,image/jpeg,image/jpg"
-                                onChange={onPrincipalImageChange}
-                                className="block w-full text-sm text-navy-700 file:mr-3 file:rounded-md file:border-0 file:bg-navy-900 file:px-3 file:py-2 file:text-xs file:font-medium file:text-white hover:file:bg-navy-800"
-                            />
-                            <p className="mt-2 text-xs text-navy-500">PNG / JPG, maks 2 MB. Disarankan portrait atau 1:1.</p>
-                            <FieldError message={errors.principal_image} />
-                            {setting?.principal_image_path && (
-                                <Button type="button" variant="outline" size="sm" onClick={removePrincipalImage} className="mt-2">
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                    Hapus Foto
-                                </Button>
-                            )}
-                        </div>
                     </CardContent>
                 </Card>
 

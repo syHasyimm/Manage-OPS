@@ -46,10 +46,10 @@ export default function ChatbotWidget() {
     };
 
     return (
-        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+        <div className="fixed bottom-3 right-3 z-50 flex flex-col items-end gap-3 sm:bottom-5 sm:right-5">
             {/* Chat window */}
             {isOpen && (
-                <div className="flex h-[420px] w-80 flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-2xl">
+                <div className="flex h-[min(30rem,calc(100dvh-6.5rem))] w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-2xl sm:w-80">
                     {/* Header */}
                     <div className="relative overflow-hidden bg-gradient-to-r from-navy-950 via-navy-900 to-navy-800 px-4 py-3">
                         <div className="pointer-events-none absolute -right-4 -top-4 h-16 w-16 rounded-full bg-gold-500/10 blur-xl" />
@@ -80,7 +80,12 @@ export default function ChatbotWidget() {
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
+                    <div
+                        className="flex-1 space-y-3 overflow-y-auto px-3 py-3"
+                        role="log"
+                        aria-live="polite"
+                        aria-label="Percakapan dengan Asisten SPMB"
+                    >
                         {messages.map((msg, idx) => (
                             <div
                                 key={idx}
@@ -119,15 +124,16 @@ export default function ChatbotWidget() {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={onKeyDown}
+                            aria-label="Pertanyaan untuk Asisten SPMB"
                             placeholder="Ketik pertanyaan Anda..."
                             disabled={isLoading}
-                            className="flex-1 rounded-lg border border-navy-200 bg-navy-50 px-3 py-2 text-xs text-navy-900 placeholder:text-navy-400 focus:border-navy-400 focus:outline-none disabled:opacity-50"
+                            className="flex-1 rounded-lg border border-navy-200 bg-navy-50 px-3 py-2 text-xs text-navy-900 placeholder:text-navy-400 focus:border-navy-400 focus:outline-none focus:ring-2 focus:ring-gold-500/40 disabled:opacity-50"
                         />
                         <button
                             type="button"
                             onClick={send}
                             disabled={!input.trim() || isLoading}
-                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-navy-900 text-white transition-colors hover:bg-navy-700 disabled:opacity-40"
+                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-navy-900 text-white transition-colors hover:bg-navy-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 disabled:opacity-40"
                             aria-label="Kirim pesan"
                         >
                             <Send className="h-3.5 w-3.5" />

@@ -17,13 +17,6 @@ import {
     Users,
     UserCheck,
     Contact,
-    Globe,
-    Target,
-    Heart,
-    Star,
-    Image as ImageIcon,
-    Building2,
-    Activity,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/Components/ui/sonner';
@@ -135,18 +128,6 @@ export default function AdminSidebar({ children }) {
                 { href: route('admin.notifications.index'), name: 'admin.notifications.*', icon: Bell, label: 'Kirim Notifikasi' },
                 { href: route('admin.notification-templates.index'), name: 'admin.notification-templates.*', icon: MessageSquare, label: 'Template Pesan' },
                 { href: route('admin.faqs.index'), name: 'admin.faqs.*', icon: HelpCircle, label: 'Kelola FAQ' },
-            ],
-        },
-        {
-            label: 'Landing Page',
-            items: [
-                { href: route('admin.school-missions.index'), name: 'admin.school-missions.*', icon: Target, label: 'Misi Sekolah' },
-                { href: route('admin.school-values.index'), name: 'admin.school-values.*', icon: Heart, label: 'Nilai Karakter' },
-                { href: route('admin.school-programs.index'), name: 'admin.school-programs.*', icon: Star, label: 'Program Unggulan' },
-                { href: route('admin.school-facilities.index'), name: 'admin.school-facilities.*', icon: Building2, label: 'Fasilitas' },
-                { href: route('admin.extracurriculars.index'), name: 'admin.extracurriculars.*', icon: Activity, label: 'Ekstrakurikuler' },
-                { href: route('admin.achievements.index'), name: 'admin.achievements.*', icon: Award, label: 'Prestasi' },
-                { href: route('admin.school-galleries.index'), name: 'admin.school-galleries.*', icon: ImageIcon, label: 'Galeri & Foto' },
             ],
         },
         {

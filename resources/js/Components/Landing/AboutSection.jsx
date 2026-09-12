@@ -19,10 +19,10 @@ export default function AboutSection({ profileData, school, missions, values }) 
     const valueIcons = [Heart, Lightbulb, Compass, Shield];
 
     return (
-        <section id="profil" className="scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
+        <section id="profil" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-14" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <Sparkles className="h-3.5 w-3.5 text-gold-600" />
                         <span>Profil & Arah Pendidikan</span>
@@ -40,7 +40,7 @@ export default function AboutSection({ profileData, school, missions, values }) 
                     {/* Left: Visi & Nilai Karakter */}
                     <div className="space-y-6 lg:col-span-5">
                         {/* Visi Card */}
-                        <div className="rounded-3xl border border-navy-800 bg-gradient-to-br from-navy-950 to-navy-900 p-6 sm:p-8 text-white shadow-xl shadow-navy-950/10 relative overflow-hidden">
+                        <div className="landing-card rounded-3xl border border-navy-800 bg-gradient-to-br from-navy-950 to-navy-900 p-6 sm:p-8 text-white shadow-xl shadow-navy-950/10 relative overflow-hidden">
                             <div className="absolute top-0 right-0 h-40 w-40 bg-gold-500/10 rounded-full blur-2xl" />
                             <div className="flex items-center gap-2.5 text-gold-400 text-xs font-bold uppercase tracking-widest mb-3">
                                 <Eye className="h-4 w-4 text-gold-400" />
@@ -67,7 +67,7 @@ export default function AboutSection({ profileData, school, missions, values }) 
                                     return (
                                         <div
                                             key={item.id || idx}
-                                            className="rounded-2xl border border-navy-100 bg-white p-4 shadow-sm hover:border-gold-400/50 transition-colors"
+                                            className="landing-card rounded-2xl border border-navy-100 bg-white p-4 shadow-sm hover:border-gold-400/50 transition-colors"
                                         >
                                             <div className="flex items-center gap-2 mb-1.5">
                                                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gold-500/15 text-gold-700">
@@ -89,7 +89,7 @@ export default function AboutSection({ profileData, school, missions, values }) 
 
                     {/* Right: Misi Sekolah */}
                     <div className="lg:col-span-7 space-y-4">
-                        <div className="rounded-3xl border border-navy-100 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+                        <div className="landing-card rounded-3xl border border-navy-100 bg-white p-6 sm:p-8 shadow-sm space-y-6">
                             <div className="flex items-center gap-2.5 text-gold-600 text-xs font-bold uppercase tracking-widest">
                                 <Target className="h-4 w-4" />
                                 <span>Misi Sekolah</span>

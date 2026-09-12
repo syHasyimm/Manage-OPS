@@ -41,21 +41,10 @@ class SchoolSettingController extends Controller
                     'signature_city',
                     'logo_path',
                     'regency_logo_path',
-                    'tagline',
-                    'short_desc',
-                    'principal_quote',
-                    'vision',
-                    'operating_hours',
-                    'office_hours',
-                    'maps_url',
-                    'hero_image_path',
-                    'principal_image_path',
                 ]),
                 [
                     'logo_url' => $setting->logoUrl(),
                     'regency_logo_url' => $setting->regencyLogoUrl(),
-                    'principal_image_url' => $setting->principalImageUrl(),
-                    'hero_image_url' => $setting->heroImageUrl(),
                 ],
             ),
         ]);
@@ -85,15 +74,6 @@ class SchoolSettingController extends Controller
             'signature_city' => ['nullable', 'string', 'max:100'],
             'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:1024'],
             'regency_logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:1024'],
-            'tagline' => ['nullable', 'string', 'max:255'],
-            'short_desc' => ['nullable', 'string'],
-            'principal_quote' => ['nullable', 'string'],
-            'vision' => ['nullable', 'string'],
-            'operating_hours' => ['nullable', 'string', 'max:100'],
-            'office_hours' => ['nullable', 'string', 'max:100'],
-            'maps_url' => ['nullable', 'string', 'max:500'],
-            'principal_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
-            'hero_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
         ]);
 
         $setting = SchoolSetting::current();
@@ -124,33 +104,7 @@ class SchoolSettingController extends Controller
             $data['regency_logo_path'] = $path;
         }
 
-        if ($request->hasFile('principal_image')) {
-            if ($setting->principal_image_path && Storage::disk('public')->exists($setting->principal_image_path)) {
-                Storage::disk('public')->delete($setting->principal_image_path);
-            }
-
-            $file = $request->file('principal_image');
-            $ext = $file->getClientOriginalExtension();
-            $filename = 'principal-'.time().'.'.$ext;
-            $path = $file->storeAs('school', $filename, 'public');
-
-            $data['principal_image_path'] = $path;
-        }
-
-        if ($request->hasFile('hero_image')) {
-            if ($setting->hero_image_path && Storage::disk('public')->exists($setting->hero_image_path)) {
-                Storage::disk('public')->delete($setting->hero_image_path);
-            }
-
-            $file = $request->file('hero_image');
-            $ext = $file->getClientOriginalExtension();
-            $filename = 'hero-'.time().'.'.$ext;
-            $path = $file->storeAs('school', $filename, 'public');
-
-            $data['hero_image_path'] = $path;
-        }
-
-        unset($data['logo'], $data['regency_logo'], $data['principal_image'], $data['hero_image']);
+        unset($data['logo'], $data['regency_logo']);
 
         $setting->fill($data)->save();
 
@@ -189,37 +143,5 @@ class SchoolSettingController extends Controller
         }
 
         return back()->with('status', 'Logo kabupaten dihapus.');
-    }
-
-    public function deletePrincipalImage(): RedirectResponse
-    {
-        $setting = SchoolSetting::current();
-
-        if ($setting->principal_image_path) {
-            if (Storage::disk('public')->exists($setting->principal_image_path)) {
-                Storage::disk('public')->delete($setting->principal_image_path);
-            }
-
-            $setting->forceFill(['principal_image_path' => null])->save();
-            SchoolSetting::bust();
-        }
-
-        return back()->with('status', 'Foto kepala sekolah dihapus.');
-    }
-
-    public function deleteHeroImage(): RedirectResponse
-    {
-        $setting = SchoolSetting::current();
-
-        if ($setting->hero_image_path) {
-            if (Storage::disk('public')->exists($setting->hero_image_path)) {
-                Storage::disk('public')->delete($setting->hero_image_path);
-            }
-
-            $setting->forceFill(['hero_image_path' => null])->save();
-            SchoolSetting::bust();
-        }
-
-        return back()->with('status', 'Gambar hero background dihapus.');
     }
 }

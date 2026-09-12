@@ -55,10 +55,10 @@ export default function AgendaSection({ academicCalendars = [] }) {
     };
 
     return (
-        <section id="agenda" className="scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
+        <section id="agenda" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-14" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <CalendarDays className="h-3.5 w-3.5 text-gold-600" />
                         <span>Kalender Pendidikan</span>
@@ -81,7 +81,7 @@ export default function AgendaSection({ academicCalendars = [] }) {
                         return (
                             <div
                                 key={item.id || idx}
-                                className="group flex flex-col sm:flex-row items-start gap-4 rounded-3xl border border-navy-100 bg-white p-5 sm:p-6 shadow-sm hover:shadow-lg hover:border-gold-400/50 transition-all duration-300"
+                                className="landing-card group flex flex-col sm:flex-row items-start gap-4 rounded-3xl border border-navy-100 bg-white p-5 sm:p-6 shadow-sm hover:shadow-lg hover:border-gold-400/50 transition-all duration-300"
                             >
                                 {/* Date Block */}
                                 <div className="flex h-16 w-16 sm:h-20 sm:w-20 shrink-0 flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-navy-900 to-navy-950 text-white shadow-md shadow-navy-950/10">

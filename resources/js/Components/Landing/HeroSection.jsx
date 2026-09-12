@@ -2,84 +2,69 @@ import { Link } from '@inertiajs/react';
 import {
     ArrowRight,
     Award,
-    BookOpen,
     CheckCircle,
     ChevronDown,
     GraduationCap,
-    HeartHandshake,
-    ShieldCheck,
     Sparkles,
-    Users,
 } from 'lucide-react';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
 
 export default function HeroSection({ profileData, school, period, canRegister }) {
     const p = profileData.profil;
     const schoolName = school?.name || p.nama;
     const npsn = school?.npsn || p.npsn;
     const accreditation = school?.accreditation || p.akreditasi;
+    const heroImage = school?.hero_image_url;
+    const isRegistrationOpen = Boolean(period && canRegister);
 
     return (
         <section
             id="beranda"
-            className="relative overflow-hidden bg-gradient-to-b from-navy-950 via-navy-900 to-navy-950 text-white pt-12 pb-24 lg:pt-20 lg:pb-32"
+            className="hero-section relative overflow-hidden bg-navy-950 text-white pt-14 pb-28 lg:pt-20 lg:pb-36"
         >
-            {/* Ambient Lighting Gradients */}
-            <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-30">
-                <div className="absolute -top-32 -left-20 h-96 w-96 rounded-full bg-gold-500/25 blur-[120px]" />
-                <div className="absolute top-1/3 -right-20 h-[30rem] w-[30rem] rounded-full bg-navy-600/30 blur-[140px]" />
-                <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-gold-600/15 blur-[100px]" />
-                {/* Decorative Subtle Grid */}
-                <div
-                    className="absolute inset-0 opacity-[0.03]"
-                    style={{
-                        backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
-                        backgroundSize: '24px 24px',
-                    }}
-                />
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="hero-orbit absolute -top-52 -left-48 h-[34rem] w-[34rem] rounded-full border border-gold-400/15" />
+                <div className="hero-orbit hero-orbit-delayed absolute -bottom-72 right-[-10rem] h-[40rem] w-[40rem] rounded-full border border-white/10" />
+                <div className="absolute left-[8%] top-[8%] h-80 w-80 rounded-full bg-gold-500/10 blur-[120px]" />
+                <div className="hero-grid absolute inset-0 opacity-30" />
             </div>
 
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+                <div className="grid gap-14 lg:grid-cols-12 lg:items-center">
                     {/* Left Column: School Introduction & CTAs */}
-                    <div className="space-y-6 lg:col-span-7">
+                    <div
+                        className="hero-copy space-y-7 lg:col-span-7"
+                        data-reveal="left"
+                    >
                         {/* School Identity Badges */}
                         <div className="flex flex-wrap items-center gap-2">
-                            <Badge
-                                variant="outline"
-                                className="border-gold-400/40 bg-gold-500/10 text-gold-300 px-3 py-1 text-xs font-semibold backdrop-blur"
-                            >
+                            <span className="inline-flex items-center border-l-2 border-gold-400 pl-3 text-[11px] font-bold uppercase tracking-[0.18em] text-gold-300">
                                 <Sparkles className="mr-1.5 h-3.5 w-3.5 text-gold-400" />
-                                {p.kurikulum}
-                            </Badge>
-                            <Badge
-                                variant="outline"
-                                className="border-white/20 bg-white/5 text-navy-100 px-3 py-1 text-xs backdrop-blur"
-                            >
+                                {schoolName}
+                            </span>
+                            <span className="inline-flex items-center text-xs text-navy-200">
                                 <Award className="mr-1.5 h-3.5 w-3.5 text-gold-400" />
                                 Akreditasi {accreditation}
-                            </Badge>
+                            </span>
                             <span className="hidden sm:inline-flex items-center text-xs text-navy-300">
                                 NPSN: <strong className="ml-1 text-white">{npsn}</strong>
                             </span>
                         </div>
 
                         {/* Heading */}
-                        <div className="space-y-3">
-                            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl leading-tight">
-                                Selamat Datang di <br />
-                                <span className="bg-gradient-to-r from-gold-300 via-gold-400 to-gold-500 bg-clip-text text-transparent">
-                                    {schoolName}
+                        <div className="space-y-4">
+                            <h1 className="font-display text-4xl font-extrabold tracking-[-0.045em] sm:text-6xl xl:text-7xl leading-[0.98] text-balance">
+                                Belajar dengan gembira,
+                                <span className="mt-2 block text-gold-400">
+                                    tumbuh dengan karakter.
                                 </span>
                             </h1>
-                            <p className="text-base sm:text-lg text-gold-200/90 font-medium">
+                            <p className="text-base sm:text-lg text-gold-200/90 font-medium italic">
                                 &ldquo;{p.tagline}&rdquo;
                             </p>
                         </div>
 
                         {/* Description */}
-                        <p className="max-w-2xl text-sm sm:text-base text-navy-100/90 leading-relaxed">
+                        <p className="max-w-[62ch] text-sm sm:text-base text-navy-100/90 leading-relaxed text-pretty">
                             {p.deskripsi_singkat}
                         </p>
 
@@ -87,22 +72,22 @@ export default function HeroSection({ profileData, school, period, canRegister }
                         <div className="flex flex-wrap items-center gap-3.5 pt-2">
                             <a
                                 href="#spmb"
-                                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 px-6 py-3.5 text-sm font-bold text-navy-950 shadow-lg shadow-gold-500/25 hover:from-gold-400 hover:to-gold-500 transition-all hover:-translate-y-0.5"
+                                className="hero-primary-action inline-flex items-center justify-center rounded-xl bg-gold-500 px-6 py-3.5 text-sm font-bold text-navy-950 shadow-lg shadow-gold-500/20 transition-all hover:-translate-y-0.5 hover:bg-gold-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                             >
-                                <span>Pendaftaran Murid Baru (SPMB)</span>
+                                <span>{isRegistrationOpen ? 'Daftar Sekarang' : 'Informasi SPMB'}</span>
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </a>
 
                             <a
                                 href="#profil"
-                                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/10 hover:border-white/30 transition-all"
+                                className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all hover:bg-white/10 hover:border-white/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
                             >
                                 <span>Profil & Visi Misi</span>
                             </a>
 
                             <Link
                                 href="/cek-status"
-                                className="inline-flex items-center justify-center rounded-xl px-4 py-3.5 text-sm font-medium text-navy-200 hover:text-white transition-colors"
+                                className="inline-flex items-center justify-center rounded-xl px-4 py-3.5 text-sm font-medium text-navy-200 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
                             >
                                 <span>Cek Status Pendaftar</span>
                             </Link>
@@ -126,84 +111,76 @@ export default function HeroSection({ profileData, school, period, canRegister }
                     </div>
 
                     {/* Right Column: Interactive School Showcase Card */}
-                    <div className="lg:col-span-5">
+                    <div
+                        className="hero-visual lg:col-span-5"
+                        data-reveal="right"
+                        data-reveal-delay="160"
+                    >
                         <div className="relative mx-auto max-w-md lg:max-w-none">
-                            {/* Glow accent */}
-                            <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-gold-500/20 to-navy-600/40 blur-xl" />
+                            <div className="hero-halo absolute -inset-6 rounded-[3rem] bg-gold-500/15 blur-3xl" />
 
-                            <div className="relative rounded-3xl border border-white/15 bg-navy-900/80 p-6 sm:p-8 backdrop-blur-xl shadow-2xl space-y-6">
-                                {/* School Header Card */}
-                                <div className="flex items-center gap-4 pb-5 border-b border-white/10">
-                                    {school?.logo_url ? (
-                                        <img
-                                            src={school.logo_url}
-                                            alt={schoolName}
-                                            className="h-16 w-16 object-contain rounded-2xl bg-white/10 p-2 ring-2 ring-gold-400/40"
-                                        />
-                                    ) : (
-                                        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 text-navy-950 shadow-md">
-                                            <GraduationCap className="h-9 w-9" />
-                                        </div>
-                                    )}
-                                    <div>
-                                        <div className="flex items-center gap-1.5 text-xs text-gold-400 font-semibold uppercase tracking-wider">
-                                            <span>Akreditasi {accreditation}</span>
-                                        </div>
-                                        <h3 className="text-lg font-bold text-white leading-snug">
-                                            {schoolName}
-                                        </h3>
-                                        <p className="text-xs text-navy-200 mt-0.5">
-                                            Kecamatan {school?.district ?? 'Kepenuhan'}, Rokan Hulu
-                                        </p>
+                            <div className="relative min-h-[32rem] overflow-hidden rounded-[2.25rem] border border-white/15 bg-navy-900 shadow-2xl shadow-navy-950/50 sm:min-h-[38rem]">
+                                {heroImage ? (
+                                    <img
+                                        src={heroImage}
+                                        alt={`Suasana pendidikan di ${schoolName}`}
+                                        className="hero-photo absolute inset-0 h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-navy-900">
+                                        <div className="hero-grid absolute inset-0 opacity-70" />
+                                        {school?.logo_url ? (
+                                            <img
+                                                src={school.logo_url}
+                                                alt={schoolName}
+                                                className="relative h-40 w-40 object-contain opacity-90 drop-shadow-2xl sm:h-48 sm:w-48"
+                                            />
+                                        ) : (
+                                            <GraduationCap className="relative h-36 w-36 text-gold-400/80" />
+                                        )}
                                     </div>
+                                )}
+
+                                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/35 to-navy-950/10" />
+
+                                <div className="absolute left-5 right-5 top-5 flex items-center justify-between">
+                                    <span className="rounded-xl border border-white/15 bg-navy-950/55 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-xl">
+                                        Kec. {school?.district ?? 'Kepenuhan'}
+                                    </span>
+                                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-500 font-display text-lg font-extrabold text-navy-950 shadow-lg shadow-navy-950/20">
+                                        {accreditation}
+                                    </span>
                                 </div>
 
-                                {/* Sambutan Singkat Kepala Sekolah */}
-                                <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 relative">
-                                    <div className="text-gold-400 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                                        <HeartHandshake className="h-4 w-4" />
-                                        <span>Kata Pengantar</span>
+                                <div className="absolute inset-x-5 bottom-5 rounded-[1.5rem] border border-white/15 bg-navy-950/[0.72] p-5 shadow-xl backdrop-blur-xl sm:p-6">
+                                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-gold-300">
+                                        <GraduationCap className="h-4 w-4" />
+                                        <span>Ruang tumbuh generasi Kepenuhan</span>
                                     </div>
-                                    <blockquote className="text-xs sm:text-sm text-navy-100 italic leading-relaxed">
-                                        &ldquo;{p.sambutan_kepala_sekolah.kutipan}&rdquo;
-                                    </blockquote>
-                                    <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
-                                        <div>
-                                            <p className="text-xs font-semibold text-white">
-                                                {school?.principal || p.sambutan_kepala_sekolah.nama}
-                                            </p>
-                                            <p className="text-[11px] text-navy-300">
-                                                {p.sambutan_kepala_sekolah.jabatan}
-                                            </p>
-                                        </div>
-                                        <span className="text-[10px] px-2 py-1 rounded bg-gold-500/20 text-gold-300 font-medium">
-                                            SDN 001
+                                    <h2 className="mt-3 text-xl font-bold leading-tight text-white sm:text-2xl">
+                                        Pendidikan yang dekat, aman, dan berpihak pada murid.
+                                    </h2>
+                                    <div className="mt-5 flex items-center justify-between gap-4 border-t border-white/10 pt-4 text-[11px]">
+                                        <span className="font-semibold text-navy-200">{p.kurikulum}</span>
+                                        <span className="flex items-center gap-2 text-gold-200">
+                                            <span className={`h-2 w-2 rounded-full ${isRegistrationOpen ? 'bg-emerald-400' : 'bg-gold-400'}`} />
+                                            {period?.academic_year
+                                                ? `SPMB ${period.academic_year}`
+                                                : 'Sekolah Negeri'}
                                         </span>
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* SPMB Quick Status Banner */}
-                                <div className="rounded-xl border border-gold-400/30 bg-gold-500/10 p-3.5 flex items-center justify-between gap-3">
-                                    <div className="flex items-center gap-2.5">
-                                        <span className="relative flex h-3 w-3">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-400 opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-gold-500"></span>
-                                        </span>
-                                        <div className="text-xs">
-                                            <p className="font-bold text-white">Pendaftaran Online</p>
-                                            <p className="text-[11px] text-gold-200">
-                                                {period?.academic_year
-                                                    ? `Tahun Ajaran ${period.academic_year}`
-                                                    : 'Informasi Pendaftaran Murid Baru'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <a
-                                        href="#spmb"
-                                        className="text-xs font-semibold text-gold-300 hover:text-white underline underline-offset-4"
-                                    >
-                                        Lihat Info
-                                    </a>
+                            <div className="hero-float-badge absolute -bottom-5 -left-5 hidden items-center gap-3 rounded-2xl border border-white/15 bg-white p-3 text-navy-950 shadow-xl sm:flex">
+                                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-500/20 text-gold-700">
+                                    <Award className="h-5 w-5" />
+                                </span>
+                                <div>
+                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-navy-500">
+                                        Sekolah negeri
+                                    </p>
+                                    <p className="text-xs font-bold">Terakreditasi {accreditation}</p>
                                 </div>
                             </div>
                         </div>

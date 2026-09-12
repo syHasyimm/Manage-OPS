@@ -6,10 +6,10 @@ export default function GallerySection({ galleries }) {
     }
 
     return (
-        <section id="galeri" className="scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
+        <section id="galeri" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-navy-50/50">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-14" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <Sparkles className="h-3.5 w-3.5 text-gold-600" />
                         <span>Dokumentasi Sekolah</span>
@@ -27,7 +27,7 @@ export default function GallerySection({ galleries }) {
                     {galleries.map((gallery, idx) => (
                         <div
                             key={gallery.id || idx}
-                            className="group relative rounded-2xl overflow-hidden bg-white shadow-sm border border-navy-100/50"
+                            className="landing-card group relative rounded-2xl overflow-hidden bg-white shadow-sm border border-navy-100/50"
                         >
                             <div className="aspect-[4/3] w-full overflow-hidden">
                                 {gallery.image_url ? (

@@ -39,10 +39,10 @@ export default function FaqSection({ faqs = [] }) {
     };
 
     return (
-        <section id="faq" className="scroll-mt-20 py-16 sm:py-24 bg-white">
+        <section id="faq" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-white">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center space-y-3 mb-12">
+                <div className="section-heading text-center space-y-3 mb-12" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <HelpCircle className="h-3.5 w-3.5 text-gold-600" />
                         <span>Pusat Informasi & Bantuan</span>
@@ -62,7 +62,7 @@ export default function FaqSection({ faqs = [] }) {
                         return (
                             <div
                                 key={faq.id || idx}
-                                className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                                className={`landing-card rounded-2xl border transition-all duration-200 overflow-hidden ${
                                     isOpen
                                         ? 'border-gold-400/60 bg-gold-50/20 shadow-md shadow-navy-950/5'
                                         : 'border-navy-100 bg-navy-50/30 hover:border-navy-200 hover:bg-white'
@@ -71,7 +71,7 @@ export default function FaqSection({ faqs = [] }) {
                                 <button
                                     type="button"
                                     onClick={() => toggle(idx)}
-                                    className="flex w-full items-center justify-between gap-4 p-5 text-left focus:outline-none"
+                                    className="flex w-full items-center justify-between gap-4 p-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold-500"
                                 >
                                     <span className="text-sm sm:text-base font-bold text-navy-950">
                                         {faq.question}

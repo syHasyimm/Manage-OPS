@@ -13,10 +13,10 @@ export default function AchievementsSection({ profileData, achievements }) {
     ];
 
     return (
-        <section id="prestasi" className="scroll-mt-20 py-16 sm:py-24 bg-white">
+        <section id="prestasi" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-white">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-14" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <Trophy className="h-3.5 w-3.5 text-gold-600" />
                         <span>Prestasi Membanggakan</span>
@@ -34,7 +34,7 @@ export default function AchievementsSection({ profileData, achievements }) {
                     {displayPrestasi.map((item, idx) => (
                         <div
                             key={item.id || idx}
-                            className="group relative rounded-3xl border border-navy-100 bg-navy-50/30 p-6 hover:bg-white hover:border-gold-400/50 hover:shadow-xl hover:shadow-navy-950/5 transition-all duration-300"
+                            className="landing-card group relative rounded-3xl border border-navy-100 bg-navy-50/30 p-6 hover:bg-white hover:border-gold-400/50 hover:shadow-xl hover:shadow-navy-950/5 transition-all duration-300"
                         >
                             <div className="flex items-center justify-between mb-4">
                                 <div

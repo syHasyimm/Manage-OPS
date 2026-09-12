@@ -15,6 +15,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                display: ['Outfit', 'Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 navy: {

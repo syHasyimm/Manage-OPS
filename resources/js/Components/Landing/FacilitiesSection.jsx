@@ -22,10 +22,10 @@ export default function FacilitiesSection({ profileData, facilities }) {
     };
 
     return (
-        <section id="fasilitas" className="scroll-mt-20 py-16 sm:py-24 bg-navy-50/40">
+        <section id="fasilitas" className="landing-section scroll-mt-20 py-16 sm:py-24 bg-navy-50/40">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
+                <div className="section-heading text-center max-w-3xl mx-auto space-y-3 mb-14" data-reveal>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-gold-500/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gold-700">
                         <Sparkles className="h-3.5 w-3.5 text-gold-600" />
                         <span>Sarana & Prasarana</span>
@@ -45,7 +45,7 @@ export default function FacilitiesSection({ profileData, facilities }) {
                         return (
                             <div
                                 key={idx}
-                                className="group relative rounded-3xl border border-navy-100 bg-white p-6 shadow-sm hover:shadow-xl hover:shadow-navy-950/5 hover:border-gold-400/50 transition-all duration-300"
+                                className="landing-card group relative rounded-3xl border border-navy-100 bg-white p-6 shadow-sm hover:shadow-xl hover:shadow-navy-950/5 hover:border-gold-400/50 transition-all duration-300"
                             >
                                 {fac.image_url ? (
                                     <div className="h-40 w-full rounded-2xl overflow-hidden mb-4 border border-navy-100">
