@@ -26,6 +26,7 @@ test('spmb landing page can be rendered with its focused props', function () {
             ->component('Welcome')
             ->has('period')
             ->where('period.academic_year', '2026/2027')
+            ->where('registrationOpen', true)
             ->where('canLogin', true)
             ->where('canRegister', true)
             ->has('school')
@@ -34,5 +35,21 @@ test('spmb landing page can be rendered with its focused props', function () {
             ->missing('academicCalendars')
             ->missing('faqs')
             ->missing('stats')
+        );
+});
+
+test('spmb landing page reports an active period outside its dates as closed', function () {
+    RegistrationPeriod::create([
+        'academic_year' => '2027/2028',
+        'opens_at' => now()->addWeek(),
+        'closes_at' => now()->addMonth(),
+        'is_active' => true,
+    ]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('period.academic_year', '2027/2028')
+            ->where('registrationOpen', false)
         );
 });

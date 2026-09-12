@@ -4,21 +4,19 @@ import LandingHeader from '@/Components/Landing/LandingHeader';
 import SpmbSection from '@/Components/Landing/SpmbSection';
 import LandingFooter from '@/Components/Landing/LandingFooter';
 import schoolProfileData from '@/data/schoolProfile.json';
-import useLandingMotion from '@/hooks/useLandingMotion';
 
 export default function Welcome({
     canLogin,
     canRegister,
     period,
+    registrationOpen,
 }) {
     const { school } = usePage().props;
     const schoolName = school?.name || schoolProfileData.profil.nama;
-    useLandingMotion();
 
     return (
         <div
-            className="landing-page flex min-h-screen flex-col bg-navy-950 text-white font-sans selection:bg-gold-500 selection:text-navy-950"
-            data-landing-page
+            className="spmb-public-page flex min-h-screen flex-col bg-[#f5f2ea] font-sans text-navy-950 selection:bg-gold-300 selection:text-navy-950"
         >
             <Head>
                 <title>{`SPMB Online - ${schoolName}`}</title>
@@ -40,6 +38,7 @@ export default function Welcome({
                     period={period}
                     canRegister={canRegister}
                     canLogin={canLogin}
+                    registrationOpen={registrationOpen}
                 />
             </main>
 
