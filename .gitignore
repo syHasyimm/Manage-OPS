@@ -2,6 +2,10 @@
 /node_modules
 /public/build
 /public/hot
+/desktop/dist/
+/desktop/runtime/
+/desktop/dev-data/
+/src-tauri/target/
 /public/storage
 /storage/*.key
 /storage/pail

@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\SuratTugasController as AdminSuratTugasController
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\WhatsAppSettingController as AdminWhatsAppSettingController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\DesktopController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicStatusController;
@@ -26,7 +27,27 @@ use App\Http\Controllers\RegistrationController;
 use App\Models\RegistrationPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
+
+Route::prefix('__desktop')->name('desktop.')->group(function () {
+    Route::get('/health', [DesktopController::class, 'health'])->name('health');
+    Route::get('/start', [DesktopController::class, 'start'])->name('start');
+    Route::get('/setup', [DesktopController::class, 'create'])->name('setup');
+    Route::post('/setup', [DesktopController::class, 'store'])->name('setup.store');
+});
+
+// Pada paket desktop folder instalasi bersifat read-only, sehingga symlink
+// public/storage digantikan route aman menuju storage di AppData.
+Route::get('/storage/{path}', function (string $path) {
+    abort_if(Str::contains($path, ['..', "\0"]), 404);
+
+    $disk = Storage::disk('public');
+    abort_unless($disk->exists($path), 404);
+
+    return response()->file($disk->path($path));
+})->where('path', '.*')->name('desktop.storage');
 
 Route::post('/chatbot/message', [ChatbotController::class, 'handle'])
     ->middleware('throttle:20,1')
