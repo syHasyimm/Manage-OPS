@@ -27,10 +27,10 @@
         .kop table { width: 100%; border-collapse: collapse; }
         .kop td { vertical-align: middle; }
         .kop-logo { width: 78px; text-align: center; padding-right: 4px; }
-        .kop-logo img { width: 70px; height: 70px; object-fit: contain; }
+        .kop-logo img { width: 70px; height: 78px; object-fit: contain; }
         .kop-logo .logo-fallback {
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             border: 2px dashed #bcccdc;
             border-radius: 50%;
             display: inline-block;
@@ -39,7 +39,7 @@
             font-size: 8pt;
         }
         .kop-logo-right { width: 78px; text-align: center; padding-left: 4px; }
-        .kop-logo-right img { width: 70px; height: 78px; object-fit: contain; }
+        .kop-logo-right img { width: 70px; height: 70px; object-fit: contain; }
         .kop-text { text-align: center; padding: 0 6px; }
         .kop-gov {
             font-family: "Times New Roman", Times, serif;

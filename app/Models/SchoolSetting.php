@@ -29,6 +29,8 @@ class SchoolSetting extends Model
         'principal_name',
         'principal_nip',
         'principal_title',
+        'principal_rank',
+        'principal_grade',
         'signature_city',
     ];
 
@@ -167,6 +169,8 @@ class SchoolSetting extends Model
             'principal_name' => $this->principal_name,
             'principal_nip' => $this->principal_nip,
             'principal_title' => $this->principal_title ?: 'Kepala Sekolah',
+            'principal_rank' => $this->principal_rank,
+            'principal_grade' => $this->principal_grade,
             'signature_city' => $this->signature_city ?: $this->district,
             'logo_path' => $this->logo_path,
             'logo_absolute' => $this->logoAbsolutePath(),

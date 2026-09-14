@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\NotificationTemplateController as AdminNotificati
 use App\Http\Controllers\Admin\PeriodController as AdminPeriodController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\SchoolSettingController as AdminSchoolSettingController;
+use App\Http\Controllers\Admin\SppdController as AdminSppdController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\Admin\StudentNotificationController as AdminStudentNotificationController;
@@ -156,6 +157,10 @@ Route::middleware(['auth', 'admin'])
         Route::get('/surat-tugas', [AdminSuratTugasController::class, 'create'])->name('surat-tugas.create');
         Route::post('/surat-tugas', [AdminSuratTugasController::class, 'store'])->name('surat-tugas.store');
         Route::get('/surat-tugas/download', [AdminSuratTugasController::class, 'download'])->name('surat-tugas.download');
+
+        Route::get('/sppd', [AdminSppdController::class, 'create'])->name('sppd.create');
+        Route::post('/sppd', [AdminSppdController::class, 'store'])->name('sppd.store');
+        Route::get('/sppd/download', [AdminSppdController::class, 'download'])->name('sppd.download');
 
         Route::get('/graduation-letters/template', [AdminGraduationLetterController::class, 'template'])->name('graduation-letters.template');
         Route::get('/graduation-letters/import', [AdminGraduationLetterController::class, 'importForm'])->name('graduation-letters.import.create');

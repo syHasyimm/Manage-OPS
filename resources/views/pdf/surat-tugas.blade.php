@@ -19,7 +19,7 @@
         .kop table { width: 100%; border-collapse: collapse; }
         .kop td { vertical-align: middle; }
         .kop-logo { width: 78px; padding-right: 4px; text-align: center; }
-        .kop-logo img { width: 70px; height: 70px; object-fit: contain; }
+        .kop-logo img { width: 70px; height: 78px; object-fit: contain; }
         .kop-logo .logo-fallback {
             display: inline-block;
             width: 65px;
@@ -32,7 +32,7 @@
             line-height: 61px;
         }
         .kop-logo-right { width: 78px; padding-left: 4px; text-align: center; }
-        .kop-logo-right img { width: 70px; height: 78px; object-fit: contain; }
+        .kop-logo-right img { width: 70px; height: 70px; object-fit: contain; }
         .kop-text { padding: 0 6px; text-align: center; }
         .kop-gov {
             margin-bottom: 2px;

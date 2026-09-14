@@ -118,6 +118,7 @@ export default function AdminSidebar({ children }) {
             label: 'Administrasi & Surat',
             items: [
                 { href: route('admin.surat-tugas.create'), name: 'admin.surat-tugas.*', icon: FileText, label: 'Surat Tugas' },
+                { href: route('admin.sppd.create'), name: 'admin.sppd.*', icon: FileText, label: 'SPPD' },
                 { href: route('admin.graduation-letters.index'), name: 'admin.graduation-letters.*', icon: Award, label: 'Surat Kelulusan' },
                 { href: route('admin.documents.index'), name: 'admin.documents.*', icon: FolderOpen, label: 'Arsip Dokumen' },
             ],

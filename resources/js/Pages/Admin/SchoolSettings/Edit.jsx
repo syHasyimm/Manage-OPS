@@ -63,6 +63,8 @@ export default function Edit({ setting }) {
         principal_name: setting?.principal_name ?? '',
         principal_nip: setting?.principal_nip ?? '',
         principal_title: setting?.principal_title ?? 'Kepala Sekolah',
+        principal_rank: setting?.principal_rank ?? '',
+        principal_grade: setting?.principal_grade ?? '',
         signature_city: setting?.signature_city ?? '',
         logo: null,
         regency_logo: null,
@@ -453,6 +455,22 @@ export default function Edit({ setting }) {
                                     id="principal_title"
                                     value={data.principal_title}
                                     onChange={(e) => setData('principal_title', e.target.value)}
+                                />
+                            </Field>
+                            <Field label="Pangkat" htmlFor="principal_rank" error={errors.principal_rank} hint="Digunakan pada tanda tangan SPPD">
+                                <Input
+                                    id="principal_rank"
+                                    value={data.principal_rank}
+                                    onChange={(e) => setData('principal_rank', e.target.value)}
+                                    placeholder="Pembina"
+                                />
+                            </Field>
+                            <Field label="Golongan" htmlFor="principal_grade" error={errors.principal_grade} hint="Digunakan pada tanda tangan SPPD">
+                                <Input
+                                    id="principal_grade"
+                                    value={data.principal_grade}
+                                    onChange={(e) => setData('principal_grade', e.target.value)}
+                                    placeholder="IV/a"
                                 />
                             </Field>
                             <Field label="Kota Tanda Tangan" htmlFor="signature_city" error={errors.signature_city} hint="Lokasi yang dicetak di atas tanggal di PDF">
