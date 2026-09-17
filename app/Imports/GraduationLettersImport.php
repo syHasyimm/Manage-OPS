@@ -2,12 +2,14 @@
 
 namespace App\Imports;
 
+use App\Imports\Concerns\NormalizesImportData;
 use App\Models\GraduationLetter;
 use App\Models\RegistrationPeriod;
 use App\Models\SchoolSetting;
-use App\Models\Student;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -16,6 +18,8 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class GraduationLettersImport implements ToCollection, WithHeadingRow
 {
+    use NormalizesImportData;
+
     public const HEADINGS = [
         'nis',
         'nomor_surat_skl',
@@ -379,39 +383,6 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
         ];
     }
 
-    protected function rowToArray(mixed $row): array
-    {
-        if (is_object($row) && method_exists($row, 'toArray')) {
-            return $row->toArray();
-        }
-
-        return is_array($row) ? $row : [];
-    }
-
-    protected function isBlank(array $row): bool
-    {
-        foreach ($row as $value) {
-            if ($value instanceof \DateTimeInterface || ($value !== null && trim((string) $value) !== '')) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    protected function stringValue(mixed $value): ?string
-    {
-        if ($value === null || is_array($value) || is_object($value)) {
-            return null;
-        }
-
-        if (is_float($value) && floor($value) === $value) {
-            return (string) (int) $value;
-        }
-
-        return trim((string) $value);
-    }
-
     protected function numericValue(mixed $value): ?float
     {
         $val = $this->stringValue($value);
@@ -422,44 +393,5 @@ class GraduationLettersImport implements ToCollection, WithHeadingRow
         $val = str_replace(',', '.', $val);
 
         return is_numeric($val) ? (float) $val : null;
-    }
-
-    protected function normalizeDate(mixed $value): ?string
-    {
-        if ($value instanceof \DateTimeInterface) {
-            return $value->format('Y-m-d');
-        }
-
-        $value = $this->stringValue($value);
-
-        if ($value === null || $value === '') {
-            return null;
-        }
-
-        if (is_numeric($value) && (float) $value >= 20000) {
-            try {
-                return ExcelDate::excelToDateTimeObject((float) $value)->format('Y-m-d');
-            } catch (\Throwable) {
-                return $value;
-            }
-        }
-
-        foreach (['Y-m-d', 'd/m/Y', 'd-m-Y', 'd.m.Y', 'Y/m/d'] as $format) {
-            try {
-                $date = Carbon::createFromFormat($format, $value);
-
-                if ($date !== false) {
-                    return $date->format('Y-m-d');
-                }
-            } catch (\Throwable) {
-                // Try the next supported format.
-            }
-        }
-
-        try {
-            return Carbon::parse($value)->format('Y-m-d');
-        } catch (\Throwable) {
-            return $value;
-        }
     }
 }

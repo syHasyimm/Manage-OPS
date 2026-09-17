@@ -20,6 +20,7 @@ import {
 import AppLayout from '@/Layouts/AppLayout';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
+import { formatDate } from '@/lib/date';
 
 const STATUS_META = {
     draft: {
@@ -77,18 +78,6 @@ const STATUS_META = {
         surfaceClass: 'border-amber-200 bg-amber-50',
     },
 };
-
-function formatDate(value, withTime = false) {
-    if (!value) return null;
-
-    return new Date(value).toLocaleDateString('id-ID', {
-        weekday: withTime ? undefined : 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        ...(withTime ? { hour: '2-digit', minute: '2-digit' } : {}),
-    });
-}
 
 function RegistrationProgress({ registration }) {
     const submitted = Boolean(registration.submitted_at);

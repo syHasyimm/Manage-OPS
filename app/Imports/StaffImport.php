@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Imports\Concerns\NormalizesImportData;
 use App\Models\Staff;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -10,10 +11,11 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Row;
-use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class StaffImport implements ToCollection, WithHeadingRow
 {
+    use NormalizesImportData;
+
     public const HEADINGS = [
         'nama',
         'nip',
@@ -202,85 +204,5 @@ class StaffImport implements ToCollection, WithHeadingRow
             'golongan' => $this->stringValue($row['golongan'] ?? null),
             'jenis' => strtolower($this->stringValue($row['jenis'] ?? null)),
         ];
-    }
-
-    protected function rowToArray(mixed $row): array
-    {
-        if (is_object($row) && method_exists($row, 'toArray')) {
-            return $row->toArray();
-        }
-
-        return is_array($row) ? $row : [];
-    }
-
-    protected function isBlank(array $row): bool
-    {
-        foreach ($row as $value) {
-            if ($value instanceof \DateTimeInterface || ($value !== null && trim((string) $value) !== '')) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    protected function stringValue(mixed $value): ?string
-    {
-        if ($value === null || is_array($value) || is_object($value)) {
-            return null;
-        }
-
-        if (is_float($value) && floor($value) === $value) {
-            return (string) (int) $value;
-        }
-
-        return trim((string) $value);
-    }
-
-    protected function normalizeDate(mixed $value): ?string
-    {
-        if ($value instanceof \DateTimeInterface) {
-            return $value->format('Y-m-d');
-        }
-
-        $value = $this->stringValue($value);
-
-        if ($value === null || $value === '') {
-            return null;
-        }
-
-        if (preg_match('/^\d{8}$/', $value)) {
-            try {
-                return Carbon::createFromFormat('Ymd', $value)->format('Y-m-d');
-            } catch (\Throwable) {
-                return $value;
-            }
-        }
-
-        if (is_numeric($value) && (float) $value >= 20000) {
-            try {
-                return ExcelDate::excelToDateTimeObject((float) $value)->format('Y-m-d');
-            } catch (\Throwable) {
-                return $value;
-            }
-        }
-
-        foreach (['Y-m-d', 'd/m/Y', 'd-m-Y', 'd.m.Y', 'Y/m/d'] as $format) {
-            try {
-                $date = Carbon::createFromFormat($format, $value);
-
-                if ($date !== false) {
-                    return $date->format('Y-m-d');
-                }
-            } catch (\Throwable) {
-                // Try the next supported format.
-            }
-        }
-
-        try {
-            return Carbon::parse($value)->format('Y-m-d');
-        } catch (\Throwable) {
-            return $value;
-        }
     }
 }

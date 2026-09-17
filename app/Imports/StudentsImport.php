@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Imports\Concerns\NormalizesImportData;
 use App\Models\Student;
 use App\Support\RegistrationOptions;
 use Illuminate\Support\Carbon;
@@ -11,10 +12,11 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Row;
-use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class StudentsImport implements ToCollection, WithHeadingRow
 {
+    use NormalizesImportData;
+
     public const HEADINGS = [
         'nama',
         'nis',
@@ -231,115 +233,5 @@ class StudentsImport implements ToCollection, WithHeadingRow
             'parent_name' => $this->stringValue($row['nama_ortu'] ?? null),
             'kelas' => $this->normalizeClass($this->stringValue($row['kelas'] ?? null)),
         ];
-    }
-
-    protected function rowToArray(mixed $row): array
-    {
-        if (is_object($row) && method_exists($row, 'toArray')) {
-            return $row->toArray();
-        }
-
-        return is_array($row) ? $row : [];
-    }
-
-    protected function isBlank(array $row): bool
-    {
-        foreach ($row as $value) {
-            if ($value instanceof \DateTimeInterface || ($value !== null && trim((string) $value) !== '')) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    protected function stringValue(mixed $value): ?string
-    {
-        if ($value === null || is_array($value) || is_object($value)) {
-            return null;
-        }
-
-        if (is_float($value) && floor($value) === $value) {
-            return (string) (int) $value;
-        }
-
-        return trim((string) $value);
-    }
-
-    protected function normalizeReligion(?string $value): ?string
-    {
-        if ($value === null || $value === '') {
-            return $value;
-        }
-
-        $normalized = strtolower($value);
-
-        if (isset(RegistrationOptions::RELIGIONS[$normalized])) {
-            return $normalized;
-        }
-
-        foreach (RegistrationOptions::RELIGIONS as $key => $label) {
-            if (strtolower($label) === $normalized) {
-                return $key;
-            }
-        }
-
-        return $value;
-    }
-
-    protected function normalizeClass(?string $value): ?string
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        return strtoupper(str_replace(' ', '', $value));
-    }
-
-    protected function normalizeDate(mixed $value): ?string
-    {
-        if ($value instanceof \DateTimeInterface) {
-            return $value->format('Y-m-d');
-        }
-
-        $value = $this->stringValue($value);
-
-        if ($value === null || $value === '') {
-            return null;
-        }
-
-        if (preg_match('/^\d{8}$/', $value)) {
-            try {
-                return Carbon::createFromFormat('Ymd', $value)->format('Y-m-d');
-            } catch (\Throwable) {
-                return $value;
-            }
-        }
-
-        if (is_numeric($value) && (float) $value >= 20000) {
-            try {
-                return ExcelDate::excelToDateTimeObject((float) $value)->format('Y-m-d');
-            } catch (\Throwable) {
-                return $value;
-            }
-        }
-
-        foreach (['Y-m-d', 'd/m/Y', 'd-m-Y', 'd.m.Y', 'Y/m/d'] as $format) {
-            try {
-                $date = Carbon::createFromFormat($format, $value);
-
-                if ($date !== false) {
-                    return $date->format('Y-m-d');
-                }
-            } catch (\Throwable) {
-                // Try the next supported format.
-            }
-        }
-
-        try {
-            return Carbon::parse($value)->format('Y-m-d');
-        } catch (\Throwable) {
-            return $value;
-        }
     }
 }

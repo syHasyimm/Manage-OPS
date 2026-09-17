@@ -15,13 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 
-const formatDate = (value) => value
-    ? new Date(value).toLocaleDateString('id-ID', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-      })
-    : null;
+import { formatDate } from '@/lib/date';
 
 const revealProps = (reducedMotion, delay = 0, direction = 'up') => {
     if (reducedMotion) return {};
