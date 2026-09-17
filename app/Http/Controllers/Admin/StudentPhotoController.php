@@ -43,6 +43,16 @@ class StudentPhotoController extends Controller
             File::makeDirectory($tempPath, 0755, true);
         }
 
+        // Prevent ZIP Slip (Directory Traversal)
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $filename = $zip->getNameIndex($i);
+            if (str_contains($filename, '../') || str_contains($filename, '..\\') || str_starts_with($filename, '/')) {
+                $zip->close();
+                File::deleteDirectory($tempPath);
+                return back()->withErrors(['file' => 'File ZIP mengandung path yang tidak aman.']);
+            }
+        }
+
         $zip->extractTo($tempPath);
         $zip->close();
 
