@@ -7,6 +7,7 @@ WORKDIR /var/www/html
 # GD untuk PDF/QR, ZIP untuk Excel, dan PCNTL untuk queue worker.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        gosu \
         libfreetype6-dev \
         libicu-dev \
         libjpeg62-turbo-dev \
@@ -14,6 +15,7 @@ RUN apt-get update \
         libpng-dev \
         libsqlite3-dev \
         libzip-dev \
+        util-linux \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" \
         bcmath exif gd intl mbstring opcache pcntl pdo_mysql pdo_sqlite zip \
@@ -63,7 +65,11 @@ FROM php-base AS production
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
-    LOG_CHANNEL=stderr
+    LOG_CHANNEL=stderr \
+    DB_CONNECTION=sqlite \
+    DB_DATABASE=/var/www/html/storage/app/database.sqlite \
+    SPMB_AUTO_MIGRATE=true \
+    TRUSTED_PROXIES=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
 COPY --from=vendor /var/www/html ./
 COPY --from=assets /app/public/build ./public/build
@@ -80,7 +86,7 @@ RUN sed -i 's/\r$//' /usr/local/bin/spmb-entrypoint \
 
 EXPOSE 80
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
     CMD php -r 'exit(@file_get_contents("http://127.0.0.1/up") === false ? 1 : 0);'
 
 ENTRYPOINT ["spmb-entrypoint"]

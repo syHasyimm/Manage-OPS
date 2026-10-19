@@ -60,6 +60,8 @@ php artisan queue:work --queue=default --tries=1 --timeout=60
 
 Build image dengan `docker build -t spmb-web .`. Panduan konfigurasi environment,
 database, penyimpanan persisten, dan queue worker tersedia di [docs/docker.md](docs/docker.md).
+Untuk deployment Coolify dengan SQLite, ikuti
+[konfigurasi Dockerfile, environment, dan volume SQLite](docs/docker.md#coolify-dengan-dockerfile-dan-sqlite).
 
 ## Akses
 
