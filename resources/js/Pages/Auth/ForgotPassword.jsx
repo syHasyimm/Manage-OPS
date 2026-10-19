@@ -49,7 +49,7 @@ export default function ForgotPassword({ status }) {
                 <div className="flex items-center justify-between gap-3 pt-2">
                     <Link
                         href={route('login')}
-                        className="text-sm text-navy-700 underline-offset-4 hover:underline"
+                        className="text-sm text-slate-700 underline-offset-4 hover:underline"
                     >
                         Kembali ke login
                     </Link>

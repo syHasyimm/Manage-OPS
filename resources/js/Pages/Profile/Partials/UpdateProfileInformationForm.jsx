@@ -27,11 +27,11 @@ export default function UpdateProfileInformation({
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-navy-900">
+                <h2 className="text-lg font-medium text-slate-900">
                     Informasi Profil
                 </h2>
 
-                <p className="mt-1 text-sm text-navy-600">
+                <p className="mt-1 text-sm text-slate-600">
                     Perbarui nama dan nomor HP/WA akun Anda. Mengubah nomor akan mereset status verifikasi.
                 </p>
             </header>
@@ -72,13 +72,13 @@ export default function UpdateProfileInformation({
 
                 {phoneVerified === false && (
                     <div>
-                        <p className="mt-2 text-sm text-navy-800">
+                        <p className="mt-2 text-sm text-slate-800">
                             Nomor HP Anda belum terverifikasi.
                             <Link
                                 href={route('verification.send')}
                                 method="post"
                                 as="button"
-                                className="ml-1 rounded-md text-sm text-navy-700 underline hover:text-navy-900"
+                                className="ml-1 rounded-md text-sm text-slate-700 underline hover:text-slate-900"
                             >
                                 Klik untuk kirim ulang OTP via WhatsApp.
                             </Link>
@@ -102,7 +102,7 @@ export default function UpdateProfileInformation({
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-navy-600">Tersimpan.</p>
+                        <p className="text-sm text-slate-600">Tersimpan.</p>
                     </Transition>
                 </div>
             </form>

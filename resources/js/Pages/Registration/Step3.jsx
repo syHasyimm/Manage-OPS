@@ -22,11 +22,11 @@ function ParentForm({ role, label, data, setData, errors, options, optional = fa
     };
 
     return (
-        <div className="rounded-lg border border-navy-100 bg-white p-4">
-            <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-navy-900">
-                <Users className="h-4 w-4 text-gold-600" />
+        <div className="rounded-lg border border-slate-100 bg-white p-4">
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
+                <Users className="h-4 w-4 text-amber-600" />
                 {label}
-                {optional && <span className="text-xs font-normal text-navy-500">(opsional)</span>}
+                {optional && <span className="text-xs font-normal text-slate-500">(opsional)</span>}
             </h3>
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -112,11 +112,11 @@ function ParentForm({ role, label, data, setData, errors, options, optional = fa
                             onValueChange={(v) => update('is_alive', v === 'alive')}
                             className="flex flex-wrap gap-x-6 gap-y-2"
                         >
-                            <label className="flex items-center gap-2 text-sm text-navy-800">
+                            <label className="flex items-center gap-2 text-sm text-slate-800">
                                 <RadioGroupItem value="alive" />
                                 Masih Hidup
                             </label>
-                            <label className="flex items-center gap-2 text-sm text-navy-800">
+                            <label className="flex items-center gap-2 text-sm text-slate-800">
                                 <RadioGroupItem value="deceased" />
                                 Almarhum/Almarhumah
                             </label>
@@ -185,10 +185,10 @@ export default function Step3({ registration, options, editable }) {
         <AppLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-600">
+                    <p className="text-xs uppercase tracking-widest text-amber-600">
                         Tahun Ajaran {registration?.period?.academic_year}
                     </p>
-                    <h1 className="mt-1 text-xl font-semibold text-navy-950">
+                    <h1 className="mt-1 text-xl font-semibold text-slate-950">
                         Formulir Pendaftaran Murid Baru
                     </h1>
                 </div>
@@ -237,11 +237,11 @@ export default function Step3({ registration, options, editable }) {
                             options={options}
                         />
 
-                        <div className="rounded-lg border border-navy-100 bg-navy-50/50 p-4">
+                        <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-4">
                             <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
-                                    <p className="text-sm font-semibold text-navy-900">Apakah memiliki Wali?</p>
-                                    <p className="text-xs text-navy-500">
+                                    <p className="text-sm font-semibold text-slate-900">Apakah memiliki Wali?</p>
+                                    <p className="text-xs text-slate-500">
                                         Aktifkan jika anak diasuh oleh Wali (selain orang tua kandung).
                                     </p>
                                 </div>
@@ -266,8 +266,8 @@ export default function Step3({ registration, options, editable }) {
                             )}
                         </div>
 
-                        <div className="rounded-lg border border-navy-100 bg-white p-4">
-                            <h3 className="mb-3 text-sm font-semibold text-navy-900">Kontak</h3>
+                        <div className="rounded-lg border border-slate-100 bg-white p-4">
+                            <h3 className="mb-3 text-sm font-semibold text-slate-900">Kontak</h3>
                             <FormField label="Email Aktif" htmlFor="contact_email" required error={errors.contact_email}>
                                 <Input
                                     id="contact_email"

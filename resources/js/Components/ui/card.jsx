@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { Reveal } from '@/Components/Motion';
 
-const Card = React.forwardRef(({ className, ...props }, ref) => (
-    <div
+const Card = React.forwardRef(({ className, motionDelay = 0, ...props }, ref) => (
+    <Reveal
         ref={ref}
+        delay={motionDelay}
+        distance={14}
         className={cn(
-            'rounded-xl border border-navy-100 bg-white text-navy-950 shadow-sm',
+            'rounded-xl border border-slate-100 bg-white text-slate-950 shadow-sm',
             className,
         )}
         {...props}
@@ -25,7 +28,7 @@ CardHeader.displayName = 'CardHeader';
 const CardTitle = React.forwardRef(({ className, ...props }, ref) => (
     <h3
         ref={ref}
-        className={cn('text-lg font-semibold leading-none tracking-tight text-navy-900', className)}
+        className={cn('text-lg font-semibold leading-none tracking-tight text-slate-900', className)}
         {...props}
     />
 ));
@@ -34,7 +37,7 @@ CardTitle.displayName = 'CardTitle';
 const CardDescription = React.forwardRef(({ className, ...props }, ref) => (
     <p
         ref={ref}
-        className={cn('text-sm text-navy-500', className)}
+        className={cn('text-sm text-slate-500', className)}
         {...props}
     />
 ));

@@ -63,10 +63,10 @@ export default function Step1({ registration, options, school, editable }) {
         <AppLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-600">
+                    <p className="text-xs uppercase tracking-widest text-amber-600">
                         Tahun Ajaran {registration?.period?.academic_year}
                     </p>
-                    <h1 className="mt-1 text-xl font-semibold text-navy-950">
+                    <h1 className="mt-1 text-xl font-semibold text-slate-950">
                         Formulir Pendaftaran Murid Baru
                     </h1>
                 </div>
@@ -82,7 +82,7 @@ export default function Step1({ registration, options, school, editable }) {
                     description="Lengkapi identitas calon murid sesuai Kartu Keluarga & Akta Kelahiran."
                     footer={
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <p className="text-xs text-navy-500">Data otomatis tersimpan saat klik Simpan & Lanjut.</p>
+                            <p className="text-xs text-slate-500">Data otomatis tersimpan saat klik Simpan & Lanjut.</p>
                             <Button type="submit" disabled={processing || !editable} className="w-full sm:w-auto">
                                 {processing && <Loader2 className="h-4 w-4 animate-spin" />}
                                 Simpan & Lanjut
@@ -101,7 +101,7 @@ export default function Step1({ registration, options, school, editable }) {
                         </FormField>
                     </div>
 
-                    <div className="my-6 border-t border-navy-100" />
+                    <div className="my-6 border-t border-slate-100" />
 
                     <div className="grid gap-4 md:grid-cols-2">
                         <FormField label="Nama Lengkap" htmlFor="full_name" required error={errors.full_name}>
@@ -120,7 +120,7 @@ export default function Step1({ registration, options, school, editable }) {
                                 className="flex flex-wrap gap-x-6 gap-y-2"
                             >
                                 {options.genders.map((g) => (
-                                    <label key={g.value} className="flex items-center gap-2 text-sm text-navy-800">
+                                    <label key={g.value} className="flex items-center gap-2 text-sm text-slate-800">
                                         <RadioGroupItem value={g.value} />
                                         {g.label}
                                     </label>
@@ -186,18 +186,18 @@ export default function Step1({ registration, options, school, editable }) {
                         </FormField>
                     </div>
 
-                    <div className="mt-6 space-y-3 rounded-lg border border-navy-100 bg-navy-50/50 p-4">
+                    <div className="mt-6 space-y-3 rounded-lg border border-slate-100 bg-slate-50/50 p-4">
                         <FormField label="Berkebutuhan Khusus?" required error={errors.has_special_needs}>
                             <RadioGroup
                                 value={data.has_special_needs ? 'yes' : 'no'}
                                 onValueChange={(v) => setData('has_special_needs', v === 'yes')}
                                 className="flex flex-wrap gap-x-6 gap-y-2"
                             >
-                                <label className="flex items-center gap-2 text-sm text-navy-800">
+                                <label className="flex items-center gap-2 text-sm text-slate-800">
                                     <RadioGroupItem value="no" />
                                     Tidak
                                 </label>
-                                <label className="flex items-center gap-2 text-sm text-navy-800">
+                                <label className="flex items-center gap-2 text-sm text-slate-800">
                                     <RadioGroupItem value="yes" />
                                     Ya
                                 </label>
@@ -211,7 +211,7 @@ export default function Step1({ registration, options, school, editable }) {
                                     {options.special_needs.map((s) => (
                                         <label
                                             key={s.value}
-                                            className="flex items-center gap-2 rounded-md border border-navy-200 bg-white px-3 py-2 text-sm text-navy-800"
+                                            className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800"
                                         >
                                             <Checkbox
                                                 checked={data.special_needs_types.includes(s.value)}
@@ -328,11 +328,11 @@ export default function Step1({ registration, options, school, editable }) {
                                 onValueChange={(v) => setData('is_kps_kph_recipient', v === 'yes')}
                                 className="flex flex-wrap gap-x-6 gap-y-2"
                             >
-                                <label className="flex items-center gap-2 text-sm text-navy-800">
+                                <label className="flex items-center gap-2 text-sm text-slate-800">
                                     <RadioGroupItem value="no" />
                                     Tidak
                                 </label>
-                                <label className="flex items-center gap-2 text-sm text-navy-800">
+                                <label className="flex items-center gap-2 text-sm text-slate-800">
                                     <RadioGroupItem value="yes" />
                                     Ya
                                 </label>
@@ -345,11 +345,11 @@ export default function Step1({ registration, options, school, editable }) {
                                 onValueChange={(v) => setData('has_kip', v === 'yes')}
                                 className="flex flex-wrap gap-x-6 gap-y-2"
                             >
-                                <label className="flex items-center gap-2 text-sm text-navy-800">
+                                <label className="flex items-center gap-2 text-sm text-slate-800">
                                     <RadioGroupItem value="no" />
                                     Tidak
                                 </label>
-                                <label className="flex items-center gap-2 text-sm text-navy-800">
+                                <label className="flex items-center gap-2 text-sm text-slate-800">
                                     <RadioGroupItem value="yes" />
                                     Ya
                                 </label>

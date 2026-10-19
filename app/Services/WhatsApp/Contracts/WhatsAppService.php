@@ -2,6 +2,8 @@
 
 namespace App\Services\WhatsApp\Contracts;
 
+use App\Services\WhatsApp\SendReceipt;
+
 interface WhatsAppService
 {
     /**
@@ -12,6 +14,8 @@ interface WhatsAppService
      * @return bool True jika request gateway berhasil.
      */
     public function sendText(string $to, string $message): bool;
+
+    public function sendTextWithReceipt(string $to, string $message): SendReceipt;
 
     /**
      * Kirim file (PDF / gambar) ke nomor tujuan.

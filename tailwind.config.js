@@ -14,38 +14,25 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-                display: ['Outfit', 'Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Manrope', ...defaultTheme.fontFamily.sans],
+                display: ['Plus Jakarta Sans', 'Manrope', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                navy: {
-                    50: '#f0f4f8',
-                    100: '#d9e2ec',
-                    200: '#bcccdc',
-                    300: '#9fb3c8',
-                    400: '#829ab1',
-                    500: '#627d98',
-                    600: '#486581',
-                    700: '#334e68',
-                    800: '#243b53',
-                    900: '#1E3A5F',
-                    950: '#102a43',
+                primary: '#3B82F6',
+                secondary: {
+                    DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
+                    soft: 'rgb(var(--color-secondary-soft) / <alpha-value>)',
+                    foreground: 'rgb(var(--color-secondary-foreground) / <alpha-value>)',
                 },
-                gold: {
-                    50: '#fdf8e8',
-                    100: '#f9edc5',
-                    200: '#f3db8e',
-                    300: '#ecc94b',
-                    400: '#d4a72c',
-                    500: '#C9A84C',
-                    600: '#a17a2a',
-                    700: '#7c5e20',
-                    800: '#5c4516',
-                    900: '#3d2e0f',
+                accent: {
+                    DEFAULT: 'rgb(var(--color-accent) / <alpha-value>)',
+                    soft: 'rgb(var(--color-accent-soft) / <alpha-value>)',
+                    foreground: 'rgb(var(--color-accent-foreground) / <alpha-value>)',
                 },
-                background: '#ffffff',
-                foreground: '#102a43',
-                ring: '#C9A84C',
+                danger: '#EF4444',
+                background: 'rgb(var(--color-background) / <alpha-value>)',
+                foreground: '#1E293B',
+                ring: '#3B82F6',
             },
             keyframes: {
                 'accordion-down': {

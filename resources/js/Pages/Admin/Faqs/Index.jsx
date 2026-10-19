@@ -8,9 +8,12 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Badge } from '@/Components/ui/badge';
 import { toast } from 'sonner';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { motionEase } from '@/Components/Motion';
 
 function FaqModal({ faq, onClose }) {
     const isEdit = !!faq;
+    const reducedMotion = useReducedMotion();
 
     const { data, setData, post, patch, processing, errors, reset } = useForm({
         question:   faq?.question   ?? '',
@@ -36,10 +39,16 @@ function FaqModal({ faq, onClose }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-            <div className="fixed inset-0 bg-navy-950/40" onClick={onClose} />
-            <div className="relative w-full max-w-lg rounded-xl bg-white shadow-2xl">
-                <div className="border-b border-navy-100 px-5 py-4">
-                    <h2 className="text-base font-semibold text-navy-950">{isEdit ? 'Edit FAQ' : 'Tambah FAQ'}</h2>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reducedMotion ? 0 : 0.18 }} className="fixed inset-0 bg-slate-950/40" onClick={onClose} />
+            <motion.div
+                initial={reducedMotion ? false : { opacity: 0, y: 16, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
+                transition={{ duration: reducedMotion ? 0 : 0.25, ease: motionEase }}
+                className="relative w-full max-w-lg rounded-xl bg-white shadow-2xl"
+            >
+                <div className="border-b border-slate-100 px-5 py-4">
+                    <h2 className="text-base font-semibold text-slate-950">{isEdit ? 'Edit FAQ' : 'Tambah FAQ'}</h2>
                 </div>
                 <form onSubmit={submit} className="space-y-4 px-5 py-4">
                     <div className="space-y-1.5">
@@ -74,7 +83,7 @@ function FaqModal({ faq, onClose }) {
                             onChange={(e) => setData('keywords', e.target.value)}
                             placeholder="biaya, uang pangkal, spp, bayar"
                         />
-                        <p className="text-xs text-navy-500">Pisahkan dengan koma. Digunakan untuk mencocokkan pertanyaan user.</p>
+                        <p className="text-xs text-slate-500">Pisahkan dengan koma. Digunakan untuk mencocokkan pertanyaan user.</p>
                         {errors.keywords && <p className="text-xs text-red-600">{errors.keywords}</p>}
                     </div>
 
@@ -97,21 +106,21 @@ function FaqModal({ faq, onClose }) {
                                     type="checkbox"
                                     checked={data.is_active}
                                     onChange={(e) => setData('is_active', e.target.checked)}
-                                    className="h-4 w-4 rounded border-navy-300 text-gold-600"
+                                    className="h-4 w-4 rounded border-slate-300 text-blue-600"
                                 />
-                                <label htmlFor="is_active" className="text-sm text-navy-700">Aktif</label>
+                                <label htmlFor="is_active" className="text-sm text-slate-700">Aktif</label>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-2 border-t border-navy-100 pt-4">
+                    <div className="flex justify-end gap-2 border-t border-slate-100 pt-4">
                         <Button type="button" variant="outline" onClick={onClose}>Batal</Button>
                         <Button type="submit" disabled={processing}>
                             {processing ? 'Menyimpan...' : 'Simpan'}
                         </Button>
                     </div>
                 </form>
-            </div>
+            </motion.div>
         </div>
     );
 }
@@ -132,22 +141,25 @@ export default function Index({ faqs }) {
         <AdminLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
-                    <h1 className="mt-1 text-xl font-semibold text-navy-950">Kelola FAQ Chatbot</h1>
-                    <p className="mt-1 text-xs text-navy-500">
-                        Pertanyaan di sini dijawab langsung dari database tanpa memanggil AI API.
+                    <p className="text-xs uppercase tracking-widest text-blue-700">Admin SPMB</p>
+                    <h1 className="mt-1 text-xl font-semibold text-slate-950">Kelola FAQ Chatbot</h1>
+                    <p className="mt-1 text-xs text-slate-500">
+                        Kelola jawaban chatbot untuk membantu calon wali murid.
                     </p>
                 </div>
             }
         >
             <Head title="Kelola FAQ" />
 
-            {modal && (
-                <FaqModal
-                    faq={modal === 'create' ? null : modal}
-                    onClose={() => setModal(null)}
-                />
-            )}
+            <AnimatePresence>
+                {modal && (
+                    <FaqModal
+                        key={modal === 'create' ? 'create' : modal.id}
+                        faq={modal === 'create' ? null : modal}
+                        onClose={() => setModal(null)}
+                    />
+                )}
+            </AnimatePresence>
 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
@@ -162,24 +174,24 @@ export default function Index({ faqs }) {
                 </CardHeader>
                 <CardContent>
                     {faqs.length === 0 ? (
-                        <div className="py-12 text-center text-sm text-navy-500">
+                        <div className="py-12 text-center text-sm text-slate-500">
                             Belum ada FAQ. Klik "Tambah FAQ" untuk menambahkan.
                         </div>
                     ) : (
-                        <div className="divide-y divide-navy-100">
+                        <div className="divide-y divide-slate-100">
                             {faqs.map((faq) => (
                                 <div key={faq.id} className="flex items-start justify-between gap-4 py-4">
                                     <div className="min-w-0 flex-1 space-y-1">
                                         <div className="flex items-center gap-2">
-                                            <p className="text-sm font-semibold text-navy-900">{faq.question}</p>
+                                            <p className="text-sm font-semibold text-slate-900">{faq.question}</p>
                                             {!faq.is_active && (
                                                 <Badge variant="secondary" className="text-[10px]">Nonaktif</Badge>
                                             )}
                                         </div>
-                                        <p className="line-clamp-2 text-xs text-navy-600">{faq.answer}</p>
+                                        <p className="line-clamp-2 text-xs text-slate-600">{faq.answer}</p>
                                         {faq.keywords && (
-                                            <p className="text-[11px] text-navy-400">
-                                                Keywords: <span className="font-medium text-navy-600">{faq.keywords}</span>
+                                            <p className="text-[11px] text-slate-400">
+                                                Keywords: <span className="font-medium text-slate-600">{faq.keywords}</span>
                                             </p>
                                         )}
                                     </div>

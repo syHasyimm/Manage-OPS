@@ -5,7 +5,7 @@
 
 ## Commands
 
-- Run the full local stack with `composer dev` (Laravel server, queue listener, Pail logs, and Vite).
+- Run the full local stack with `composer dev` (Laravel server, queue listener for `default`, Pail logs, and Vite).
 - Run tests with `php artisan test`; focus one test with `php artisan test --filter="test name"` or a test path.
 - Format PHP with `vendor/bin/pint`; there is no repository lint, typecheck, CI, or pre-commit script.
 - Build frontend assets with `npm run build`; use `npm run dev` for Vite HMR.
@@ -21,18 +21,19 @@
 
 - Phone-number auth and WhatsApp OTP are implemented in `app/Http/Controllers/Auth` and `app/Services/OtpService.php`; there is no email login.
 - Registration form option values have one source of truth in `app/Support/RegistrationOptions.php`; do not duplicate them in requests or React pages.
+- The admin panel contains Dashboard SPMB, Periods, Registrations, Pengaturan KOP, and Kelola FAQ Chatbot. Removed modules, including calendars, teacher contacts, WhatsApp settings, and reminder history, must not be reintroduced without an explicit request.
+- Historical migrations, existing database tables, and uploaded files are retained; this cleanup does not authorize deleting stored data.
 - Admin routes live under `/admin` and use the `admin.*` name prefix; protect new admin endpoints with the existing `auth` and `admin` middleware group.
-- `config/spmb.php` and `config/whatsapp.php` contain app defaults; `SchoolSetting` overrides school display values from the database at boot.
+- `config/spmb.php` and `config/whatsapp.php` contain app defaults; `SchoolSetting` overrides school display values from the database at boot. Admin > Pengaturan KOP manages school identity, logos, and principal details; updates must call `SchoolSetting::bust()` to clear its cache. Admin > Kelola FAQ Chatbot manages the FAQ data used by the public SPMB chatbot.
 - Registration numbers must be generated through `RegistrationNumberGenerator`, which locks the per-period sequence in a transaction.
 - PDF output uses `resources/views/pdf/registration.blade.php` and DomPDF-compatible inline/table CSS, not Tailwind classes.
-- Surat Tugas uses `resources/views/pdf/surat-tugas.blade.php`; POST validation stores a temporary session payload, then GET download consumes it to return a PDF without database history.
-- Student master data lives in `Student`; manual photos use the public `students/` storage path, while Excel import uses `StudentsImport` and all-or-nothing validation before inserts.
-- Parent notifications use `StudentNotification` snapshots and `SendStudentNotification`; render templates before dispatching queue jobs so edited templates cannot change message history.
 
 ## WhatsApp Settings
 
-- Fonnte token/device can be managed at Admin > Pengaturan WhatsApp; token values are encrypted in `app_settings`.
-- `FONNTE_TOKEN` and `FONNTE_DEVICE` remain `.env` fallbacks. A blank admin token deliberately preserves the existing token.
+- WhatsApp remains available for OTP and SPMB registration notifications. The calendar reminder feature and its settings UI have been removed. Preserve existing encrypted Fonnte credentials; never expose or flash tokens.
+- `FONNTE_TOKEN` remains the `.env` fallback when no database token exists. `FONNTE_DEVICE` is a reference value only. Clearing the stored token with `AppSetting::set(AppSetting::FONNTE_TOKEN, null)` restores the `.env` fallback.
 - `WhatsAppService` is a scoped binding so long-running queue workers resolve the current database token for each job; do not change it back to a singleton.
 - Fonnte's send endpoint authenticates with the token; the stored device value is a reference and must not be added as an unsupported send payload field.
 - Set `WHATSAPP_DRIVER=log` during development to avoid real WhatsApp sends; queue jobs still need a worker in normal development.
+- Preserve historical calendar, teacher contact, staff, and reminder delivery data and migrations. `SendCalendarReminder` is retained only as an inert compatibility job for old queue payloads; it must never send messages or modify historical data. There is no calendar reminder command or schedule.
+- Fonnte receipts distinguish `accepted`, `failed`, `uncertain`, and development `simulated`. Never automatically retry an uncertain HTTP outcome.

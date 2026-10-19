@@ -59,7 +59,7 @@ export default function Register() {
                         onChange={(e) => setData('phone', e.target.value.replace(/\D/g, ''))}
                         placeholder="081234567890"
                     />
-                    <p className="text-xs text-navy-500">
+                    <p className="text-xs text-slate-500">
                         Pastikan nomor aktif WhatsApp untuk verifikasi & notifikasi.
                     </p>
                     {errors.phone && (
@@ -102,7 +102,7 @@ export default function Register() {
                 <div className="flex items-center justify-between gap-3 pt-2">
                     <Link
                         href={route('login')}
-                        className="text-sm text-navy-700 underline-offset-4 hover:underline"
+                        className="text-sm text-slate-700 underline-offset-4 hover:underline"
                     >
                         Sudah punya akun?
                     </Link>

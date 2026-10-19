@@ -1,11 +1,12 @@
+import '../css/fonts.css';
 import '../css/app.css';
+import '../css/motion.css';
 import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-
-import AdminSidebar from './Layouts/AdminSidebar';
+import { MotionProvider } from '@/Components/Motion';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -18,6 +19,7 @@ createInertiaApp({
         );
 
         if (name.startsWith('Admin/')) {
+            const { default: AdminSidebar } = await import('./Layouts/AdminSidebar');
             page.default.layout = page.default.layout || ((pageElement) => <AdminSidebar>{pageElement}</AdminSidebar>);
         }
 
@@ -26,9 +28,9 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(<MotionProvider><App {...props} /></MotionProvider>);
     },
     progress: {
-        color: '#4B5563',
+        color: '#3B82F6',
     },
 });

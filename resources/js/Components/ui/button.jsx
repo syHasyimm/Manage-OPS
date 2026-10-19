@@ -4,16 +4,16 @@ import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    'motion-action inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
     {
         variants: {
             variant: {
-                default: 'bg-navy-900 text-white hover:bg-navy-800',
-                destructive: 'bg-red-600 text-white hover:bg-red-700',
-                outline: 'border border-navy-200 bg-white hover:bg-navy-50 text-navy-900',
-                secondary: 'bg-gold-500 text-navy-950 hover:bg-gold-400',
-                ghost: 'hover:bg-navy-50 hover:text-navy-900',
-                link: 'text-navy-700 underline-offset-4 hover:underline',
+                default: 'bg-primary text-slate-950 hover:bg-blue-600 hover:text-white',
+                destructive: 'bg-danger text-slate-950 hover:bg-red-600 hover:text-white',
+                outline: 'border border-slate-200 bg-white hover:bg-slate-50 text-slate-900',
+                secondary: 'bg-secondary text-slate-950 hover:bg-secondary/80',
+                ghost: 'hover:bg-slate-50 hover:text-slate-900',
+                link: 'text-blue-700 underline-offset-4 hover:underline',
             },
             size: {
                 default: 'h-10 px-4 py-2',

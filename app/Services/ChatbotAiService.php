@@ -12,16 +12,23 @@ class ChatbotAiService
 
     private string $apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
 
-    private string $model = 'llama-3.1-8b-instant';
+    private string $model;
 
     public function __construct()
     {
-        $this->apiKey = config('services.groq.api_key', '');
+        $this->apiKey = trim((string) config('services.groq.api_key', ''));
+        $this->model = trim((string) config('services.groq.model', '')) ?: 'openai/gpt-oss-20b';
     }
 
     public function generate(string $message): string
     {
         $school = SchoolSetting::current();
+        if ($this->apiKey === '') {
+            Log::warning('Chatbot AI API key is not configured');
+
+            return $this->unavailableMessage($school);
+        }
+
         $systemPrompt = $this->buildSystemPrompt($school);
 
         $payload = [
@@ -30,9 +37,14 @@ class ChatbotAiService
                 ['role' => 'system', 'content' => $systemPrompt],
                 ['role' => 'user',   'content' => $message],
             ],
-            'temperature' => 0.7,
-            'max_tokens' => 512,
+            'temperature' => 0.3,
+            'max_completion_tokens' => 1024,
         ];
+
+        if (str_starts_with($this->model, 'openai/gpt-oss-')) {
+            $payload['reasoning_effort'] = 'low';
+            $payload['include_reasoning'] = false;
+        }
 
         $maxRetries = 3;
         $delay = 1;
@@ -40,12 +52,13 @@ class ChatbotAiService
         for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             try {
                 $response = Http::withToken($this->apiKey)
+                    ->connectTimeout(5)
                     ->timeout(15)
                     ->post($this->apiUrl, $payload);
 
                 if ($response->successful()) {
                     $text = $response->json('choices.0.message.content');
-                    if ($text) {
+                    if (is_string($text) && trim($text) !== '') {
                         return trim($text);
                     }
                 }
@@ -61,19 +74,28 @@ class ChatbotAiService
                 Log::warning('Chatbot AI response error', [
                     'attempt' => $attempt,
                     'status' => $response->status(),
-                    'body' => $response->body(),
+                    'model' => $this->model,
+                    'error_code' => $response->json('error.code'),
                 ]);
                 break;
 
             } catch (\Throwable $e) {
-                Log::error('Chatbot AI exception', ['attempt' => $attempt, 'error' => $e->getMessage()]);
+                Log::error('Chatbot AI exception', ['attempt' => $attempt, 'exception' => get_class($e)]);
                 break;
             }
         }
 
-        $phone = $school->phone ?? 'panitia';
+        return $this->unavailableMessage($school);
+    }
 
-        return "Mohon maaf, asisten sedang sibuk. Silakan coba lagi dalam beberapa detik, atau hubungi panitia SPMB langsung via WhatsApp di nomor {$phone}.";
+    private function unavailableMessage(SchoolSetting $school): string
+    {
+        $phone = trim($school->phone ?? '');
+        $contact = $phone !== ''
+            ? "hubungi panitia SPMB melalui WhatsApp di nomor {$phone}."
+            : 'hubungi panitia SPMB melalui kontak sekolah yang tertera di halaman utama.';
+
+        return "Maaf, layanan AI sedang tidak tersedia.\n\nAnda tetap dapat bertanya tentang biaya, syarat, dokumen, atau cara pendaftaran.\n\nUntuk bantuan lebih lanjut, ".$contact;
     }
 
     private function buildSystemPrompt(SchoolSetting $school): string
@@ -96,10 +118,12 @@ Informasi resmi sekolah:
 
 Aturan penting:
 1. Hanya jawab pertanyaan yang berkaitan dengan sekolah dan proses pendaftaran murid baru.
-2. Selalu tegaskan bahwa pendaftaran GRATIS jika ada pertanyaan tentang biaya.
+2. Jika ditanya tentang biaya, sampaikan bahwa pendaftaran gratis.
 3. Jika pertanyaan di luar topik sekolah (misalnya resep masakan, berita politik, dll), tolak dengan sopan: "Maaf, saya hanya dapat membantu pertanyaan seputar pendaftaran murid baru di {$name}."
-4. Selalu akhiri jawaban dengan tawaran bantuan lebih lanjut jika diperlukan.
-5. Jawab dalam Bahasa Indonesia yang ramah dan mudah dipahami orang tua.
+4. Jawab langsung inti pertanyaan dalam Bahasa Indonesia yang ramah dan mudah dipahami orang tua. Untuk pertanyaan sederhana, cukup 2–4 kalimat. Jangan mengulang pertanyaan, salam, atau tawaran bantuan pada setiap jawaban.
+5. Pisahkan paragraf dengan satu baris kosong. Gunakan daftar bernomor untuk langkah pendaftaran dan daftar poin untuk persyaratan atau dokumen. Tiap butir daftar harus berada pada baris tersendiri. Gunakan satu pengantar singkat dan satu daftar bila diperlukan; jangan mengulang isi daftar sebagai langkah atau paragraf tambahan. Sampaikan semua butir yang diperlukan tanpa memotong informasi penting.
+6. Gunakan Markdown sederhana. Tebalkan hanya informasi penting dengan **teks tebal**. Hindari tabel, HTML, blok kode, judul berlebihan, emoji, dan kata-kata dengan huruf kapital semua.
+7. Gunakan hanya informasi resmi yang tercantum di atas. Jangan menambahkan jadwal, kuota, nomor kontak, ukuran/latar foto, aturan dokumen, atau persyaratan lain yang tidak tersedia. Jika detail belum diketahui, arahkan ke informasi resmi di website atau panitia.
 PROMPT;
     }
 }

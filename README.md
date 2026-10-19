@@ -52,9 +52,14 @@ npm run build       # production
 # atau
 npm run dev         # dev mode (Vite HMR)
 
-# 5. Jalankan queue worker (untuk job WA & PDF)
-php artisan queue:work
+# 5. Jalankan worker (terminal terpisah)
+php artisan queue:work --queue=default --tries=1 --timeout=60
 ```
+
+## Docker
+
+Build image dengan `docker build -t spmb-web .`. Panduan konfigurasi environment,
+database, penyimpanan persisten, dan queue worker tersedia di [docs/docker.md](docs/docker.md).
 
 ## Akses
 
@@ -82,19 +87,23 @@ Untuk development tanpa kirim WA real, ganti driver ke `log` (pesan ditulis ke `
 WHATSAPP_DRIVER=log
 ```
 
-Token dan device Fonnte juga dapat diubah dari Panel Admin → Pengaturan WhatsApp. Token dari panel disimpan terenkripsi dan digunakan oleh request serta queue job berikutnya. Jika belum pernah diatur dari panel, aplikasi memakai `FONNTE_TOKEN` dan `FONNTE_DEVICE` dari `.env` sebagai fallback. Base URL dan pilihan driver tetap diatur melalui `.env`. Endpoint kirim Fonnte mengikat pengiriman ke token; nilai device disimpan sebagai konfigurasi referensi dan tidak dikirim sebagai parameter API yang tidak didukung.
+Panel admin menyediakan **Dashboard SPMB**, **Periode**, **Data Pendaftar**, **Pengaturan KOP**, dan **Kelola FAQ Chatbot**. Menu FAQ di seluler tersedia melalui tab **Akun**.
 
-## Surat Perintah Tugas
+WhatsApp tetap digunakan untuk OTP dan notifikasi pendaftaran SPMB. Token Fonnte tersimpan di `app_settings` tetap dipertahankan dan digunakan; jika tidak ada, aplikasi memakai `FONNTE_TOKEN` dari `.env`. Pengaturan token melalui panel admin telah dihapus. Pemeliharaan teknis dapat mengganti token menggunakan `AppSetting::set(AppSetting::FONNTE_TOKEN, $token)` atau mengembalikan penggunaan `.env` dengan nilai `null`. Worker mengambil token terbaru pada setiap job. Pilihan driver dan base URL diatur melalui `.env`. Device hanya merupakan referensi dan tidak dikirim sebagai parameter endpoint kirim Fonnte.
 
-Admin dapat membuat Surat Perintah Tugas dari menu **Surat Tugas**. KOP dan data Kepala Sekolah diambil dari Pengaturan Sekolah, nomor surat diisi manual, tanggal surat dapat diubah, dan daftar penerima tugas dapat berisi satu atau beberapa orang. Setelah validasi berhasil, PDF A4 langsung diunduh dan tidak disimpan sebagai riwayat.
+Kalender Sekolah, Kontak Guru, Pengaturan WhatsApp, dan Riwayat Pengingat telah dihapus beserta rute, perintah, dan jadwal pengingatnya. `composer dev` menjalankan server, worker antrean `default`, Pail, dan Vite. Setelah pembaruan, mulai ulang proses pengembangan dan worker agar menggunakan kode terbaru. Job kalender yang tersisa di antrean lama tidak akan mengirim pesan karena kelas kompatibilitas `SendCalendarReminder` tidak melakukan tindakan apa pun.
 
-## Data Siswa
+Identitas sekolah, logo sekolah/kabupaten, alamat, dan data kepala sekolah dapat diubah melalui **Admin > Pengaturan KOP** (`/admin/school-settings`). Data ini dipakai pada halaman publik dan PDF pendaftaran. Pengaturan baru berlaku pada PDF yang dibuat setelah perubahan; untuk PDF lama gunakan tombol **Regenerate PDF** di detail pendaftar. Pembaruan melalui pemeliharaan teknis harus diikuti `SchoolSetting::bust()` agar cache diperbarui. Chatbot SPMB tetap tersedia di halaman publik, dan jawabannya dapat dikelola melalui **Admin > Kelola FAQ Chatbot** (`/admin/faqs`). Di seluler, menu FAQ tersedia melalui tab **Akun**.
 
-Menu **Data Siswa** menyediakan input manual dan import Excel untuk data Nama, NIS, NISN, NIK, tempat/tanggal lahir, agama, alamat, No HP Ortu, Nama Ortu, dan kelas. Kelas memakai format tingkat 1-6 dengan rombel opsional, misalnya `1A`. Foto bersifat opsional dan hanya diunggah melalui form manual/edit. Import membatalkan seluruh file jika ada baris tidak valid, sedangkan data dengan NIS/NISN/NIK duplikat dilewati dan dilaporkan.
+Modul Buku Induk Siswa, Guru & Tendik, Kartu NISN, Surat Tugas, SPPD, Surat Kelulusan, Arsip Dokumen, Notifikasi Siswa, dan Template Pesan tetap dihapus dari aplikasi. Tabel database, migrasi historis, data kalender/kontak guru/riwayat pengingat, serta berkas unggahan lama dipertahankan.
 
-## Notifikasi Orang Tua
+Sebelum memperbarui instalasi yang memiliki antrean aktif, selesaikan job `SendStudentNotification` yang sudah terjadwal dengan versi lama. Kelas job tersebut tidak tersedia pada versi SPMB ini. Setelah pembaruan, restart worker agar memakai kode terbaru.
 
-Menu **Notifikasi Ortu** mengirim template pesan ke No HP Ortu melalui driver WhatsApp yang dikonfigurasi. Staff dapat mengirim ke satu siswa atau broadcast berdasarkan kelas. Nama siswa, kelas, nama ortu, dan nama sekolah diisi otomatis; variabel kegiatan diisi pada form. Pesan final dan nomor tujuan disimpan sebagai snapshot, lalu dikirim melalui queue. Gunakan **Template Pesan** untuk mengelola placeholder `{{nama_siswa}}`, `{{nama_ortu}}`, `{{kelas}}`, dan variabel kategori lainnya.
+## Chatbot SPMB
+
+Chatbot mencocokkan pertanyaan dengan FAQ aktif terlebih dahulu, termasuk kata kunci di dalam kalimat. Pertanyaan yang belum cocok diteruskan ke Groq. Atur `GROQ_API_KEY` dan, jika diperlukan, `GROQ_MODEL` di `.env`; model bawaan adalah `openai/gpt-oss-20b`. Pilih model chat yang tersedia untuk akun Groq Anda. Setelah mengubah konfigurasi pada instalasi yang memakai cache, jalankan `php artisan config:clear`.
+
+FAQ tetap dapat menjawab saat layanan AI tidak tersedia. Kegagalan AI dicatat di log dengan status HTTP, model, dan kode error tanpa menyimpan API key atau isi percakapan. Nomor kontak pada pesan bantuan mengikuti **Pengaturan KOP**.
 
 ## Periode Pendaftaran
 
@@ -133,7 +142,7 @@ app/
 │   ├── SendRegistrationConfirmation
 │   ├── SendStatusUpdateNotification
 │   ├── SendWhatsAppMessage
-│   └── SendWhatsAppFile
+│   └── SendPrintInstructionNotification
 ├── Services/
 │   ├── OtpService
 │   ├── RegistrationNumberGenerator

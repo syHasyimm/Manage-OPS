@@ -4,19 +4,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Siapkan Administrator - {{ config('app.name') }}</title>
+    <link rel="preload" href="/fonts/manrope-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/plus-jakarta-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
     <style>
+        @font-face { font-family: Manrope; font-style: normal; font-weight: 400 800; font-display: swap; src: url('/fonts/manrope-latin-variable.woff2') format('woff2'); }
+        @font-face { font-family: 'Plus Jakarta Sans'; font-style: normal; font-weight: 400 800; font-display: swap; src: url('/fonts/plus-jakarta-sans-latin-variable.woff2') format('woff2'); }
         * { box-sizing: border-box; }
-        body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 32px; background: #f4f7f5; color: #17221b; font-family: Arial, sans-serif; }
-        main { width: min(100%, 520px); background: #fff; border: 1px solid #dce5df; border-radius: 18px; padding: 32px; box-shadow: 0 18px 50px rgba(25, 55, 37, .10); }
-        .eyebrow { margin: 0 0 8px; color: #257a47; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-        h1 { margin: 0 0 10px; font-size: 28px; }
-        .intro { margin: 0 0 26px; color: #5b6860; line-height: 1.6; }
+        body { margin: 0; min-height: 100dvh; display: grid; place-items: center; padding: 32px; background: #f8fafc; color: #1E293B; font-family: Manrope, Arial, sans-serif; color-scheme: light; }
+        main { width: min(100%, 520px); background: #fff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 32px; box-shadow: 0 18px 50px rgba(30, 41, 59, .10); }
+        .eyebrow { margin: 0 0 8px; color: #1d4ed8; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+        h1 { margin: 0 0 10px; font-family: 'Plus Jakarta Sans', Manrope, sans-serif; font-size: 28px; }
+        .intro { margin: 0 0 26px; color: #475569; line-height: 1.6; }
         label { display: block; margin: 17px 0 7px; font-size: 14px; font-weight: 700; }
-        input { width: 100%; border: 1px solid #cbd7cf; border-radius: 10px; padding: 12px 14px; font: inherit; outline: none; }
-        input:focus { border-color: #27844d; box-shadow: 0 0 0 3px rgba(39, 132, 77, .12); }
-        button { width: 100%; margin-top: 24px; border: 0; border-radius: 10px; padding: 13px 16px; background: #206f40; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
-        .error { margin-top: 6px; color: #b42318; font-size: 13px; }
-        .note { margin-top: 18px; color: #69756d; font-size: 12px; line-height: 1.5; }
+        input { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 14px; font: inherit; outline: none; }
+        input:focus { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59, 130, 246, .18); }
+        button { width: 100%; margin-top: 24px; border: 0; border-radius: 10px; padding: 13px 16px; background: #3B82F6; color: #0f172a; font: inherit; font-weight: 700; cursor: pointer; transition: background-color 180ms, color 180ms; }
+        button:hover { background: #2563eb; color: #fff; }
+        button:focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; }
+        .error { margin-top: 6px; color: #b91c1c; font-size: 13px; }
+        .note { margin-top: 18px; color: #64748b; font-size: 12px; line-height: 1.5; }
+        main { animation: setup-enter 450ms cubic-bezier(.22, 1, .36, 1); }
+        input { transition: border-color 180ms, box-shadow 180ms; }
+        button { transition: background-color 180ms, color 180ms, translate 200ms, scale 200ms; }
+        @media (hover: hover) and (pointer: fine) { button:hover { translate: 0 -2px; } }
+        button:active { translate: 0 0; scale: .98; }
+        @keyframes setup-enter { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+        @media (prefers-reduced-motion: reduce) { main { animation: none; } input, button { transition: none; } button:hover, button:active { translate: none; scale: none; } }
     </style>
 </head>
 <body>

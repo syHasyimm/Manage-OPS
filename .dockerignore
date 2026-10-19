@@ -1,0 +1,36 @@
+.git
+.github
+.idea
+.vscode
+.fleet
+.nova
+.zed
+
+# Environment, kredensial, database, dan unggahan bukan bagian image.
+.env*
+!.env.example
+auth.json
+**/*.key
+**/*.pem
+**/*.sql
+**/*.sql.gz
+**/*.sqlite
+**/*.sqlite-*
+storage
+bootstrap/cache
+public/storage
+
+# Dependensi dan aset dibangun ulang di dalam Docker.
+node_modules
+vendor
+public/build
+public/hot
+npm-debug.log*
+yarn-error.log*
+
+.phpunit.cache
+.phpunit.result.cache
+tests
+docs
+desktop
+src-tauri

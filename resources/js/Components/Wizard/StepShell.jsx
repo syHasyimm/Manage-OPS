@@ -19,18 +19,18 @@ export default function StepShell({ title, description, currentStep, completedSt
                     <div className="min-w-0">
                         <CardTitle className="text-base sm:text-lg">{title}</CardTitle>
                         {description && (
-                            <p className="mt-1 text-sm text-navy-600">{description}</p>
+                            <p className="mt-1 text-sm text-slate-600">{description}</p>
                         )}
                     </div>
                     <Link
                         href={route('dashboard')}
-                        className="shrink-0 text-xs font-medium text-navy-600 underline-offset-4 hover:underline"
+                        className="shrink-0 text-xs font-medium text-slate-600 underline-offset-4 hover:underline"
                     >
                         Kembali ke Dashboard
                     </Link>
                 </CardHeader>
                 <CardContent>{children}</CardContent>
-                {footer && <div className="border-t border-navy-100 px-4 py-4 sm:px-6">{footer}</div>}
+                {footer && <div className="border-t border-slate-100 px-4 py-4 sm:px-6">{footer}</div>}
             </Card>
         </div>
     );

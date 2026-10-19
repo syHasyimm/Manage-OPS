@@ -4,6 +4,7 @@ namespace App\Services\WhatsApp\Drivers;
 
 use App\Models\User;
 use App\Services\WhatsApp\Contracts\WhatsAppService;
+use App\Services\WhatsApp\SendReceipt;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,44 @@ class FonnteWhatsAppService implements WhatsAppService
         protected string $baseUrl = 'https://api.fonnte.com',
         protected int $timeout = 15,
     ) {}
+
+    public function sendTextWithReceipt(string $to, string $message): SendReceipt
+    {
+        if (empty($this->token)) {
+            return new SendReceipt('failed', error: 'Token Fonnte belum diatur.');
+        }
+
+        try {
+            // No HTTP retry: a lost response may still mean Fonnte accepted the message.
+            $response = $this->client()->post("{$this->baseUrl}/send", [
+                'target' => User::normalizePhone($to),
+                'message' => $message,
+                'countryCode' => '62',
+                'connectOnly' => true,
+            ]);
+            $json = $response->json();
+            // Store only receipt metadata; never echo arbitrary gateway content or secrets.
+            $receipt = ['http_status' => $response->status()];
+            foreach (['id', 'requestid', 'process', 'status'] as $key) {
+                if (isset($json[$key])) {
+                    $receipt[$key] = $json[$key];
+                }
+            }
+
+            if ($response->successful() && ($json['status'] ?? null) === true) {
+                return new SendReceipt('accepted', $receipt);
+            }
+
+            if (($response->successful() && ($json['status'] ?? null) === false)
+                || ($response->clientError() && ! in_array($response->status(), [408, 429]))) {
+                return new SendReceipt('failed', $receipt, 'Fonnte menolak permintaan. Periksa token, perangkat, kuota, dan nomor tujuan.');
+            }
+
+            return new SendReceipt('uncertain', $receipt, 'Respons Fonnte tidak memastikan hasil. Periksa Fonnte sebelum mengirim ulang.');
+        } catch (\Throwable) {
+            return new SendReceipt('uncertain', error: 'Koneksi terputus atau timeout; pesan mungkin sudah diterima Fonnte.');
+        }
+    }
 
     public function sendText(string $to, string $message): bool
     {

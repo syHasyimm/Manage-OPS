@@ -16,7 +16,7 @@ export default function Welcome({
 
     return (
         <div
-            className="spmb-public-page flex min-h-screen flex-col bg-[#f5f2ea] font-sans text-navy-950 selection:bg-gold-300 selection:text-navy-950"
+            className="spmb-public-page flex min-h-[100dvh] flex-col font-sans selection:bg-amber-200 selection:text-slate-950"
         >
             <Head>
                 <title>{`SPMB Online - ${schoolName}`}</title>
@@ -24,6 +24,7 @@ export default function Welcome({
                     name="description"
                     content={`Informasi dan pendaftaran murid baru ${schoolName}. Daftar secara online, siapkan dokumen, dan pantau status pendaftaran dari rumah.`}
                 />
+                <link rel="preload" href="/images/spmb/hero-family.webp" as="image" />
             </Head>
 
             <a className="skip-link" href="#konten-utama">

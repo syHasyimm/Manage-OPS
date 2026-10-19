@@ -1,0 +1,46 @@
+name: spmb-web
+
+services:
+  app:
+    image: spmb-web:latest
+    build:
+      context: .
+    container_name: spmb-app
+    restart: unless-stopped
+    env_file:
+      - path: .env.docker
+        format: raw
+    ports:
+      - "127.0.0.1:8000:80"
+    volumes:
+      - storage:/var/www/html/storage
+
+  worker:
+    image: spmb-web:latest
+    container_name: spmb-worker
+    restart: unless-stopped
+    env_file:
+      - path: .env.docker
+        format: raw
+    command:
+      - php
+      - artisan
+      - queue:work
+      - --queue=default
+      - --sleep=3
+      - --tries=1
+      - --timeout=60
+      - --max-time=3600
+    stop_grace_period: 90s
+    healthcheck:
+      disable: true
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - storage:/var/www/html/storage
+
+volumes:
+  storage:
+    name: spmb-storage
+    external: true

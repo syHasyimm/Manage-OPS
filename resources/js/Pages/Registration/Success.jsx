@@ -48,10 +48,10 @@ export default function Success({ registration }) {
         <AppLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-600">
+                    <p className="text-xs uppercase tracking-widest text-amber-600">
                         Tahun Ajaran {registration.period}
                     </p>
-                    <h1 className="mt-1 text-xl font-semibold text-navy-950">
+                    <h1 className="mt-1 text-xl font-semibold text-slate-950">
                         Pendaftaran Berhasil
                     </h1>
                 </div>
@@ -62,26 +62,26 @@ export default function Success({ registration }) {
             <div className="mx-auto max-w-2xl space-y-6">
                 <Card>
                     <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold-500/20 text-gold-600">
+                        <div className="motion-pop flex h-16 w-16 items-center justify-center rounded-full bg-accent-soft text-accent-foreground">
                             <CheckCircle2 className="h-9 w-9" />
                         </div>
                         <div>
-                            <h2 className="text-lg font-semibold text-navy-950">
+                            <h2 className="text-lg font-semibold text-slate-950">
                                 Terima kasih,{" "}
                                 {registration.student_name ?? "Calon Murid"}!
                             </h2>
-                            <p className="mt-1 text-sm text-navy-600">
+                            <p className="mt-1 text-sm text-slate-600">
                                 Silahkan Download PDF formulir pendaftaran kamu
                                 dan Berikan Formulr ke Panitia untuk proses
                                 selanjutnya.
                             </p>
                         </div>
 
-                        <div className="mt-2 rounded-xl border-2 border-dashed border-gold-400 bg-gold-50 px-6 py-4">
-                            <p className="text-xs uppercase tracking-widest text-navy-600">
+                        <div className="mt-2 rounded-xl border-2 border-dashed border-blue-300 bg-blue-50 px-6 py-4">
+                            <p className="text-xs uppercase tracking-widest text-slate-600">
                                 Nomor Pendaftaran
                             </p>
-                            <p className="mt-1 select-all text-2xl font-bold tracking-wider text-navy-900">
+                            <p className="mt-1 select-all text-2xl font-bold tracking-wider text-slate-900">
                                 {registration.registration_number}
                             </p>
                         </div>
@@ -94,12 +94,12 @@ export default function Success({ registration }) {
 
                 <Card>
                     <CardContent className="space-y-3 py-5">
-                        <p className="text-sm text-navy-700">
+                        <p className="text-sm text-slate-700">
                             Notifikasi WhatsApp berisi konfirmasi & file PDF
                             formulir akan terkirim otomatis ke nomor terdaftar
                             dalam beberapa menit.
                         </p>
-                        <p className="rounded-lg bg-gold-50 px-3 py-2 text-xs text-navy-700">
+                        <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-slate-700">
                             Setelah mengunduh PDF, kamu akan menerima
                             notifikasi WhatsApp berisi instruksi untuk{" "}
                             <span className="font-semibold">mencetak</span>{" "}

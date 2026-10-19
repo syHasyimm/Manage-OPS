@@ -12,9 +12,9 @@ function findLabel(list, value) {
 
 function Row({ label, value }) {
     return (
-        <div className="grid grid-cols-1 gap-1 border-b border-navy-100 py-2 text-sm sm:grid-cols-3">
-            <dt className="font-medium text-navy-600">{label}</dt>
-            <dd className="break-words text-navy-950 sm:col-span-2">{value || <span className="text-navy-400">-</span>}</dd>
+        <div className="grid grid-cols-1 gap-1 border-b border-slate-100 py-2 text-sm sm:grid-cols-3">
+            <dt className="font-medium text-slate-600">{label}</dt>
+            <dd className="break-words text-slate-950 sm:col-span-2">{value || <span className="text-slate-400">-</span>}</dd>
         </div>
     );
 }
@@ -27,7 +27,7 @@ function Section({ title, action, children }) {
                 {action}
             </CardHeader>
             <CardContent>
-                <dl className="divide-y divide-navy-100">{children}</dl>
+                <dl className="divide-y divide-slate-100">{children}</dl>
             </CardContent>
         </Card>
     );
@@ -63,10 +63,10 @@ export default function Review({ registration, options, school, editable }) {
             header={
                 <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3">
                     <div className="min-w-0">
-                        <p className="text-xs uppercase tracking-widest text-gold-600">
+                        <p className="text-xs uppercase tracking-widest text-amber-600">
                             Tahun Ajaran {registration?.period?.academic_year}
                         </p>
-                        <h1 className="mt-1 break-words text-lg font-semibold text-navy-950 sm:text-xl">
+                        <h1 className="mt-1 break-words text-lg font-semibold text-slate-950 sm:text-xl">
                             Review & Submit Pendaftaran
                         </h1>
                     </div>
@@ -169,12 +169,12 @@ export default function Review({ registration, options, school, editable }) {
                     <Card>
                         <CardContent className="flex flex-col items-start gap-4 py-5 sm:flex-row sm:items-center sm:justify-between">
                             <div className="flex items-start gap-3">
-                                <CheckCircle2 className="mt-1 h-5 w-5 text-gold-600" />
+                                <CheckCircle2 className="mt-1 h-5 w-5 text-amber-600" />
                                 <div>
-                                    <p className="text-sm font-medium text-navy-900">
+                                    <p className="text-sm font-medium text-slate-900">
                                         Pastikan semua data sudah benar.
                                     </p>
-                                    <p className="text-xs text-navy-500">
+                                    <p className="text-xs text-slate-500">
                                         Setelah submit, data tidak dapat diubah kecuali admin meminta revisi.
                                     </p>
                                 </div>

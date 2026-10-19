@@ -27,7 +27,10 @@ class PublicStatusController extends Controller
             'phone' => ['required', 'string', 'regex:/^08[0-9]{8,12}$/'],
             'registration_number' => ['required', 'string', 'max:32'],
         ], [
+            'phone.required' => 'Masukkan nomor WhatsApp yang terdaftar.',
             'phone.regex' => 'Format nomor HP tidak valid (contoh: 081234567890).',
+            'registration_number.required' => 'Masukkan nomor pendaftaran Anda.',
+            'registration_number.max' => 'Nomor pendaftaran maksimal 32 karakter.',
         ]);
 
         $registration = Registration::with(['identity', 'period', 'user'])
@@ -43,7 +46,7 @@ class PublicStatusController extends Controller
         if (! $matches) {
             return back()
                 ->withInput()
-                ->withErrors(['registration_number' => 'Data tidak ditemukan. Periksa nomor pendaftaran & nomor HP.']);
+                ->withErrors(['registration_number' => 'Data tidak ditemukan. Periksa kembali nomor pendaftaran dan nomor WhatsApp.']);
         }
 
         return back()

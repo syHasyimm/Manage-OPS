@@ -41,9 +41,9 @@ function findLabel(list, value) {
 
 function Row({ label, value }) {
     return (
-        <div className="grid grid-cols-1 gap-1 border-b border-navy-100 py-2 text-sm sm:grid-cols-3">
-            <dt className="font-medium text-navy-600">{label}</dt>
-            <dd className="break-words text-navy-950 sm:col-span-2">{value || <span className="text-navy-400">-</span>}</dd>
+        <div className="grid grid-cols-1 gap-1 border-b border-slate-100 py-2 text-sm sm:grid-cols-3">
+            <dt className="font-medium text-slate-600">{label}</dt>
+            <dd className="break-words text-slate-950 sm:col-span-2">{value || <span className="text-slate-400">-</span>}</dd>
         </div>
     );
 }
@@ -55,7 +55,7 @@ function Section({ title, children }) {
                 <CardTitle className="text-base">{title}</CardTitle>
             </CardHeader>
             <CardContent>
-                <dl className="divide-y divide-navy-100">{children}</dl>
+                <dl className="divide-y divide-slate-100">{children}</dl>
             </CardContent>
         </Card>
     );
@@ -144,8 +144,8 @@ export default function Show({ registration, options, school }) {
                             </Link>
                         </Button>
                         <div className="min-w-0">
-                            <p className="text-xs uppercase tracking-widest text-gold-700">Detail Pendaftaran</p>
-                            <h1 className="mt-1 break-words text-lg font-semibold text-navy-950 sm:text-xl">
+                            <p className="text-xs uppercase tracking-widest text-blue-700">Detail Pendaftaran</p>
+                            <h1 className="mt-1 break-words text-lg font-semibold text-slate-950 sm:text-xl">
                                 {i?.full_name ?? '-'}
                             </h1>
                         </div>
@@ -160,24 +160,24 @@ export default function Show({ registration, options, school }) {
                 <Card className="lg:col-span-1">
                     <CardContent className="space-y-3 py-5 text-sm">
                         <div>
-                            <p className="text-xs uppercase text-navy-500">Nomor Pendaftaran</p>
-                            <p className="select-all font-mono text-base text-navy-950">{registration.registration_number ?? '-'}</p>
+                            <p className="text-xs uppercase text-slate-500">Nomor Pendaftaran</p>
+                            <p className="select-all font-mono text-base text-slate-950">{registration.registration_number ?? '-'}</p>
                         </div>
                         <div>
-                            <p className="text-xs uppercase text-navy-500">Pendaftar</p>
-                            <p className="font-medium text-navy-950">{registration.user?.name}</p>
-                            <p className="text-navy-500">{registration.user?.phone}</p>
+                            <p className="text-xs uppercase text-slate-500">Pendaftar</p>
+                            <p className="font-medium text-slate-950">{registration.user?.name}</p>
+                            <p className="text-slate-500">{registration.user?.phone}</p>
                         </div>
                         <div>
-                            <p className="text-xs uppercase text-navy-500">Submitted</p>
+                            <p className="text-xs uppercase text-slate-500">Submitted</p>
                             <p>{registration.submitted_at ? new Date(registration.submitted_at).toLocaleString('id-ID') : '-'}</p>
                         </div>
                         <div>
-                            <p className="text-xs uppercase text-navy-500">Verified</p>
+                            <p className="text-xs uppercase text-slate-500">Verified</p>
                             <p>{registration.verified_at ? new Date(registration.verified_at).toLocaleString('id-ID') : '-'}</p>
                         </div>
                         {registration.admin_note && (
-                            <div className="rounded-md bg-amber-50 px-3 py-2 text-amber-900">
+                            <div className="rounded-md bg-slate-50 px-3 py-2 text-slate-900">
                                 <p className="text-xs uppercase">Catatan Admin</p>
                                 <p>{registration.admin_note}</p>
                             </div>

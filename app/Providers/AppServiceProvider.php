@@ -11,7 +11,6 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Throwable;
 
@@ -23,10 +22,10 @@ class AppServiceProvider extends ServiceProvider
             $driver = config('whatsapp.driver', 'log');
             $token = config('whatsapp.drivers.fonnte.token');
 
-            // Queue workers are long-lived, so resolve admin settings for each job lifecycle.
+            // Queue workers are long-lived, so resolve stored settings for each job lifecycle.
             try {
                 if (Schema::hasTable('app_settings')) {
-                    $token = AppSetting::value(AppSetting::FONNTE_TOKEN, $token);
+                    $token = AppSetting::value(AppSetting::FONNTE_TOKEN, $token, fresh: true);
                 }
             } catch (Throwable) {
                 // Use .env fallback while the database is unavailable or not migrated yet.
@@ -45,8 +44,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Vite::prefetch(concurrency: 3);
-
         $this->configureRateLimiters();
         $this->overrideSchoolConfigFromDatabase();
     }

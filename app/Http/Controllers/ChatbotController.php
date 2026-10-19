@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Faq;
 use App\Services\ChatbotAiService;
+use App\Services\ChatbotFaqMatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -11,19 +11,14 @@ class ChatbotController extends Controller
 {
     public function handle(Request $request): JsonResponse
     {
-        $message = strtolower(trim($request->input('message', '')));
+        $request->validate(['message' => ['nullable', 'string', 'max:2000']]);
+        $message = trim($request->input('message') ?? '');
 
         if (empty($message)) {
             return response()->json(['message' => 'Pesan tidak boleh kosong.', 'source' => 'error'], 422);
         }
 
-        $faq = Faq::where('is_active', true)
-            ->where(function ($q) use ($message) {
-                $q->whereRaw('LOWER(question) LIKE ?', ["%{$message}%"])
-                    ->orWhereRaw('LOWER(keywords) LIKE ?', ["%{$message}%"]);
-            })
-            ->orderBy('sort_order')
-            ->first();
+        $faq = app(ChatbotFaqMatcher::class)->match($message);
 
         if ($faq) {
             return response()->json([

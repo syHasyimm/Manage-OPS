@@ -70,7 +70,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-2 text-sm text-navy-700">
+                    <label className="flex items-center gap-2 text-sm text-slate-700">
                         <Checkbox
                             checked={data.remember}
                             onCheckedChange={(value) => setData('remember', Boolean(value))}
@@ -81,7 +81,7 @@ export default function Login({ status, canResetPassword }) {
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="text-sm text-navy-700 underline-offset-4 hover:underline"
+                            className="text-sm text-slate-700 underline-offset-4 hover:underline"
                         >
                             Lupa password?
                         </Link>
@@ -91,7 +91,7 @@ export default function Login({ status, canResetPassword }) {
                 <div className="flex items-center justify-between gap-3 pt-2">
                     <Link
                         href={route('register')}
-                        className="text-sm text-navy-700 underline-offset-4 hover:underline"
+                        className="text-sm text-slate-700 underline-offset-4 hover:underline"
                     >
                         Belum punya akun?
                     </Link>

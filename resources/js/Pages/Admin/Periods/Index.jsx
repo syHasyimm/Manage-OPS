@@ -45,8 +45,8 @@ export default function Index({ periods }) {
         <AdminLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
-                    <h1 className="mt-1 text-xl font-semibold text-navy-950">Periode Pendaftaran</h1>
+                    <p className="text-xs uppercase tracking-widest text-blue-700">Admin SPMB</p>
+                    <h1 className="mt-1 text-xl font-semibold text-slate-950">Periode Pendaftaran</h1>
                 </div>
             }
         >
@@ -92,7 +92,7 @@ export default function Index({ periods }) {
                                 />
                                 {create.errors.closes_at && <p className="text-xs text-red-600">{create.errors.closes_at}</p>}
                             </div>
-                            <label className="flex items-center justify-between text-sm text-navy-800">
+                            <label className="flex items-center justify-between text-sm text-slate-800">
                                 Set sebagai aktif
                                 <Switch
                                     checked={create.data.is_active}
@@ -112,7 +112,7 @@ export default function Index({ periods }) {
                         <CardTitle className="text-base">Daftar Periode</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
-                        <p className="px-4 pt-3 text-xs text-navy-500 sm:hidden">
+                        <p className="px-4 pt-3 text-xs text-slate-500 sm:hidden">
                             Geser tabel ke samping untuk melihat semua kolom.
                         </p>
                         <Table className="min-w-[680px]">
@@ -128,7 +128,7 @@ export default function Index({ periods }) {
                             <TableBody>
                                 {periods.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="py-10 text-center text-sm text-navy-500">
+                                        <TableCell colSpan={5} className="py-10 text-center text-sm text-slate-500">
                                             Belum ada periode.
                                         </TableCell>
                                     </TableRow>
@@ -136,13 +136,13 @@ export default function Index({ periods }) {
                                 {periods.map((p) => (
                                     <TableRow key={p.id}>
                                         <TableCell className="whitespace-nowrap font-medium">
-                                            <Calendar className="mr-2 inline h-4 w-4 text-gold-600" />
+                                            <Calendar className="mr-2 inline h-4 w-4 text-blue-600" />
                                             {p.academic_year}
                                         </TableCell>
-                                        <TableCell className="whitespace-nowrap text-xs text-navy-600">
+                                        <TableCell className="whitespace-nowrap text-xs text-slate-600">
                                             {new Date(p.opens_at).toLocaleString('id-ID')}
                                         </TableCell>
-                                        <TableCell className="whitespace-nowrap text-xs text-navy-600">
+                                        <TableCell className="whitespace-nowrap text-xs text-slate-600">
                                             {new Date(p.closes_at).toLocaleString('id-ID')}
                                         </TableCell>
                                         <TableCell className="whitespace-nowrap">

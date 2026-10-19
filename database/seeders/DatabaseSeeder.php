@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
             RegistrationPeriodSeeder::class,
             SchoolSettingSeeder::class,
             FaqSeeder::class,
-            NotificationTemplateSeeder::class,
         ]);
     }
 }

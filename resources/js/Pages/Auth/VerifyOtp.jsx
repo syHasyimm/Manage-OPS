@@ -76,7 +76,7 @@ export default function VerifyOtp({ phone, status }) {
                     Verifikasi
                 </Button>
 
-                <div className="flex items-center justify-between text-xs text-navy-500">
+                <div className="flex items-center justify-between text-xs text-slate-500">
                     <span className="flex items-center gap-1.5">
                         <MessageCircle className="h-3.5 w-3.5" />
                         Tidak menerima kode?
@@ -85,7 +85,7 @@ export default function VerifyOtp({ phone, status }) {
                         type="button"
                         onClick={resend}
                         disabled={cooldown > 0}
-                        className="font-medium text-navy-800 underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:text-navy-300"
+                        className="font-medium text-slate-800 underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:text-slate-300"
                     >
                         {cooldown > 0 ? `Kirim ulang (${cooldown}s)` : 'Kirim ulang'}
                     </button>

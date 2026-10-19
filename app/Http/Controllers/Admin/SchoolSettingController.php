@@ -114,7 +114,7 @@ class SchoolSettingController extends Controller
 
         SchoolSetting::bust();
 
-        return back()->with('status', 'Pengaturan sekolah berhasil diperbarui.');
+        return back()->with('status', 'Pengaturan KOP berhasil diperbarui.');
     }
 
     public function deleteLogo(): RedirectResponse

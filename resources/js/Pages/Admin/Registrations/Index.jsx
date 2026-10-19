@@ -63,8 +63,8 @@ export default function Index({ registrations, filters, periods }) {
             header={
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <p className="text-xs uppercase tracking-widest text-gold-700">Manage OPS</p>
-                        <h1 className="mt-1 text-xl font-semibold text-navy-950">Daftar Pendaftar</h1>
+                        <p className="text-xs uppercase tracking-widest text-blue-700">Admin SPMB</p>
+                        <h1 className="mt-1 text-xl font-semibold text-slate-950">Daftar Pendaftar</h1>
                     </div>
                     <Button asChild variant="outline">
                         <a href={exportUrl()}>
@@ -151,7 +151,7 @@ export default function Index({ registrations, filters, periods }) {
 
             <Card>
                 <CardContent className="p-0">
-                    <p className="px-4 pt-3 text-xs text-navy-500 sm:hidden">
+                    <p className="px-4 pt-3 text-xs text-slate-500 sm:hidden">
                         Geser tabel ke samping untuk melihat semua kolom.
                     </p>
                     <Table className="min-w-[860px]">
@@ -169,7 +169,7 @@ export default function Index({ registrations, filters, periods }) {
                         <TableBody>
                             {registrations.data.length === 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={7} className="py-10 text-center text-sm text-navy-500">
+                                    <TableCell colSpan={7} className="py-10 text-center text-sm text-slate-500">
                                         Tidak ada data.
                                     </TableCell>
                                 </TableRow>
@@ -180,13 +180,13 @@ export default function Index({ registrations, filters, periods }) {
                                     <TableRow key={r.id}>
                                         <TableCell className="whitespace-nowrap font-mono text-xs">{r.registration_number ?? '-'}</TableCell>
                                         <TableCell className="min-w-[160px]">{r.identity?.full_name ?? '-'}</TableCell>
-                                        <TableCell className="min-w-[160px] text-xs text-navy-600">
-                                            <div className="font-medium text-navy-800">{r.user?.name}</div>
-                                            <div className="text-navy-400">{r.user?.phone}</div>
+                                        <TableCell className="min-w-[160px] text-xs text-slate-600">
+                                            <div className="font-medium text-slate-800">{r.user?.name}</div>
+                                            <div className="text-slate-400">{r.user?.phone}</div>
                                         </TableCell>
                                         <TableCell className="whitespace-nowrap">{r.identity?.gender === 'L' ? 'Laki-Laki' : r.identity?.gender === 'P' ? 'Perempuan' : '-'}</TableCell>
                                         <TableCell className="whitespace-nowrap"><Badge variant={meta.variant}>{meta.label}</Badge></TableCell>
-                                        <TableCell className="whitespace-nowrap text-xs text-navy-600">
+                                        <TableCell className="whitespace-nowrap text-xs text-slate-600">
                                             {r.submitted_at ? new Date(r.submitted_at).toLocaleString('id-ID') : '-'}
                                         </TableCell>
                                         <TableCell className="whitespace-nowrap text-right">
@@ -216,10 +216,10 @@ export default function Index({ registrations, filters, periods }) {
                             className={
                                 'rounded-md border px-3 py-1.5 text-sm ' +
                                 (link.active
-                                    ? 'border-navy-900 bg-navy-900 text-white'
+                                    ? 'border-slate-900 bg-slate-900 text-white'
                                     : link.url
-                                    ? 'border-navy-200 bg-white text-navy-800 hover:bg-navy-50'
-                                    : 'border-navy-100 bg-navy-50 text-navy-300 cursor-not-allowed')
+                                    ? 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'
+                                    : 'border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed')
                             }
                             dangerouslySetInnerHTML={{ __html: link.label }}
                         />

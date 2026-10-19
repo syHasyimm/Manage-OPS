@@ -1,182 +1,136 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import {
-    ArrowLeft,
-    Download,
-    GraduationCap,
-    Loader2,
-    Search,
-    AlertCircle,
-} from 'lucide-react';
-import { Button } from '@/Components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Badge } from '@/Components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/Components/ui/alert';
+import { AlertCircle, ArrowLeft, ArrowRight, Download, Loader2, Search, ShieldCheck } from 'lucide-react';
+import LandingHeader from '@/Components/Landing/LandingHeader';
+import LandingFooter from '@/Components/Landing/LandingFooter';
+import schoolProfileData from '@/data/schoolProfile.json';
+import { PageTransition, Reveal } from '@/Components/Motion';
 
 const STATUS_LABEL = {
-    draft: { label: 'Draft', variant: 'warning' },
-    submitted: { label: 'Terkirim', variant: 'default' },
-    verified: { label: 'Terverifikasi', variant: 'secondary' },
-    accepted: { label: 'Diterima', variant: 'success' },
-    rejected: { label: 'Ditolak', variant: 'destructive' },
-    need_revision: { label: 'Perlu Revisi', variant: 'warning' },
+    draft: 'Draf',
+    submitted: 'Terkirim',
+    verified: 'Terverifikasi',
+    accepted: 'Diterima',
+    rejected: 'Ditolak',
+    need_revision: 'Perlu revisi',
+};
+
+const STATUS_COLOR = {
+    draft: 'public-status-warning',
+    submitted: '',
+    verified: 'public-status-success',
+    accepted: 'public-status-success',
+    rejected: 'public-status-danger',
+    need_revision: 'public-status-warning',
 };
 
 export default function PublicStatus({ prefill, result }) {
-    const { school } = usePage().props;
+    const { school, auth } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
         phone: prefill?.phone ?? '',
         registration_number: prefill?.no ?? '',
     });
+    const dashboardRoute = auth?.user?.role === 'admin' ? 'admin.dashboard' : 'dashboard';
 
-    const submit = (e) => {
-        e.preventDefault();
+    const submit = (event) => {
+        event.preventDefault();
         post(route('public-status.check'), {
             preserveScroll: true,
+            onError: (validationErrors) => document.getElementById(Object.keys(validationErrors)[0])?.focus(),
         });
     };
 
-    const meta = result ? STATUS_LABEL[result.status] ?? STATUS_LABEL.draft : null;
-
     return (
-        <div className="min-h-screen bg-navy-50 text-navy-900">
+        <div className="spmb-public-page flex min-h-[100dvh] flex-col font-sans selection:bg-amber-200 selection:text-slate-950">
             <Head title="Cek Status Pendaftaran" />
+            <a className="skip-link" href="#konten-utama">Lewati ke konten utama</a>
+            <LandingHeader home={false} />
 
-            <header className="border-b border-navy-100 bg-white">
-                <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-                    <Link href="/" className="flex items-center gap-3">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gold-500 text-navy-950">
-                            <GraduationCap className="h-5 w-5" />
-                        </span>
-                        <div className="leading-tight">
-                            <p className="text-[10px] uppercase tracking-widest text-gold-700">SPMB</p>
-                            <p className="text-sm font-semibold text-navy-950">{school?.name}</p>
+            <PageTransition as="main" id="konten-utama" className="public-container flex-1 py-10 sm:py-16">
+                <Link href="/" className="public-text-link mb-10"><ArrowLeft className="h-4 w-4" aria-hidden="true" />Kembali ke beranda</Link>
+                <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-16">
+                    <div className="lg:col-span-5">
+                        <span className="public-icon-tile mb-6"><Search className="h-6 w-6" aria-hidden="true" /></span>
+                        <h1 className="public-heading">Pantau status pendaftaran.</h1>
+                        <p className="public-description">Masukkan nomor WhatsApp terdaftar dan nomor pendaftaran untuk melihat perkembangan data serta hasil verifikasi terbaru.</p>
+                        <div className="mt-8 flex gap-3 text-sm leading-7 text-[var(--public-muted)]">
+                            <ShieldCheck className="mt-1 h-5 w-5 shrink-0" aria-hidden="true" />
+                            <p>Gunakan nomor yang sama saat membuat akun. Nomor pendaftaran tercantum pada formulir PDF Anda.</p>
                         </div>
-                    </Link>
-                    <Button asChild variant="ghost" size="sm">
-                        <Link href="/">
-                            <ArrowLeft className="h-4 w-4" />
-                            Beranda
-                        </Link>
-                    </Button>
-                </div>
-            </header>
+                        <Link href={auth?.user ? route(dashboardRoute) : route('login')} className="public-text-link mt-6">{auth?.user ? 'Buka dashboard' : 'Sudah punya akun? Masuk'}<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+                    </div>
 
-            <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-                <div className="mb-6 text-center">
-                    <Badge variant="secondary" className="bg-gold-500 text-navy-950">
-                        Public Status Tracker
-                    </Badge>
-                    <h1 className="mt-3 text-2xl font-semibold text-navy-950">
-                        Cek Status Pendaftaran
-                    </h1>
-                    <p className="mt-1 text-sm text-navy-600">
-                        Masukkan nomor HP terdaftar dan nomor pendaftaran untuk melihat status terkini.
-                    </p>
-                </div>
+                    <div className="space-y-6 lg:col-span-7">
+                        <section className="public-panel p-6 sm:p-8" aria-labelledby="status-form-title">
+                            <h2 id="status-form-title" className="font-display text-xl font-semibold">Cek status pendaftaran</h2>
+                            <p className="mt-2 text-sm leading-6 text-[var(--public-muted)]">Lengkapi kedua nomor berikut untuk mencari data Anda.</p>
+                            <form onSubmit={submit} className="mt-7 space-y-5" aria-busy={processing}>
+                                <div>
+                                    <label htmlFor="phone" className="block text-sm font-semibold">Nomor HP / WA</label>
+                                    <input
+                                        id="phone"
+                                        name="phone"
+                                        type="tel"
+                                        inputMode="numeric"
+                                        autoComplete="tel"
+                                        value={data.phone}
+                                        onChange={(event) => setData('phone', event.target.value.replace(/\D/g, ''))}
+                                        placeholder="Contoh: 081234567890"
+                                        className="public-input mt-2"
+                                        aria-invalid={Boolean(errors.phone)}
+                                        aria-describedby={errors.phone ? 'phone-error' : undefined}
+                                    />
+                                    {errors.phone && <p id="phone-error" role="alert" className="public-error mt-2 text-sm">{errors.phone}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="registration_number" className="block text-sm font-semibold">Nomor Pendaftaran</label>
+                                    <input
+                                        id="registration_number"
+                                        name="registration_number"
+                                        value={data.registration_number}
+                                        onChange={(event) => setData('registration_number', event.target.value.toUpperCase())}
+                                        placeholder="Contoh: SPMB-2026-0001"
+                                        className="public-input mt-2"
+                                        aria-invalid={Boolean(errors.registration_number)}
+                                        aria-describedby={errors.registration_number ? 'registration-number-error' : undefined}
+                                        autoCapitalize="characters"
+                                        spellCheck={false}
+                                    />
+                                    {errors.registration_number && <p id="registration-number-error" role="alert" className="public-error mt-2 text-sm">{errors.registration_number}</p>}
+                                </div>
+                                <button type="submit" disabled={processing} className="public-button public-button-primary w-full">
+                                    {processing ? <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" /> : <Search className="h-4 w-4" aria-hidden="true" />}
+                                    {processing ? 'Memeriksa...' : 'Cek Status'}
+                                </button>
+                            </form>
+                        </section>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base">Pencarian</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
-                            <div className="space-y-1.5">
-                                <Label htmlFor="phone">Nomor HP / WA</Label>
-                                <Input
-                                    id="phone"
-                                    inputMode="numeric"
-                                    autoComplete="tel"
-                                    value={data.phone}
-                                    onChange={(e) => setData('phone', e.target.value.replace(/\D/g, ''))}
-                                    placeholder="081234567890"
-                                />
-                                {errors.phone && <p className="text-xs text-red-600">{errors.phone}</p>}
-                            </div>
-                            <div className="space-y-1.5">
-                                <Label htmlFor="registration_number">Nomor Pendaftaran</Label>
-                                <Input
-                                    id="registration_number"
-                                    value={data.registration_number}
-                                    onChange={(e) => setData('registration_number', e.target.value.toUpperCase())}
-                                    placeholder="SPMB-2026-0001"
-                                />
-                                {errors.registration_number && (
-                                    <p className="text-xs text-red-600">{errors.registration_number}</p>
+                        {result && (
+                            <Reveal as="section" key={result.registration_number + result.status} className="public-panel p-6 sm:p-8" aria-labelledby="status-result-title" aria-live="polite">
+                                <div className="flex flex-wrap items-center justify-between gap-3">
+                                    <h2 id="status-result-title" className="font-display text-xl font-semibold">Hasil pencarian</h2>
+                                    <span className={'public-status-label ' + (STATUS_COLOR[result.status] || '')}>{STATUS_LABEL[result.status] || result.status}</span>
+                                </div>
+                                <p className="mt-4 break-words font-mono text-sm font-semibold tracking-wide">{result.registration_number}</p>
+                                <dl className="mt-6 grid gap-5 text-sm sm:grid-cols-2">
+                                    <div><dt className="text-[var(--public-muted)]">Nama Murid</dt><dd className="mt-1.5 font-medium">{result.student_name ?? '-'}</dd></div>
+                                    <div><dt className="text-[var(--public-muted)]">Tahun Ajaran</dt><dd className="mt-1.5 font-medium">{result.period}</dd></div>
+                                    <div><dt className="text-[var(--public-muted)]">Tanggal dikirim</dt><dd className="mt-1.5 font-medium">{result.submitted_at ? new Date(result.submitted_at).toLocaleString('id-ID') : 'Belum dikirim'}</dd></div>
+                                    <div><dt className="text-[var(--public-muted)]">Diverifikasi</dt><dd className="mt-1.5 font-medium">{result.verified_at ? new Date(result.verified_at).toLocaleString('id-ID') : 'Belum'}</dd></div>
+                                </dl>
+                                {result.admin_note && (
+                                    <div className="mt-6 flex gap-3 rounded-xl bg-[var(--public-soft)] p-4">
+                                        <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+                                        <div><h3 className="text-sm font-semibold">Catatan panitia</h3><p className="mt-2 whitespace-pre-line break-words text-sm leading-7 text-[var(--public-muted)]">{result.admin_note}</p></div>
+                                    </div>
                                 )}
-                            </div>
-                            <div className="sm:col-span-2 sm:flex sm:justify-end">
-                                <Button type="submit" disabled={processing}>
-                                    {processing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-                                    Cek Status
-                                </Button>
-                            </div>
-                        </form>
-                    </CardContent>
-                </Card>
+                                {result.pdf_url && <a href={result.pdf_url} target="_blank" rel="noopener noreferrer" className="public-button public-button-secondary mt-6 w-full sm:w-auto"><Download className="h-4 w-4" aria-hidden="true" />Unduh formulir PDF</a>}
+                            </Reveal>
+                        )}
+                    </div>
+                </div>
+            </PageTransition>
 
-                {result && (
-                    <Card className="mt-6">
-                        <CardHeader>
-                            <CardTitle className="text-base">Hasil</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex flex-wrap items-center gap-3">
-                                <Badge variant={meta?.variant} className="uppercase">
-                                    {meta?.label ?? result.status}
-                                </Badge>
-                                <span className="text-sm font-mono tracking-wider text-gold-700">
-                                    {result.registration_number}
-                                </span>
-                            </div>
-                            <dl className="divide-y divide-navy-100 text-sm">
-                                <div className="grid grid-cols-1 gap-1 py-2 sm:grid-cols-3">
-                                    <dt className="font-medium text-navy-600">Nama Murid</dt>
-                                    <dd className="sm:col-span-2">{result.student_name ?? '-'}</dd>
-                                </div>
-                                <div className="grid grid-cols-1 gap-1 py-2 sm:grid-cols-3">
-                                    <dt className="font-medium text-navy-600">Tahun Ajaran</dt>
-                                    <dd className="sm:col-span-2">{result.period}</dd>
-                                </div>
-                                <div className="grid grid-cols-1 gap-1 py-2 sm:grid-cols-3">
-                                    <dt className="font-medium text-navy-600">Submitted</dt>
-                                    <dd className="sm:col-span-2">
-                                        {result.submitted_at
-                                            ? new Date(result.submitted_at).toLocaleString('id-ID')
-                                            : '-'}
-                                    </dd>
-                                </div>
-                                <div className="grid grid-cols-1 gap-1 py-2 sm:grid-cols-3">
-                                    <dt className="font-medium text-navy-600">Diverifikasi</dt>
-                                    <dd className="sm:col-span-2">
-                                        {result.verified_at
-                                            ? new Date(result.verified_at).toLocaleString('id-ID')
-                                            : 'Belum'}
-                                    </dd>
-                                </div>
-                            </dl>
-
-                            {result.admin_note && (
-                                <Alert variant="info">
-                                    <AlertCircle className="h-4 w-4" />
-                                    <AlertTitle>Catatan Admin</AlertTitle>
-                                    <AlertDescription>{result.admin_note}</AlertDescription>
-                                </Alert>
-                            )}
-
-                            {result.pdf_url && (
-                                <Button asChild variant="outline">
-                                    <a href={result.pdf_url} target="_blank" rel="noopener">
-                                        <Download className="h-4 w-4" />
-                                        Download PDF Formulir
-                                    </a>
-                                </Button>
-                            )}
-                        </CardContent>
-                    </Card>
-                )}
-            </main>
+            <LandingFooter profileData={schoolProfileData} school={school} home={false} />
         </div>
     );
 }

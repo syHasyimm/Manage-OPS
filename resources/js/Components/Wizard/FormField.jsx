@@ -19,7 +19,7 @@ export default function FormField({
                 </Label>
             )}
             {children}
-            {hint && !error && <p className="text-xs text-navy-500">{hint}</p>}
+            {hint && !error && <p className="text-xs text-slate-500">{hint}</p>}
             {error && <p className="text-xs text-red-600">{error}</p>}
         </div>
     );

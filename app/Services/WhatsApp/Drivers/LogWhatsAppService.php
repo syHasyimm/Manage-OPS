@@ -3,6 +3,7 @@
 namespace App\Services\WhatsApp\Drivers;
 
 use App\Services\WhatsApp\Contracts\WhatsAppService;
+use App\Services\WhatsApp\SendReceipt;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -11,6 +12,13 @@ use Illuminate\Support\Facades\Log;
  */
 class LogWhatsAppService implements WhatsAppService
 {
+    public function sendTextWithReceipt(string $to, string $message): SendReceipt
+    {
+        $this->sendText($to, $message);
+
+        return new SendReceipt('simulated');
+    }
+
     public function sendText(string $to, string $message): bool
     {
         Log::info('[WA-LOG] sendText', [

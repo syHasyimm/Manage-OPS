@@ -29,8 +29,8 @@ const STATUS_META = {
         title: 'Lengkapi data pendaftaran',
         description: 'Formulir Anda tersimpan. Lengkapi bagian yang belum selesai sebelum mengirimkannya ke sekolah.',
         badge: 'warning',
-        iconClass: 'bg-gold-300 text-navy-950',
-        surfaceClass: 'border-gold-300/30 bg-gold-300/10',
+        iconClass: 'bg-amber-300 text-slate-950',
+        surfaceClass: 'border-amber-300/30 bg-amber-300/10',
     },
     submitted: {
         label: 'Terkirim',
@@ -38,8 +38,8 @@ const STATUS_META = {
         title: 'Berkas sedang diperiksa',
         description: 'Formulir sudah diterima. Tim sekolah akan memeriksa kelengkapan dan kesesuaian data Anda.',
         badge: 'default',
-        iconClass: 'bg-sky-100 text-sky-800',
-        surfaceClass: 'border-sky-200 bg-sky-50',
+        iconClass: 'bg-blue-100 text-blue-800',
+        surfaceClass: 'border-blue-200 bg-blue-50',
     },
     verified: {
         label: 'Terverifikasi',
@@ -47,8 +47,8 @@ const STATUS_META = {
         title: 'Data telah terverifikasi',
         description: 'Berkas Anda lolos pemeriksaan awal. Silakan tunggu pengumuman keputusan dari sekolah.',
         badge: 'secondary',
-        iconClass: 'bg-gold-300 text-navy-950',
-        surfaceClass: 'border-gold-300/30 bg-gold-300/10',
+        iconClass: 'bg-amber-300 text-slate-950',
+        surfaceClass: 'border-amber-300/30 bg-amber-300/10',
     },
     accepted: {
         label: 'Diterima',
@@ -56,8 +56,8 @@ const STATUS_META = {
         title: 'Calon murid diterima',
         description: 'Selamat. Ikuti informasi lanjutan dari sekolah dan simpan bukti pendaftaran Anda.',
         badge: 'success',
-        iconClass: 'bg-emerald-100 text-emerald-800',
-        surfaceClass: 'border-emerald-200 bg-emerald-50',
+        iconClass: 'bg-green-100 text-green-800',
+        surfaceClass: 'border-green-200 bg-green-50',
     },
     rejected: {
         label: 'Belum diterima',
@@ -119,17 +119,17 @@ function RegistrationProgress({ registration }) {
     ];
 
     return (
-        <section className="rounded-2xl border border-navy-100 bg-white p-5 shadow-[0_18px_45px_-36px_rgba(16,42,67,.55)] sm:p-6">
+        <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_18px_45px_-36px_rgba(16,42,67,.55)] sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                    <h2 className="font-display text-xl font-bold tracking-[-0.02em] text-navy-950">
+                    <h2 className="font-display text-xl font-bold tracking-[-0.02em] text-slate-950">
                         Perjalanan pendaftaran
                     </h2>
-                    <p className="mt-1 text-sm text-navy-600">
+                    <p className="mt-1 text-sm text-slate-600">
                         Pantau posisi berkas Anda pada setiap tahap.
                     </p>
                 </div>
-                <span className="rounded-md bg-navy-50 px-3 py-1.5 text-xs font-semibold text-navy-700">
+                <span className="rounded-md bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700">
                     {submitted ? 'Formulir telah dikirim' : 'Formulir belum dikirim'}
                 </span>
             </div>
@@ -141,17 +141,17 @@ function RegistrationProgress({ registration }) {
                             <span
                                 className={
                                     stage.complete
-                                        ? 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-950 text-gold-300'
+                                        ? 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-foreground'
                                         : stage.current
-                                          ? 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold-300 text-navy-950 ring-4 ring-gold-300/20'
-                                          : 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-100 text-navy-400'
+                                          ? 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-slate-950 ring-4 ring-blue-200'
+                                          : 'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-400'
                                 }
                             >
                                 {stage.complete ? <CheckCircle2 className="h-4 w-4" /> : <span className="text-sm font-bold">{index + 1}</span>}
                             </span>
                             <div className="min-w-0">
-                                <h3 className="text-sm font-bold text-navy-950">{stage.title}</h3>
-                                <p className="mt-1 text-xs leading-5 text-navy-500">{stage.description}</p>
+                                <h3 className="text-sm font-bold text-slate-950">{stage.title}</h3>
+                                <p className="mt-1 text-xs leading-5 text-slate-500">{stage.description}</p>
                             </div>
                         </div>
                     </li>
@@ -171,18 +171,18 @@ function RegistrationClosedState({ period }) {
         : 'Belum ada periode pendaftaran yang dapat diikuti saat ini. Pantau pengumuman resmi sekolah secara berkala.';
 
     return (
-        <section className="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-[0_20px_55px_-42px_rgba(16,42,67,.65)]">
+        <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_20px_55px_-42px_rgba(16,42,67,.65)]">
             <div className="grid lg:grid-cols-[1.1fr_.9fr]">
-                <div className="bg-[#0b2941] p-7 text-white sm:p-10">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold-300 text-navy-950">
+                <div className="bg-blue-50 p-7 text-slate-800 sm:p-10">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-300 text-slate-950">
                         <Icon className="h-6 w-6" />
                     </span>
                     <h2 className="mt-7 font-display text-3xl font-bold tracking-[-0.03em]">{title}</h2>
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-navy-200">{description}</p>
+                    <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">{description}</p>
                 </div>
                 <div className="flex flex-col justify-center p-7 sm:p-10">
-                    <p className="text-sm font-semibold text-navy-950">Sudah pernah mendaftar?</p>
-                    <p className="mt-2 text-sm leading-6 text-navy-600">
+                    <p className="text-sm font-semibold text-slate-950">Sudah pernah mendaftar?</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
                         Gunakan nomor pendaftaran untuk melihat hasil dan mengunduh bukti pendaftaran.
                     </p>
                     <Button asChild variant="outline" className="mt-6 w-full sm:w-fit">
@@ -199,19 +199,19 @@ function RegistrationClosedState({ period }) {
 
 function StartRegistrationPanel({ period }) {
     return (
-        <section className="overflow-hidden rounded-2xl bg-[#0b2941] text-white shadow-[0_24px_58px_-40px_rgba(16,42,67,.8)]">
+        <section className="overflow-hidden rounded-2xl bg-blue-50 text-slate-800 shadow-[0_24px_58px_-40px_rgba(16,42,67,.8)]">
             <div className="grid gap-8 p-7 sm:p-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
                 <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
                         Tahun Ajaran {period.academic_year}
                     </p>
                     <h2 className="mt-4 max-w-lg font-display text-3xl font-bold tracking-[-0.035em] sm:text-4xl">
                         Mulai pendaftaran calon murid.
                     </h2>
-                    <p className="mt-4 max-w-xl text-sm leading-6 text-navy-200">
+                    <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600">
                         Isi data calon murid, data periodik, dan data orang tua secara bertahap. Anda dapat melanjutkannya kapan saja.
                     </p>
-                    <Button asChild className="mt-7 h-11 bg-gold-300 px-5 font-bold text-navy-950 hover:bg-gold-200">
+                    <Button asChild className="mt-7 h-11 bg-primary px-5 font-bold text-slate-950 hover:bg-blue-600 hover:text-white">
                         <Link href={route('registration.start')}>
                             Mulai pendaftaran
                             <ArrowRight className="h-4 w-4" />
@@ -219,16 +219,16 @@ function StartRegistrationPanel({ period }) {
                     </Button>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-                    <p className="text-sm font-bold text-white">Yang perlu disiapkan</p>
+                <div className="rounded-xl border border-blue-100 bg-white p-5">
+                    <p className="text-sm font-bold text-slate-800">Yang perlu disiapkan</p>
                     <div className="mt-5 space-y-4">
                         {[
                             'Nomor WhatsApp orang tua atau wali yang aktif',
                             'Data calon murid sesuai dokumen resmi',
                             'Waktu untuk meninjau ulang sebelum formulir dikirim',
                         ].map((item) => (
-                            <div key={item} className="flex gap-3 text-sm leading-6 text-navy-200">
-                                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-gold-300" />
+                            <div key={item} className="flex gap-3 text-sm leading-6 text-slate-600">
+                                <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-blue-700" />
                                 <span>{item}</span>
                             </div>
                         ))}
@@ -280,16 +280,16 @@ export default function Dashboard({ period, isOpen, registration }) {
             header={
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-700">Portal pendaftar</p>
-                        <h1 className="mt-1 font-display text-2xl font-bold tracking-[-0.025em] text-navy-950">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-amber-700">Portal pendaftar</p>
+                        <h1 className="mt-1 font-display text-2xl font-bold tracking-[-0.025em] text-slate-950">
                             Beranda pendaftaran
                         </h1>
-                        <p className="mt-1 text-sm text-navy-600">
+                        <p className="mt-1 text-sm text-slate-600">
                             Pantau status dan kelola dokumen pendaftaran Anda.
                         </p>
                     </div>
                     {period && (
-                        <span className="w-fit rounded-md border border-navy-100 bg-navy-50 px-3 py-1.5 text-xs font-semibold text-navy-700">
+                        <span className="w-fit rounded-md border border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-700">
                             Tahun Ajaran {period.academic_year}
                         </span>
                     )}
@@ -305,14 +305,14 @@ export default function Dashboard({ period, isOpen, registration }) {
 
                 {registration && (
                     <>
-                        <section className="overflow-hidden rounded-2xl bg-[#0b2941] text-white shadow-[0_24px_58px_-40px_rgba(16,42,67,.8)]">
+                        <section className="overflow-hidden rounded-2xl bg-blue-50 text-slate-800 shadow-[0_24px_58px_-40px_rgba(16,42,67,.8)]">
                             <div className="grid gap-7 p-6 sm:p-8 lg:grid-cols-[1fr_18rem] lg:items-start">
                                 <div>
                                     <div className="flex flex-wrap items-center gap-3">
-                                        <span className="text-xs font-bold uppercase tracking-[0.16em] text-gold-300">
+                                        <span className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
                                             {registration.period ? `Tahun Ajaran ${registration.period}` : 'Pendaftaran calon murid'}
                                         </span>
-                                        <Badge variant={meta.badge} className="bg-white/10 text-white ring-1 ring-white/15">
+                                        <Badge variant={meta.badge} className="bg-blue-100 text-slate-800 ring-1 ring-blue-200">
                                             {meta.label}
                                         </Badge>
                                     </div>
@@ -324,32 +324,32 @@ export default function Dashboard({ period, isOpen, registration }) {
                                             <h2 className="font-display text-2xl font-bold tracking-[-0.025em] sm:text-3xl">
                                                 {registration.student_name ? `Pendaftaran ${registration.student_name}` : meta.title}
                                             </h2>
-                                            <p className="mt-2 max-w-2xl text-sm leading-6 text-navy-200">{meta.description}</p>
+                                            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{meta.description}</p>
                                         </div>
                                     </div>
 
                                     {registration.registration_number && (
-                                        <div className="mt-7 inline-flex max-w-full flex-col rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-                                            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-navy-300">
+                                        <div className="mt-7 inline-flex max-w-full flex-col rounded-lg border border-blue-100 bg-white px-4 py-3">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
                                                 Nomor pendaftaran
                                             </span>
-                                            <span className="mt-1 select-all font-mono text-base font-bold tracking-[0.08em] text-gold-300">
+                                            <span className="mt-1 select-all font-mono text-base font-bold tracking-[0.08em] text-blue-700">
                                                 {registration.registration_number}
                                             </span>
                                         </div>
                                     )}
                                 </div>
 
-                                <aside className="rounded-xl border border-white/10 bg-white/5 p-5">
-                                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-navy-300">Tindakan berikutnya</p>
+                                <aside className="rounded-xl border border-blue-100 bg-white p-5">
+                                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-slate-500">Tindakan berikutnya</p>
                                     {canEdit ? (
                                         <>
-                                            <p className="mt-3 text-sm leading-6 text-white">
+                                            <p className="mt-3 text-sm leading-6 text-slate-800">
                                                 {registration.status === 'need_revision'
                                                     ? 'Perbarui formulir berdasarkan catatan sekolah.'
                                                     : 'Lanjutkan pengisian formulir sebelum mengirimkannya.'}
                                             </p>
-                                            <Button asChild className="mt-5 h-10 w-full bg-gold-300 font-bold text-navy-950 hover:bg-gold-200">
+                                            <Button asChild className="mt-5 h-10 w-full bg-primary font-bold text-slate-950 hover:bg-blue-600 hover:text-white">
                                                 <Link href={route('registration.start')}>
                                                     {registration.current_step > 1 ? 'Lanjutkan formulir' : 'Isi formulir'}
                                                     <ArrowRight className="h-4 w-4" />
@@ -358,8 +358,8 @@ export default function Dashboard({ period, isOpen, registration }) {
                                         </>
                                     ) : hasPdf ? (
                                         <>
-                                            <p className="mt-3 text-sm leading-6 text-white">Bukti pendaftaran sudah siap untuk diunduh dan disimpan.</p>
-                                            <Button asChild className="mt-5 h-10 w-full bg-gold-300 font-bold text-navy-950 hover:bg-gold-200">
+                                            <p className="mt-3 text-sm leading-6 text-slate-800">Bukti pendaftaran sudah siap untuk diunduh dan disimpan.</p>
+                                            <Button asChild className="mt-5 h-10 w-full bg-primary font-bold text-slate-950 hover:bg-blue-600 hover:text-white">
                                                 <a
                                                     href={route('registration.pdf', { registration: registration.id })}
                                                     target="_blank"
@@ -371,7 +371,7 @@ export default function Dashboard({ period, isOpen, registration }) {
                                             </Button>
                                         </>
                                     ) : (
-                                        <p className="mt-3 text-sm leading-6 text-navy-200">
+                                        <p className="mt-3 text-sm leading-6 text-slate-600">
                                             {registration.status === 'submitted'
                                                 ? 'Tidak ada tindakan yang diperlukan. Sekolah sedang memeriksa berkas Anda.'
                                                 : 'Periksa status pendaftaran secara berkala untuk informasi terbaru.'}
@@ -384,22 +384,22 @@ export default function Dashboard({ period, isOpen, registration }) {
                         {registration.admin_note && (
                             <section className={`rounded-2xl border p-5 sm:p-6 ${meta.surfaceClass}`}>
                                 <div className="flex gap-3">
-                                    <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-navy-800" />
+                                    <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-slate-800" />
                                     <div>
-                                        <h2 className="font-semibold text-navy-950">Catatan dari sekolah</h2>
-                                        <p className="mt-2 text-sm leading-6 text-navy-700">{registration.admin_note}</p>
+                                        <h2 className="font-semibold text-slate-950">Catatan dari sekolah</h2>
+                                        <p className="mt-2 text-sm leading-6 text-slate-700">{registration.admin_note}</p>
                                     </div>
                                 </div>
                             </section>
                         )}
 
                         {!isOpen && (
-                            <section className="rounded-2xl border border-gold-200 bg-gold-50 p-5 sm:p-6">
+                            <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:p-6">
                                 <div className="flex gap-3">
-                                    <Lock className="mt-0.5 h-5 w-5 shrink-0 text-gold-800" />
+                                    <Lock className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" />
                                     <div>
-                                        <h2 className="font-semibold text-navy-950">Periode pendaftaran tidak aktif</h2>
-                                        <p className="mt-1 text-sm leading-6 text-navy-700">
+                                        <h2 className="font-semibold text-slate-950">Periode pendaftaran tidak aktif</h2>
+                                        <p className="mt-1 text-sm leading-6 text-slate-700">
                                             Anda tetap dapat memantau status dan mengunduh bukti pendaftaran melalui halaman ini.
                                         </p>
                                     </div>
@@ -413,20 +413,20 @@ export default function Dashboard({ period, isOpen, registration }) {
                             </div>
 
                             <aside className="space-y-6 lg:col-span-4">
-                                <section className="rounded-2xl border border-navy-100 bg-white p-5 shadow-[0_18px_45px_-36px_rgba(16,42,67,.55)]">
+                                <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_18px_45px_-36px_rgba(16,42,67,.55)]">
                                     <div className="flex items-center gap-3">
-                                        <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-800">
+                                        <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-800">
                                             <FileCheck2 className="h-5 w-5" />
                                         </span>
                                         <div>
-                                            <h2 className="font-display text-lg font-bold text-navy-950">Dokumen pendaftaran</h2>
-                                            <p className="text-xs text-navy-500">Bukti formulir resmi</p>
+                                            <h2 className="font-display text-lg font-bold text-slate-950">Dokumen pendaftaran</h2>
+                                            <p className="text-xs text-slate-500">Bukti formulir resmi</p>
                                         </div>
                                     </div>
 
-                                    <div className="mt-5 rounded-lg bg-navy-50 p-4">
-                                        <p className="text-sm font-semibold text-navy-950">Formulir PDF</p>
-                                        <p className="mt-1 text-xs leading-5 text-navy-600">
+                                    <div className="mt-5 rounded-lg bg-slate-50 p-4">
+                                        <p className="text-sm font-semibold text-slate-950">Formulir PDF</p>
+                                        <p className="mt-1 text-xs leading-5 text-slate-600">
                                             {hasPdf
                                                 ? 'Dokumen telah tersedia untuk disimpan.'
                                                 : registration.registration_number
@@ -438,13 +438,13 @@ export default function Dashboard({ period, isOpen, registration }) {
                                                 href={route('registration.pdf', { registration: registration.id })}
                                                 target="_blank"
                                                 rel="noopener"
-                                                className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-navy-800 hover:text-gold-700"
+                                                className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-slate-800 hover:text-amber-700"
                                             >
                                                 Buka dokumen
                                                 <ArrowRight className="h-3.5 w-3.5" />
                                             </a>
                                         ) : registration.registration_number ? (
-                                            <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-navy-600">
+                                            <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-slate-600">
                                                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                                 Menyiapkan dokumen
                                             </div>
@@ -453,14 +453,14 @@ export default function Dashboard({ period, isOpen, registration }) {
                                 </section>
 
                                 {registration.status !== 'draft' && registration.registration_number && (
-                                    <section className="rounded-2xl border border-navy-100 bg-white p-5 shadow-[0_18px_45px_-36px_rgba(16,42,67,.55)]">
+                                    <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_18px_45px_-36px_rgba(16,42,67,.55)]">
                                         <div className="flex items-center gap-3">
-                                            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gold-300 text-navy-950">
+                                            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-300 text-slate-950">
                                                 <MessageCircle className="h-5 w-5" />
                                             </span>
                                             <div>
-                                                <h2 className="font-display text-lg font-bold text-navy-950">Notifikasi WhatsApp</h2>
-                                                <p className="text-xs text-navy-500">Kirim ulang bukti pendaftaran</p>
+                                                <h2 className="font-display text-lg font-bold text-slate-950">Notifikasi WhatsApp</h2>
+                                                <p className="text-xs text-slate-500">Kirim ulang bukti pendaftaran</p>
                                             </div>
                                         </div>
                                         <Button

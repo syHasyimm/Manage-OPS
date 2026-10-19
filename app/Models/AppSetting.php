@@ -27,10 +27,11 @@ class AppSetting extends Model
     /**
      * Ambil nilai setting yang tersimpan terenkripsi.
      * Nilai default dipakai jika setting belum pernah disimpan atau tidak dapat didekripsi.
+     * Gunakan fresh untuk credential/settings job agar cache proses lama tidak mengalahkan database.
      */
-    public static function value(string $key, ?string $default = null): ?string
+    public static function value(string $key, ?string $default = null, bool $fresh = false): ?string
     {
-        $encrypted = Cache::rememberForever(
+        $encrypted = $fresh ? self::query()->where('key', $key)->value('value') : Cache::rememberForever(
             self::cacheKey($key),
             fn () => self::query()->where('key', $key)->value('value'),
         );

@@ -35,10 +35,10 @@ export default function Step2({ registration, options, editable }) {
         <AppLayout
             header={
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-gold-600">
+                    <p className="text-xs uppercase tracking-widest text-amber-600">
                         Tahun Ajaran {registration?.period?.academic_year}
                     </p>
-                    <h1 className="mt-1 text-xl font-semibold text-navy-950">
+                    <h1 className="mt-1 text-xl font-semibold text-slate-950">
                         Formulir Pendaftaran Murid Baru
                     </h1>
                 </div>
@@ -113,7 +113,7 @@ export default function Step2({ registration, options, editable }) {
                         </FormField>
                     </div>
 
-                    <div className="mt-6 rounded-lg border border-navy-100 bg-navy-50/50 p-4">
+                    <div className="mt-6 rounded-lg border border-slate-100 bg-slate-50/50 p-4">
                         <FormField label="Jarak Tempat Tinggal ke Sekolah" required error={errors.distance_category}>
                             <RadioGroup
                                 value={data.distance_category}
@@ -124,7 +124,7 @@ export default function Step2({ registration, options, editable }) {
                                 className="flex flex-col gap-2 sm:flex-row sm:gap-6"
                             >
                                 {options.distance_categories.map((d) => (
-                                    <label key={d.value} className="flex items-center gap-2 text-sm text-navy-800">
+                                    <label key={d.value} className="flex items-center gap-2 text-sm text-slate-800">
                                         <RadioGroupItem value={d.value} />
                                         {d.label}
                                     </label>
